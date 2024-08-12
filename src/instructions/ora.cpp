@@ -1,10 +1,8 @@
 #include "cpu.hpp"
 #include "memory.hpp"
 
-namespace {
 CPU& cpu = CPU::get_instance();
 Memory& memory = Memory::get_instance();
-}  // namespace
 
 void CPU::Instructions::ORA::zero_page() {
   switch (cpu._cycle) {

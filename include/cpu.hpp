@@ -16,6 +16,7 @@ enum class Instruction {
   BRK = 0x00,
   ORA_INDIRECT_X = 0x01,
   ORA_ZERO_PAGE = 0x05,
+  ASL_ZERO_PAGE = 0x06,
 
 };
 
@@ -79,6 +80,14 @@ class CPU {
   void do_cycle();
 
   struct Instructions {
+    struct ASL {
+      static void zero_page();
+
+      private:
+        static uint8_t _carry;
+        static void _set_flags();
+    };
+
     struct ORA {
       static void zero_page();
       static void indirect_x();

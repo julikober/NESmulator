@@ -2,9 +2,7 @@
 
 #include "memory.hpp"
 
-namespace {
 Memory& memory = Memory::get_instance();
-}  // namespace
 
 uint8_t CPU::_read_memory() { return memory.read(_address); }
 
