@@ -3,17 +3,16 @@
 #include "memory.hpp"
 
 namespace {
-CPU& cpu = CPU::get_instance();
 Memory& memory = Memory::get_instance();
 }  // namespace
 
-void CPU::_fetch_instruction() {
-  _instruction = (Instruction)memory.read(_program_counter);
-}
+uint8_t CPU::_read_memory() { return memory.read(_address); }
 
 void CPU::do_cycle() {
   if (_cycle == 1) {
-    _fetch_instruction();
+    _address = _program_counter;
+    _instruction = (Instruction)_read_memory();
+    _program_counter++;
 
   } else {
     switch (_instruction) {
@@ -22,6 +21,10 @@ void CPU::do_cycle() {
 
       case Instruction::ORA_INDIRECT_X:
         Instructions::ORA::indirect_x();
+        break;
+
+      case Instruction::ORA_ZERO_PAGE:
+        Instructions::ORA::zero_page();
         break;
 
       default:

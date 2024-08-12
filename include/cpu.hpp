@@ -1,21 +1,21 @@
 #pragma once
 
 #include <cstdint>
-#include "ora.hpp"
 
-enum class StatusFlag {
-  CARRY = 0,
-  ZERO = 1,
-  INTERRUPT_DISABLE = 2,
-  DECIMAL_MODE = 3,
-  BREAK = 4,
-  OVERFLOW = 6,
-  NEGATIVE = 7
+enum StatusFlag {
+  CARRY = 1 << 0,
+  ZERO = 1 << 1,
+  INTERRUPT_DISABLE = 1 << 2,
+  DECIMAL_MODE = 1 << 3,
+  BREAK = 1 << 4,
+  OVERFLOW = 1 << 6,
+  NEGATIVE = 1 << 7
 };
 
 enum class Instruction {
   BRK = 0x00,
   ORA_INDIRECT_X = 0x01,
+  ORA_ZERO_PAGE = 0x05,
 
 };
 
@@ -62,7 +62,10 @@ class CPU {
     _address = (_address & 0xFF00) | value;
   }
 
-  void _fetch_instruction();
+  inline void _set_flag(uint8_t flags) { _status = flags; };
+  inline void _clear_flag(uint8_t flags) { _status &= ~flags; };
+
+  uint8_t _read_memory();
 
  public:
   static CPU& get_instance() {
@@ -75,5 +78,13 @@ class CPU {
 
   void do_cycle();
 
-  friend struct Instructions::ORA;
+  struct Instructions {
+    struct ORA {
+      static void zero_page();
+      static void indirect_x();
+
+     private:
+      static void _set_flags();
+    };
+  };
 };

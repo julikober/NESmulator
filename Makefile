@@ -6,7 +6,10 @@ CPPFLAGS = -Wall -std=c++17 -I $(INCLUDEDIR)
 
 all: clean $(BUILDDIR)/main
 
-$(BUILDDIR)/cpu.o: $(SRCDIR)/cpu.cpp
+$(BUILDDIR)/instructions/ora.o: $(SRCDIR)/instructions/ora.cpp
+	g++ $(CPPFLAGS) -c $(SRCDIR)/instructions/ora.cpp -o $(BUILDDIR)/instructions/ora.o
+
+$(BUILDDIR)/cpu.o: $(SRCDIR)/cpu.cpp $(BUILDDIR)/instructions/ora.o
 	g++ $(CPPFLAGS) -c $(SRCDIR)/cpu.cpp -o $(BUILDDIR)/cpu.o
 
 $(BUILDDIR)/main: $(SRCDIR)/main.cpp $(BUILDDIR)/cpu.o
