@@ -10,7 +10,7 @@ void CPU::InstructionSet::ORAZeroPage() {
       break;
 
     case 3:
-      mCpu.mAccumulator = mCpu.mAlu.OR(mCpu.mAccumulator, mCpu.mReadMemory());
+      mCpu.mAccumulator = mCpu.mOr(mCpu.mAccumulator, mCpu.mReadMemory());
 
     default:
       mCpu.mCycle = 1;
@@ -41,7 +41,7 @@ void CPU::InstructionSet::ORAIndirectX() {
       break;
 
     case 6:
-      mCpu.mAccumulator = mCpu.mAlu.OR(mCpu.mAccumulator, mCpu.mReadMemory());
+      mCpu.mAccumulator = mCpu.mOr(mCpu.mAccumulator, mCpu.mReadMemory());
 
     default:
       mCpu.mCycle = 1;

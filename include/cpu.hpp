@@ -8,14 +8,13 @@ enum StatusFlag {
   CARRY = 1 << 0,
   ZERO = 1 << 1,
   INTERRUPT_DISABLE = 1 << 2,
-  DECIMAL_MODE = 1 << 3,
+  // DECIMAL_MODE = 1 << 3, // Not used in NES
   BREAK = 1 << 4,
   OVERFLOW = 1 << 6,
   NEGATIVE = 1 << 7
 };
 
 enum Instruction {
-  BRK = 0x00,
   ORA_INDIRECT_X = 0x01,
   ORA_ZERO_PAGE = 0x05,
   ASL_ZERO_PAGE = 0x06,
@@ -28,19 +27,6 @@ enum Instruction {
 
 class CPU {
  private:
-  class ALU {
-   private:
-    CPU& mCpu;
-
-   public:
-    ALU(CPU& cpu) : mCpu(cpu){};
-    uint8_t SUM(uint8_t a, uint8_t b, bool addCarry = false);
-    uint8_t AND(uint8_t a, uint8_t b);
-    uint8_t OR(uint8_t a, uint8_t b);
-    uint8_t EOR(uint8_t a, uint8_t b);
-    uint8_t SR(uint8_t a);
-  };
-
   class InstructionSet {
    private:
     CPU& mCpu;
@@ -51,9 +37,9 @@ class CPU {
     // ADC
     void ADCImmediate();
     void ADCZeroPage();
-    // void ADCZeroPageX();
-    // void ADCAbsolute();
-    // void ADCAbsoluteX();
+    void ADCZeroPageX();
+    void ADCAbsolute();
+    void ADCAbsoluteX();
     // void ADCAbsoluteY();
     // void ADCIndirectX();
     // void ADCIndirectY();
@@ -67,7 +53,6 @@ class CPU {
   };
 
   Memory& mMemory;
-  ALU mAlu;
   InstructionSet mInstructionSet;
 
   // General purpose registers
@@ -113,14 +98,20 @@ class CPU {
   // Read and write memory
 
   inline uint8_t mReadMemory() { return mMemory.read(mAddress); }
-  inline void mWriteMemory(uint8_t value) {
-    mMemory.write(mAddress, value);
-  }
+  inline void mWriteMemory(uint8_t value) { mMemory.write(mAddress, value); }
+
+  // Arithmatic and logical operations affecting status flags
+  uint8_t mAddWithCarry(uint8_t a, uint8_t b);
+  uint8_t mSubtractWithCarry(uint8_t a, uint8_t b);
+  uint8_t mAnd(uint8_t a, uint8_t b);
+  uint8_t mOr(uint8_t a, uint8_t b);
+  uint8_t mXor(uint8_t a, uint8_t b);
+  uint8_t mShiftRight(uint8_t value);
+  uint8_t mShiftLeft(uint8_t value);
 
  public:
   CPU(Memory& memory)
       : mMemory(memory),
-        mAlu(*this),
         mInstructionSet(*this),
         mProgramCounter(0),
         mStackPointer(0xFF),

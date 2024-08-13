@@ -14,7 +14,7 @@ void CPU::InstructionSet::ASLZeroPage() {
       break;
 
     case 4:
-      mCpu.mWriteMemory(mCpu.mAlu.SUM(mCpu.mBuffer, mCpu.mBuffer));
+      mCpu.mWriteMemory(mCpu.mShiftLeft(mCpu.mBuffer));
 
     default:
       mCpu.mCycle = 1;
