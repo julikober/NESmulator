@@ -2,6 +2,8 @@
 
 #include <cstdint>
 
+#include "memory.hpp"
+
 enum StatusFlag {
   CARRY = 1 << 0,
   ZERO = 1 << 1,
@@ -12,88 +14,122 @@ enum StatusFlag {
   NEGATIVE = 1 << 7
 };
 
-enum class Instruction {
+enum Instruction {
   BRK = 0x00,
   ORA_INDIRECT_X = 0x01,
   ORA_ZERO_PAGE = 0x05,
   ASL_ZERO_PAGE = 0x06,
 
+  ADC_ZERO_PAGE = 0x65,
+
+  ADC_IMMEDIATE = 0x69,
+
 };
 
 class CPU {
  private:
-  uint16_t _program_counter;
-  uint8_t _stack_pointer;
-  uint8_t _accumulator;
-  uint8_t _index_x;
-  uint8_t _index_y;
-  uint8_t _status;
-  Instruction _instruction;
+  class ALU {
+   private:
+    CPU& mCpu;
 
-  uint16_t _address;
-  uint8_t _buffer;
+   public:
+    ALU(CPU& cpu) : mCpu(cpu){};
+    uint8_t SUM(uint8_t a, uint8_t b, bool addCarry = false);
+    uint8_t AND(uint8_t a, uint8_t b);
+    uint8_t OR(uint8_t a, uint8_t b);
+    uint8_t EOR(uint8_t a, uint8_t b);
+    uint8_t SR(uint8_t a);
+  };
 
-  uint8_t _cycle;
+  class InstructionSet {
+   private:
+    CPU& mCpu;
 
-  CPU()
-      : _program_counter(0),
-        _stack_pointer(0xFF),
-        _accumulator(0),
-        _index_x(0),
-        _index_y(0),
-        _status(0),
-        _cycle(1){};
-  ~CPU(){};
+   public:
+    InstructionSet(CPU& cpu) : mCpu(cpu){};
 
-  inline uint8_t _get_program_counter_high() { return _program_counter >> 8; }
-  inline uint8_t _get_program_counter_low() { return _program_counter & 0xFF; }
-  inline void _set_program_counter_high(uint8_t value) {
-    _program_counter = (_program_counter & 0x00FF) | (value << 8);
+    // ADC
+    void ADCImmediate();
+    void ADCZeroPage();
+    // void ADCZeroPageX();
+    // void ADCAbsolute();
+    // void ADCAbsoluteX();
+    // void ADCAbsoluteY();
+    // void ADCIndirectX();
+    // void ADCIndirectY();
+
+    // ASL
+    void ASLZeroPage();
+
+    // ORA
+    void ORAZeroPage();
+    void ORAIndirectX();
+  };
+
+  Memory& mMemory;
+  ALU mAlu;
+  InstructionSet mInstructionSet;
+
+  // General purpose registers
+  uint16_t mProgramCounter;
+  uint8_t mStackPointer;
+  uint8_t mAccumulator;
+  uint8_t mXIndex;
+  uint8_t mYIndex;
+  uint8_t mStatus;
+
+  // Other registers and abstractions
+  Instruction mInstruction;
+  uint16_t mAddress;
+  uint8_t mBuffer;
+
+  uint8_t mCycle;
+
+  // Getters and setters for program counter high and low bytes
+  inline uint8_t mGetProgramCounterHigh() { return mProgramCounter >> 8; }
+  inline uint8_t mGetProgramCounterLow() { return mProgramCounter & 0xFF; }
+  inline void mSetProgramCounterHigh(uint8_t value) {
+    mProgramCounter = (mProgramCounter & 0x00FF) | (value << 8);
   }
-  inline void _set_program_counter_low(uint8_t value) {
-    _program_counter = (_program_counter & 0xFF00) | value;
+  inline void mSetProgramCounterLow(uint8_t value) {
+    mProgramCounter = (mProgramCounter & 0xFF00) | value;
   }
 
-  inline uint8_t _get_address_high() { return _address >> 8; }
-  inline uint8_t _get_address_low() { return _address & 0xFF; }
-  inline void _set_address_high(uint8_t value) {
-    _address = (_address & 0x00FF) | (value << 8);
+  // Getters and setters for address high and low bytes
+  inline uint8_t mGetAddressHigh() { return mAddress >> 8; }
+  inline uint8_t mGetAddressLow() { return mAddress & 0xFF; }
+  inline void mSetAddressHigh(uint8_t value) {
+    mAddress = (mAddress & 0x00FF) | (value << 8);
   }
-  inline void _set_address_low(uint8_t value) {
-    _address = (_address & 0xFF00) | value;
+  inline void mSetAddressLow(uint8_t value) {
+    mAddress = (mAddress & 0xFF00) | value;
   }
 
-  inline void _set_flag(uint8_t flags) { _status = flags; };
-  inline void _clear_flag(uint8_t flags) { _status &= ~flags; };
+  // Getters and setters for status flags
+  inline void mSetFlag(uint8_t flags) { mStatus = flags; };
+  inline void mClearFlag(uint8_t flags) { mStatus &= ~flags; };
+  inline bool mCheckFlag(uint8_t flags) { return mStatus & flags; };
 
-  uint8_t _read_memory();
+  // Read and write memory
+
+  inline uint8_t mReadMemory() { return mMemory.read(mAddress); }
+  inline void mWriteMemory(uint8_t value) {
+    mMemory.write(mAddress, value);
+  }
 
  public:
-  static CPU& get_instance() {
-    static CPU instance;
-    return instance;
-  }
-
-  CPU(CPU const&) = delete;
-  void operator=(CPU const&) = delete;
+  CPU(Memory& memory)
+      : mMemory(memory),
+        mAlu(*this),
+        mInstructionSet(*this),
+        mProgramCounter(0),
+        mStackPointer(0xFF),
+        mAccumulator(0),
+        mXIndex(0),
+        mYIndex(0),
+        mStatus(0),
+        mCycle(1){};
+  ~CPU(){};
 
   void do_cycle();
-
-  struct Instructions {
-    struct ASL {
-      static void zero_page();
-
-      private:
-        static uint8_t _carry;
-        static void _set_flags();
-    };
-
-    struct ORA {
-      static void zero_page();
-      static void indirect_x();
-
-     private:
-      static void _set_flags();
-    };
-  };
 };

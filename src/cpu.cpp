@@ -1,34 +1,42 @@
 #include "cpu.hpp"
 
-#include "memory.hpp"
-
-Memory& memory = Memory::get_instance();
-
-uint8_t CPU::_read_memory() { return memory.read(_address); }
-
 void CPU::do_cycle() {
-  if (_cycle == 1) {
-    _address = _program_counter;
-    _instruction = (Instruction)_read_memory();
-    _program_counter++;
+  if (mCycle == 1) {
+    mAddress = mProgramCounter;
+    mInstruction = (Instruction)mReadMemory();
+    mProgramCounter++;
 
   } else {
-    switch (_instruction) {
-      case Instruction::BRK:
+    switch (mInstruction) {
+      // 0x00
+      case ORA_INDIRECT_X:
+        mInstructionSet.ORAIndirectX();
         break;
 
-      case Instruction::ORA_INDIRECT_X:
-        Instructions::ORA::indirect_x();
+      // 0x05
+      case ORA_ZERO_PAGE:
+        mInstructionSet.ORAZeroPage();
         break;
 
-      case Instruction::ORA_ZERO_PAGE:
-        Instructions::ORA::zero_page();
+      // 0x06
+      case ASL_ZERO_PAGE:
+        mInstructionSet.ASLZeroPage();
+        break;
+
+      // 0x65
+      case ADC_ZERO_PAGE:
+        mInstructionSet.ADCZeroPage();
+        break;
+
+      // 0x69
+      case ADC_IMMEDIATE:
+        mInstructionSet.ADCImmediate();
         break;
 
       default:
-        _cycle = 1;
+        mCycle = 1;
         break;
     }
   }
-  _cycle++;
+  mCycle++;
 }
