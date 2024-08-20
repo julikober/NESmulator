@@ -1,7 +1,7 @@
 #include "cpu.hpp"
 
-void CPU::InstructionSet::mReadADC() {
-  mCpu.mAccumulator = mCpu.mAddWithCarry(mCpu.mAccumulator, mCpu.mReadMemory());
+void CPU::InstructionSet::mReadADC(uint8_t value) {
+  mCpu.mAccumulator = mCpu.mAddWithCarry(mCpu.mAccumulator, value);
 }
 
 void CPU::InstructionSet::ADCImmediate() {
@@ -29,9 +29,9 @@ void CPU::InstructionSet::ADCAbsoluteY() {
 }
 
 void CPU::InstructionSet::ADCIndirectX() {
-  // mExecuteIndirectX(&InstructionSet::mReadADC);
+  mExecuteIndirectX(&InstructionSet::mReadADC);
 }
 
 void CPU::InstructionSet::ADCIndirectY() {
-  // mExecuteIndirectY(&InstructionSet::mReadADC);
+  mExecuteIndirectY(&InstructionSet::mReadADC);
 }

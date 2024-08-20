@@ -6,29 +6,23 @@ CPPFLAGS = -Wall -std=c++17 -I $(INCLUDEDIR)
 
 all: clean $(BUILDDIR)/main
 
-# Instructions
-# ADC
-$(BUILDDIR)/instructions/adc.o: $(SRCDIR)/cpu/instructions/adc.cpp
-	g++ $(CPPFLAGS) -c $(SRCDIR)/cpu/instructions/adc.cpp -o $(BUILDDIR)/instructions/adc.o
+$(BUILDDIR)/cpu/cpu.o: $(SRCDIR)/cpu/cpu.cpp
+	g++ $(CPPFLAGS) -c -o $(BUILDDIR)/cpu/cpu.o $(SRCDIR)/cpu/cpu.cpp
 
-# ASL
-$(BUILDDIR)/instructions/asl.o: $(SRCDIR)/cpu/instructions/asl.cpp
-	g++ $(CPPFLAGS) -c $(SRCDIR)/cpu/instructions/asl.cpp -o $(BUILDDIR)/instructions/asl.o
+$(BUILDDIR)/cpu/instructions.o: $(SRCDIR)/cpu/instructions.cpp
+	g++ $(CPPFLAGS) -c -o $(BUILDDIR)/cpu/instructions.o $(SRCDIR)/cpu/instructions.cpp
 
-# ORA
-$(BUILDDIR)/instructions/ora.o: $(SRCDIR)/cpu/instructions/ora.cpp
-	g++ $(CPPFLAGS) -c $(SRCDIR)/cpu/instructions/ora.cpp -o $(BUILDDIR)/instructions/ora.o
+$(BUILDDIR)/cpu/operations.o: $(SRCDIR)/cpu/operations.cpp
+	g++ $(CPPFLAGS) -c -o $(BUILDDIR)/cpu/operations.o $(SRCDIR)/cpu/operations.cpp
 
+$(BUILDDIR)/cpu/instructions/adc.o: $(SRCDIR)/cpu/instructions/adc.cpp
+	g++ $(CPPFLAGS) -c -o $(BUILDDIR)/cpu/instructions/adc.o $(SRCDIR)/cpu/instructions/adc.cpp
 
-# CPU
-$(BUILDDIR)/cpu.o: $(SRCDIR)/cpu.cpp $(BUILDDIR)/instructions/adc.o $(BUILDDIR)/instructions/asl.o $(BUILDDIR)/instructions/ora.o
-	g++ $(CPPFLAGS) -c $(SRCDIR)/cpu.cpp -o $(BUILDDIR)/cpu.o
+$(BUILDDIR)/cpu.a: $(INCLUDEDIR)/cpu.hpp $(BUILDDIR)/cpu/cpu.o $(BUILDDIR)/cpu/instructions.o $(BUILDDIR)/cpu/operations.o $(BUILDDIR)/cpu/instructions/adc.o
+	ar rcs $(BUILDDIR)/cpu.a $(BUILDDIR)/cpu/cpu.o $(BUILDDIR)/cpu/instructions.o $(BUILDDIR)/cpu/operations.o $(BUILDDIR)/cpu/instructions/adc.o
 
-$(BUILDDIR)/main: $(SRCDIR)/main.cpp $(BUILDDIR)/cpu.o
-	g++ $(CPPFLAGS) $(BUILDDIR)/cpu.o -o $(BUILDDIR)/main
-
-clean:
-	rm -rf $(BUILDDIR)/*
+$(BUILDDIR)/main: $(SRCDIR)/main.cpp $(BUILDDIR)/cpu.a
+	g++ $(CPPFLAGS) -o $(BUILDDIR)/main $(SRCDIR)/main.cpp $(BUILDDIR)/cpu.a
 
 run: all
 	$(BUILDDIR)/main

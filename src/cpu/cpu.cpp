@@ -1,6 +1,6 @@
 #include "cpu.hpp"
 
-void CPU::do_cycle() {
+void CPU::doCycle() {
   if (mCycle == 1) {
     mAddress = mProgramCounter;
     mProgramCounter++;

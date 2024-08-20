@@ -8,10 +8,10 @@ int main(void) {
   CPU cpu = CPU(memory);
   memory.loadFile("test.bin");
 
-  cpu.do_cycle();
-  cpu.do_cycle();
-  cpu.do_cycle();
-  cpu.do_cycle();
+  cpu.doCycle();
+  cpu.doCycle();
+  cpu.doCycle();
+  cpu.doCycle();
   memory.dumpMemory();
   cpu.dumpRegisters();  
 }

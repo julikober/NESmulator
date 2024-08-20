@@ -39,47 +39,61 @@ class CPU {
    private:
     CPU& mCpu;
 
-    void mReadADC();
+    void mReadADC(uint8_t value);
 
     // Addressing modes
-    void mExecuteImmediate(void (InstructionSet::*read)(),
-                           void (InstructionSet::*modify)() = nullptr,
-                           void (InstructionSet::*write)() = nullptr);
-    void mExecuteZeroPage(void (InstructionSet::*read)(),
-                          void (InstructionSet::*modify)() = nullptr,
-                          void (InstructionSet::*write)() = nullptr);
-    void mExecuteZeroPageX(void (InstructionSet::*read)(),
-                           void (InstructionSet::*modify)() = nullptr,
-                           void (InstructionSet::*write)() = nullptr);
-    void mExecuteZeroPageY(void (InstructionSet::*read)(),
-                           void (InstructionSet::*modify)() = nullptr,
-                           void (InstructionSet::*write)() = nullptr);
-    void mExecuteRelative(void (InstructionSet::*read)(),
-                          void (InstructionSet::*modify)() = nullptr,
-                          void (InstructionSet::*write)() = nullptr);
-    void mExecuteAbsolute(void (InstructionSet::*read)(),
-                          void (InstructionSet::*modify)() = nullptr,
-                          void (InstructionSet::*write)() = nullptr);
-    void mExecuteAbsoluteX(void (InstructionSet::*read)(),
-                           void (InstructionSet::*modify)() = nullptr,
-                           void (InstructionSet::*write)() = nullptr);
-    void mExecuteAbsoluteY(void (InstructionSet::*read)(),
-                           void (InstructionSet::*modify)() = nullptr,
-                           void (InstructionSet::*write)() = nullptr);
-    void mExecuteIndirect(void (InstructionSet::*read)(),
-                          void (InstructionSet::*modify)() = nullptr,
-                          void (InstructionSet::*write)() = nullptr);
-    void mExecuteIndirectX(void (InstructionSet::*read)(),
-                           void (InstructionSet::*modify)() = nullptr,
-                           void (InstructionSet::*write)() = nullptr);
-    void mExecuteIndirectY(void (InstructionSet::*read)(),
-                           void (InstructionSet::*modify)() = nullptr,
-                           void (InstructionSet::*write)() = nullptr);
+    void mExecuteAccumulator(
+        void (InstructionSet::*read)(uint8_t value),
+        void (InstructionSet::*modify)(uint8_t value) = nullptr,
+        void (InstructionSet::*write)(uint8_t value) = nullptr);
+    void mExecuteImmediate(
+        void (InstructionSet::*read)(uint8_t value),
+        void (InstructionSet::*modify)(uint8_t value) = nullptr,
+        void (InstructionSet::*write)(uint8_t value) = nullptr);
+    void mExecuteZeroPage(
+        void (InstructionSet::*read)(uint8_t value),
+        void (InstructionSet::*modify)(uint8_t value) = nullptr,
+        void (InstructionSet::*write)(uint8_t value) = nullptr);
+    void mExecuteZeroPageX(
+        void (InstructionSet::*read)(uint8_t value),
+        void (InstructionSet::*modify)(uint8_t value) = nullptr,
+        void (InstructionSet::*write)(uint8_t value) = nullptr);
+    void mExecuteZeroPageY(
+        void (InstructionSet::*read)(uint8_t value),
+        void (InstructionSet::*modify)(uint8_t value) = nullptr,
+        void (InstructionSet::*write)(uint8_t value) = nullptr);
+    // void mExecuteRelative(void (InstructionSet::*read)(),
+    //                       void (InstructionSet::*modify)() = nullptr,
+    //                       void (InstructionSet::*write)() = nullptr);
+    void mExecuteAbsolute(
+        void (InstructionSet::*read)(uint8_t value),
+        void (InstructionSet::*modify)(uint8_t value) = nullptr,
+        void (InstructionSet::*write)(uint8_t value) = nullptr);
+    void mExecuteAbsoluteX(
+        void (InstructionSet::*read)(uint8_t value),
+        void (InstructionSet::*modify)(uint8_t value) = nullptr,
+        void (InstructionSet::*write)(uint8_t value) = nullptr);
+    void mExecuteAbsoluteY(
+        void (InstructionSet::*read)(uint8_t value),
+        void (InstructionSet::*modify)(uint8_t value) = nullptr,
+        void (InstructionSet::*write)(uint8_t value) = nullptr);
+    // void mExecuteIndirect(void (InstructionSet::*read)(),
+    //                       void (InstructionSet::*modify)() = nullptr,
+    //                       void (InstructionSet::*write)() = nullptr);
+    void mExecuteIndirectX(
+        void (InstructionSet::*read)(uint8_t value),
+        void (InstructionSet::*modify)(uint8_t value) = nullptr,
+        void (InstructionSet::*write)(uint8_t value) = nullptr);
+    void mExecuteIndirectY(
+        void (InstructionSet::*read)(uint8_t value),
+        void (InstructionSet::*modify)(uint8_t value) = nullptr,
+        void (InstructionSet::*write)(uint8_t value) = nullptr);
 
     // Execute instruction
-    void mExecute(int startCycle, void (InstructionSet::*read)(),
-                  void (InstructionSet::*modify)() = nullptr,
-                  void (InstructionSet::*write)() = nullptr);
+    void mExecute(int startCycle, uint8_t value,
+                  void (InstructionSet::*read)(uint8_t value),
+                  void (InstructionSet::*modify)(uint8_t value) = nullptr,
+                  void (InstructionSet::*write)(uint8_t value) = nullptr);
 
    public:
     InstructionSet(CPU& cpu) : mCpu(cpu) {};
@@ -166,13 +180,13 @@ class CPU {
         mProgramCounter(0),
         mStackPointer(0xFF),
         mAccumulator(0),
-        mXIndex(1),
-        mYIndex(2),
+        mXIndex(0),
+        mYIndex(0),
         mStatus(0),
         mCycle(1) {};
   ~CPU() {};
 
-  void do_cycle();
+  void doCycle();
 
   void dumpRegisters() {  // For debugging purposes only
     printf("PC: %04X SP: %02X A: %02X X: %02X Y: %02X P: ", mProgramCounter,
