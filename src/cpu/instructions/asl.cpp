@@ -1,23 +1,37 @@
 #include "cpu.hpp"
 
+void CPU::InstructionSet::mReadASL() { mCpu.mBuffer = mCpu.mReadMemory(); }
+
+void CPU::InstructionSet::mModifyASL() {
+  mCpu.mBuffer = mCpu.mShiftLeft(mCpu.mBuffer);
+}
+
+void CPU::InstructionSet::mWriteASL() { mCpu.mWriteMemory(mCpu.mBuffer); }
+
+void CPU::InstructionSet::mReadASLAccumulator() {
+  mCpu.mAccumulator = mCpu.mShiftLeft(mCpu.mAccumulator);
+}
+
+void CPU::InstructionSet::ASLAccumulator() {
+  mExecuteAccumulator(&InstructionSet::mReadASLAccumulator);
+}
+
 void CPU::InstructionSet::ASLZeroPage() {
-  switch (mCpu.mCycle) {
-    case 2:
-      mCpu.mAddress = mCpu.mProgramCounter;
-      mCpu.mProgramCounter++;
+  mExecuteZeroPage(&InstructionSet::mReadASL, &InstructionSet::mModifyASL,
+                   &InstructionSet::mWriteASL);
+}
 
-      mCpu.mAddress = mCpu.mReadMemory();
-      break;
+void CPU::InstructionSet::ASLZeroPageX() {
+  mExecuteZeroPageX(&InstructionSet::mReadASL, &InstructionSet::mModifyASL,
+                    &InstructionSet::mWriteASL);
+}
 
-    case 3:
-      mCpu.mBuffer = mCpu.mReadMemory();
-      break;
+void CPU::InstructionSet::ASLAbsolute() {
+  mExecuteAbsolute(&InstructionSet::mReadASL, &InstructionSet::mModifyASL,
+                   &InstructionSet::mWriteASL);
+}
 
-    case 4:
-      mCpu.mWriteMemory(mCpu.mShiftLeft(mCpu.mBuffer));
-
-    default:
-      mCpu.mCycle = 1;
-      break;
-  }
+void CPU::InstructionSet::ASLAbsoluteX() {
+  mExecuteAbsoluteX(&InstructionSet::mReadASL, &InstructionSet::mModifyASL,
+                    &InstructionSet::mWriteASL);
 }

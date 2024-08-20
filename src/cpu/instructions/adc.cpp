@@ -1,7 +1,7 @@
 #include "cpu.hpp"
 
-void CPU::InstructionSet::mReadADC(uint8_t value) {
-  mCpu.mAccumulator = mCpu.mAddWithCarry(mCpu.mAccumulator, value);
+void CPU::InstructionSet::mReadADC() {
+  mCpu.mAccumulator = mCpu.mAddWithCarry(mCpu.mAccumulator, mCpu.mReadMemory());
 }
 
 void CPU::InstructionSet::ADCImmediate() {

@@ -1,48 +1,48 @@
 #include "cpu.hpp"
 
 void CPU::InstructionSet::mExecute(
-    int startCycle, uint8_t value, void (InstructionSet::*read)(uint8_t value),
-    void (InstructionSet::*modify)(uint8_t value),
-    void (InstructionSet::*write)(uint8_t value)) {
+    int startCycle, void (InstructionSet::*read)(),
+    void (InstructionSet::*modify)(),
+    void (InstructionSet::*write)()) {
   if (read != nullptr && modify == nullptr && write == nullptr) {
-    (this->*read)(value);
+    (this->*read)();
     mCpu.mCycle = 0;
   } else if (read == nullptr && modify == nullptr && write != nullptr) {
-    (this->*write)(value);
+    (this->*write)();
     mCpu.mCycle = 0;
   } else if (read != nullptr && modify != nullptr && write != nullptr) {
     if (mCpu.mCycle = startCycle) {
-      (this->*read)(value);
+      (this->*read)();
     } else if (mCpu.mCycle = startCycle + 1) {
-      (this->*modify)(value);
+      (this->*modify)();
     } else if (mCpu.mCycle = startCycle + 2) {
-      (this->*write)(value);
+      (this->*write)();
       mCpu.mCycle = 0;
     }
   }
 }
 
 void CPU::InstructionSet::mExecuteAccumulator(
-    void (InstructionSet::*read)(uint8_t value),
-    void (InstructionSet::*modify)(uint8_t value),
-    void (InstructionSet::*write)(uint8_t value)) {
-  mExecute(2, mCpu.mAccumulator, read, modify, write);
+    void (InstructionSet::*read)(),
+    void (InstructionSet::*modify)(),
+    void (InstructionSet::*write)()) {
+  mExecute(2, read, modify, write);
 }
 
 void CPU::InstructionSet::mExecuteImmediate(
-    void (InstructionSet::*read)(uint8_t value),
-    void (InstructionSet::*modify)(uint8_t value),
-    void (InstructionSet::*write)(uint8_t value)) {
+    void (InstructionSet::*read)(),
+    void (InstructionSet::*modify)(),
+    void (InstructionSet::*write)()) {
   mCpu.mAddress = mCpu.mProgramCounter;
   mCpu.mProgramCounter++;
 
-  mExecute(2, mCpu.mReadMemory(), modify, write);
+  mExecute(2, modify, write);
 }
 
 void CPU::InstructionSet::mExecuteZeroPage(
-    void (InstructionSet::*read)(uint8_t value),
-    void (InstructionSet::*modify)(uint8_t value),
-    void (InstructionSet::*write)(uint8_t value)) {
+    void (InstructionSet::*read)(),
+    void (InstructionSet::*modify)(),
+    void (InstructionSet::*write)()) {
   switch (mCpu.mCycle) {
     case 2:
       mCpu.mAddress = mCpu.mProgramCounter;
@@ -52,15 +52,15 @@ void CPU::InstructionSet::mExecuteZeroPage(
       break;
 
     default:
-      mExecute(3, mCpu.mReadMemory(), read, modify, write);
+      mExecute(3, read, modify, write);
       break;
   }
 }
 
 void CPU::InstructionSet::mExecuteZeroPageX(
-    void (InstructionSet::*read)(uint8_t value),
-    void (InstructionSet::*modify)(uint8_t value),
-    void (InstructionSet::*write)(uint8_t value)) {
+    void (InstructionSet::*read)(),
+    void (InstructionSet::*modify)(),
+    void (InstructionSet::*write)()) {
   switch (mCpu.mCycle) {
     case 2:
       mCpu.mAddress = mCpu.mProgramCounter;
@@ -74,15 +74,15 @@ void CPU::InstructionSet::mExecuteZeroPageX(
       break;
 
     default:
-      mExecute(4, mCpu.mReadMemory(), read, modify, write);
+      mExecute(4, read, modify, write);
       break;
   }
 }
 
 void CPU::InstructionSet::mExecuteZeroPageY(
-    void (InstructionSet::*read)(uint8_t value),
-    void (InstructionSet::*modify)(uint8_t value),
-    void (InstructionSet::*write)(uint8_t value)) {
+    void (InstructionSet::*read)(),
+    void (InstructionSet::*modify)(),
+    void (InstructionSet::*write)()) {
   switch (mCpu.mCycle) {
     case 2:
       mCpu.mAddress = mCpu.mProgramCounter;
@@ -96,15 +96,15 @@ void CPU::InstructionSet::mExecuteZeroPageY(
       break;
 
     default:
-      mExecute(4, mCpu.mReadMemory(), read, modify, write);
+      mExecute(4, read, modify, write);
       break;
   }
 }
 
 void CPU::InstructionSet::mExecuteAbsolute(
-    void (InstructionSet::*read)(uint8_t value),
-    void (InstructionSet::*modify)(uint8_t value),
-    void (InstructionSet::*write)(uint8_t value)) {
+    void (InstructionSet::*read)(),
+    void (InstructionSet::*modify)(),
+    void (InstructionSet::*write)()) {
   switch (mCpu.mCycle) {
     case 2:
       mCpu.mAddress = mCpu.mProgramCounter;
@@ -122,15 +122,15 @@ void CPU::InstructionSet::mExecuteAbsolute(
       break;
 
     default:
-      mExecute(4, mCpu.mReadMemory(), read, modify, write);
+      mExecute(4, read, modify, write);
       break;
   }
 }
 
 void CPU::InstructionSet::mExecuteAbsoluteX(
-    void (InstructionSet::*read)(uint8_t value),
-    void (InstructionSet::*modify)(uint8_t value),
-    void (InstructionSet::*write)(uint8_t value)) {
+    void (InstructionSet::*read)(),
+    void (InstructionSet::*modify)(),
+    void (InstructionSet::*write)()) {
   switch (mCpu.mCycle) {
     case 2:
       mCpu.mAddress = mCpu.mProgramCounter;
@@ -154,20 +154,20 @@ void CPU::InstructionSet::mExecuteAbsoluteX(
       }
 
       if (write == nullptr && modify == nullptr) {
-        mExecute(4, mCpu.mReadMemory(), read, nullptr, nullptr);
+        mExecute(4, read, nullptr, nullptr);
       }
       break;
 
     default:
-      mExecute(5, mCpu.mReadMemory(), read, modify, write);
+      mExecute(5, read, modify, write);
       break;
   }
 }
 
 void CPU::InstructionSet::mExecuteAbsoluteY(
-    void (InstructionSet::*read)(uint8_t value),
-    void (InstructionSet::*modify)(uint8_t value),
-    void (InstructionSet::*write)(uint8_t value)) {
+    void (InstructionSet::*read)(),
+    void (InstructionSet::*modify)(),
+    void (InstructionSet::*write)()) {
   switch (mCpu.mCycle) {
     case 2:
       mCpu.mAddress = mCpu.mProgramCounter;
@@ -191,20 +191,20 @@ void CPU::InstructionSet::mExecuteAbsoluteY(
       }
 
       if (write == nullptr && modify == nullptr) {
-        mExecute(4, mCpu.mReadMemory(), read, nullptr, nullptr);
+        mExecute(4, read, nullptr, nullptr);
       }
       break;
 
     default:
-      mExecute(5, mCpu.mReadMemory(), read, modify, write);
+      mExecute(5, read, modify, write);
       break;
   }
 }
 
 void CPU::InstructionSet::mExecuteIndirectX(
-    void (InstructionSet::*read)(uint8_t value),
-    void (InstructionSet::*modify)(uint8_t value),
-    void (InstructionSet::*write)(uint8_t value)) {
+    void (InstructionSet::*read)(),
+    void (InstructionSet::*modify)(),
+    void (InstructionSet::*write)()) {
   switch (mCpu.mCycle) {
     case 2:
       mCpu.mAddress = mCpu.mProgramCounter;
@@ -228,15 +228,15 @@ void CPU::InstructionSet::mExecuteIndirectX(
       break;
 
     default:
-      mExecute(6, mCpu.mReadMemory(), read, modify, write);
+      mExecute(6, read, modify, write);
       break;
   }
 }
 
 void CPU::InstructionSet::mExecuteIndirectY(
-    void (InstructionSet::*read)(uint8_t value),
-    void (InstructionSet::*modify)(uint8_t value),
-    void (InstructionSet::*write)(uint8_t value)) {
+    void (InstructionSet::*read)(),
+    void (InstructionSet::*modify)(),
+    void (InstructionSet::*write)()) {
   switch (mCpu.mCycle) {
     case 2:
       mCpu.mAddress = mCpu.mProgramCounter;
@@ -262,12 +262,12 @@ void CPU::InstructionSet::mExecuteIndirectY(
       }
 
       if (write == nullptr && modify == nullptr) {
-        mExecute(5, mCpu.mReadMemory(), read, nullptr, nullptr);
+        mExecute(5, read, nullptr, nullptr);
       }
       break;
 
     default:
-      mExecute(6, mCpu.mReadMemory(), read, modify, write);
+      mExecute(6, read, modify, write);
       break;
   }
 }

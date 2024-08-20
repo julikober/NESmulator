@@ -1,7 +1,7 @@
 #include "cpu.hpp"
 
-void CPU::InstructionSet::mReadAND(uint8_t value) {
-  mCpu.mAccumulator = mCpu.mAnd(mCpu.mAccumulator, value);
+void CPU::InstructionSet::mReadAND() {
+  mCpu.mAccumulator = mCpu.mAnd(mCpu.mAccumulator, mCpu.mReadMemory());
 }
 
 void CPU::InstructionSet::ANDImmediate() {
