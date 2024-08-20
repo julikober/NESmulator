@@ -15,6 +15,22 @@ enum StatusFlag {
 };
 
 enum Instruction {
+  AND_INDIRECT_X = 0x21,
+
+  AND_ZERO_PAGE = 0x25,
+
+  AND_IMMEDIATE = 0x29,
+
+  AND_ABSOLUTE = 0x2D,
+
+  AND_INDIRECT_Y = 0x31,
+
+  AND_ZERO_PAGE_X = 0x35,
+
+  AND_ABSOLUTE_Y = 0x39,
+
+  AND_ABSOLUTE_X = 0x3D,
+
   ADC_INDIRECT_X = 0x61,
 
   ADC_ZERO_PAGE = 0x65,
@@ -39,7 +55,11 @@ class CPU {
    private:
     CPU& mCpu;
 
+    // ADC
     void mReadADC(uint8_t value);
+
+    // AND
+    void mReadAND(uint8_t value);
 
     // Addressing modes
     void mExecuteAccumulator(
@@ -107,6 +127,16 @@ class CPU {
     void ADCAbsoluteY();
     void ADCIndirectX();
     void ADCIndirectY();
+
+    // AND
+    void ANDImmediate();
+    void ANDZeroPage();
+    void ANDZeroPageX();
+    void ANDAbsolute();
+    void ANDAbsoluteX();
+    void ANDAbsoluteY();
+    void ANDIndirectX();
+    void ANDIndirectY();
 
     // ASL
     void ASLZeroPage();

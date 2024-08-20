@@ -30,6 +30,22 @@ uint8_t CPU::mAddWithCarry(uint8_t a, uint8_t b) {
   return a + b + c;
 }
 
+uint8_t CPU::mAnd(uint8_t a, uint8_t b) {
+  if (a & b == 0) {
+    mSetFlag(ZERO);
+  } else {
+    mClearFlag(ZERO);
+  }
+
+  if (a & b >> 7) {
+    mSetFlag(NEGATIVE);
+  } else {
+    mClearFlag(NEGATIVE);
+  }
+
+  return a & b;
+}
+
 uint8_t CPU::mOr(uint8_t a, uint8_t b) {
   if (a | b == 0) {
     mSetFlag(ZERO);
