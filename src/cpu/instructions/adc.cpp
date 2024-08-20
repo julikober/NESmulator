@@ -1,110 +1,37 @@
 #include "cpu.hpp"
 
+void CPU::InstructionSet::mReadADC() {
+  mCpu.mAccumulator = mCpu.mAddWithCarry(mCpu.mAccumulator, mCpu.mReadMemory());
+}
+
 void CPU::InstructionSet::ADCImmediate() {
-  switch (mCpu.mCycle) {
-    case 2:
-      mCpu.mAddress = mCpu.mProgramCounter;
-      mCpu.mProgramCounter++;
-
-      mCpu.mAccumulator =
-          mCpu.mAddWithCarry(mCpu.mAccumulator, mCpu.mReadMemory());
-
-    default:
-      mCpu.mCycle = 1;
-      break;
-  }
+  mExecuteImmediate(&InstructionSet::mReadADC);
 }
 
 void CPU::InstructionSet::ADCZeroPage() {
-  switch (mCpu.mCycle) {
-    case 2:
-      mCpu.mAddress = mCpu.mProgramCounter;
-      mCpu.mProgramCounter++;
-
-      mCpu.mAddress = mCpu.mReadMemory();
-      break;
-
-    case 3:
-      mCpu.mAccumulator =
-          mCpu.mAddWithCarry(mCpu.mAccumulator, mCpu.mReadMemory());
-
-    default:
-      mCpu.mCycle = 1;
-      break;
-  }
+  mExecuteZeroPage(&InstructionSet::mReadADC);
 }
 
 void CPU::InstructionSet::ADCZeroPageX() {
-  switch (mCpu.mCycle) {
-    case 2:
-      mCpu.mAddress = mCpu.mProgramCounter;
-      mCpu.mProgramCounter++;
-
-      mCpu.mAddress = mCpu.mReadMemory();
-      break;
-
-    case 3:
-      mCpu.mAddress += mCpu.mXIndex;
-
-    case 4:
-      mCpu.mAccumulator =
-          mCpu.mAddWithCarry(mCpu.mAccumulator, mCpu.mReadMemory());
-
-    default:
-      mCpu.mCycle = 1;
-      break;
-  }
+  mExecuteZeroPageX(&InstructionSet::mReadADC);
 }
 
 void CPU::InstructionSet::ADCAbsolute() {
-  switch (mCpu.mCycle) {
-    case 2:
-      mCpu.mAddress = mCpu.mProgramCounter;
-      mCpu.mProgramCounter++;
-
-      mCpu.mSetAddressLow(mCpu.mReadMemory());
-      break;
-
-    case 3:
-      mCpu.mAddress = mCpu.mProgramCounter;
-      mCpu.mProgramCounter++;
-      mCpu.mSetAddressHigh(mCpu.mReadMemory());
-      break;
-
-    case 4:
-      mCpu.mAccumulator =
-          mCpu.mAddWithCarry(mCpu.mAccumulator, mCpu.mReadMemory());
-
-    default:
-      mCpu.mCycle = 1;
-      break;
-  }
+  mExecuteAbsolute(&InstructionSet::mReadADC);
 }
 
 void CPU::InstructionSet::ADCAbsoluteX() {
-  switch (mCpu.mCycle) {
-    case 2:
-      mCpu.mAddress = mCpu.mProgramCounter;
-      mCpu.mProgramCounter++;
+  mExecuteAbsoluteX(&InstructionSet::mReadADC);
+}
 
-      mCpu.mSetAddressLow(mCpu.mReadMemory());
-      break;
+void CPU::InstructionSet::ADCAbsoluteY() {
+  mExecuteAbsoluteY(&InstructionSet::mReadADC);
+}
 
-    case 3:
-      mCpu.mAddress = mCpu.mProgramCounter;
-      mCpu.mProgramCounter++;
-      mCpu.mSetAddressHigh(mCpu.mReadMemory());
-      break;
+void CPU::InstructionSet::ADCIndirectX() {
+  // mExecuteIndirectX(&InstructionSet::mReadADC);
+}
 
-    case 4:
-      mCpu.mAddress += mCpu.mXIndex;
-
-    case 5:
-      mCpu.mAccumulator =
-          mCpu.mAddWithCarry(mCpu.mAccumulator, mCpu.mReadMemory());
-
-    default:
-      mCpu.mCycle = 1;
-      break;
-  }
+void CPU::InstructionSet::ADCIndirectY() {
+  // mExecuteIndirectY(&InstructionSet::mReadADC);
 }

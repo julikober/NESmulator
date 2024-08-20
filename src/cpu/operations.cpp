@@ -3,13 +3,13 @@
 uint8_t CPU::mAddWithCarry(uint8_t a, uint8_t b) {
   uint8_t c = mCheckFlag(CARRY);
 
-  if (a + b + c == 0) {
+  if ((uint8_t)(a + b + c) == 0) {
     mSetFlag(ZERO);
   } else {
     mClearFlag(ZERO);
   }
 
-  if (a + b + c >> 7) {
+  if ((uint8_t)(a + b + c) >> 7) {
     mSetFlag(NEGATIVE);
   } else {
     mClearFlag(NEGATIVE);
@@ -21,7 +21,7 @@ uint8_t CPU::mAddWithCarry(uint8_t a, uint8_t b) {
     mClearFlag(CARRY);
   }
 
-  if (a >> 7 != (a + b + c) >> 7) {
+  if (((a ^ (uint8_t)(a + b + c)) & (uint8_t)(b ^ (a + b + c))) >> 7) {
     mSetFlag(OVERFLOW);
   } else {
     mClearFlag(OVERFLOW);

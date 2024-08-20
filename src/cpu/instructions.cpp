@@ -1,0 +1,188 @@
+#include "cpu.hpp"
+
+void CPU::InstructionSet::mExecute(int startCycle,
+                                   void (InstructionSet::*read)(),
+                                   void (InstructionSet::*modify)(),
+                                   void (InstructionSet::*write)()) {
+  if (read != nullptr && modify == nullptr && write == nullptr) {
+    (this->*read)();
+    mCpu.mCycle = 0;
+  } else if (read == nullptr && modify == nullptr && write != nullptr) {
+    (this->*write)();
+    mCpu.mCycle = 0;
+  } else if (read != nullptr && modify != nullptr && write != nullptr) {
+    if (mCpu.mCycle = startCycle) {
+      (this->*read)();
+    } else if (mCpu.mCycle = startCycle + 1) {
+      (this->*modify)();
+    } else if (mCpu.mCycle = startCycle + 2) {
+      (this->*write)();
+      mCpu.mCycle = 0;
+    }
+  }
+}
+
+void CPU::InstructionSet::mExecuteImmediate(void (InstructionSet::*read)(),
+                                            void (InstructionSet::*modify)(),
+                                            void (InstructionSet::*write)()) {
+  mCpu.mAddress = mCpu.mProgramCounter;
+  mCpu.mProgramCounter++;
+
+  mExecute(2, read, modify, write);
+}
+
+void CPU::InstructionSet::mExecuteZeroPage(void (InstructionSet::*read)(),
+                                           void (InstructionSet::*modify)(),
+                                           void (InstructionSet::*write)()) {
+  switch (mCpu.mCycle) {
+    case 2:
+      mCpu.mAddress = mCpu.mProgramCounter;
+      mCpu.mProgramCounter++;
+
+      mCpu.mAddress = mCpu.mReadMemory();
+      break;
+
+    default:
+      mExecute(3, read, modify, write);
+      break;
+  }
+}
+
+void CPU::InstructionSet::mExecuteZeroPageX(void (InstructionSet::*read)(),
+                                            void (InstructionSet::*modify)(),
+                                            void (InstructionSet::*write)()) {
+  switch (mCpu.mCycle) {
+    case 2:
+      mCpu.mAddress = mCpu.mProgramCounter;
+      mCpu.mProgramCounter++;
+
+      mCpu.mAddress = mCpu.mReadMemory();
+      break;
+
+    case 3:
+      mCpu.mAddress = (uint8_t)(mCpu.mAddress + mCpu.mXIndex);
+      break;
+
+    default:
+      mExecute(4, read, modify, write);
+      break;
+  }
+}
+
+void CPU::InstructionSet::mExecuteZeroPageY(void (InstructionSet::*read)(),
+                                            void (InstructionSet::*modify)(),
+                                            void (InstructionSet::*write)()) {
+  switch (mCpu.mCycle) {
+    case 2:
+      mCpu.mAddress = mCpu.mProgramCounter;
+      mCpu.mProgramCounter++;
+
+      mCpu.mAddress = mCpu.mReadMemory();
+      break;
+
+    case 3:
+      mCpu.mAddress = (uint8_t)(mCpu.mAddress + mCpu.mYIndex);
+      break;
+
+    default:
+      mExecute(4, read, modify, write);
+      break;
+  }
+}
+
+void CPU::InstructionSet::mExecuteAbsolute(void (InstructionSet::*read)(),
+                                           void (InstructionSet::*modify)(),
+                                           void (InstructionSet::*write)()) {
+  switch (mCpu.mCycle) {
+    case 2:
+      mCpu.mAddress = mCpu.mProgramCounter;
+      mCpu.mProgramCounter++;
+
+      mCpu.mBuffer = mCpu.mReadMemory();
+      break;
+
+    case 3:
+      mCpu.mAddress = mCpu.mProgramCounter;
+      mCpu.mProgramCounter++;
+
+      mCpu.mSetAddressHigh(mCpu.mReadMemory());
+      mCpu.mSetAddressLow(mCpu.mBuffer);
+      break;
+
+    default:
+      mExecute(4, read, modify, write);
+      break;
+  }
+}
+
+void CPU::InstructionSet::mExecuteAbsoluteX(void (InstructionSet::*read)(),
+                                            void (InstructionSet::*modify)(),
+                                            void (InstructionSet::*write)()) {
+  switch (mCpu.mCycle) {
+    case 2:
+      mCpu.mAddress = mCpu.mProgramCounter;
+      mCpu.mProgramCounter++;
+
+      mCpu.mBuffer = mCpu.mReadMemory();
+      break;
+
+    case 3:
+      mCpu.mAddress = mCpu.mProgramCounter;
+      mCpu.mProgramCounter++;
+
+      mCpu.mSetAddressHigh(mCpu.mReadMemory());
+      mCpu.mSetAddressLow(mCpu.mBuffer + mCpu.mXIndex);
+      break;
+
+    case 4:
+      if (mCpu.mGetAddressLow() - mCpu.mXIndex < 0) {
+        mCpu.mSetAddressHigh(mCpu.mGetAddressHigh() + 1);
+        break;
+      }
+
+      if (write == nullptr && modify == nullptr) {
+        mExecute(4, read, nullptr, nullptr);
+      }
+      break;
+
+    default:
+      mExecute(5, read, modify, write);
+      break;
+  }
+}
+
+void CPU::InstructionSet::mExecuteAbsoluteY(void (InstructionSet::*read)(),
+                                            void (InstructionSet::*modify)(),
+                                            void (InstructionSet::*write)()) {
+  switch (mCpu.mCycle) {
+    case 2:
+      mCpu.mAddress = mCpu.mProgramCounter;
+      mCpu.mProgramCounter++;
+
+      mCpu.mBuffer = mCpu.mReadMemory();
+      break;
+
+    case 3:
+      mCpu.mAddress = mCpu.mProgramCounter;
+      mCpu.mProgramCounter++;
+
+      mCpu.mSetAddressHigh(mCpu.mReadMemory());
+      mCpu.mSetAddressLow(mCpu.mBuffer + mCpu.mYIndex);
+      break;
+
+    case 4:
+      if (mCpu.mGetAddressLow() - mCpu.mYIndex < 0) {
+        mCpu.mSetAddressHigh(mCpu.mGetAddressHigh() + 1);
+        break;
+      }
+
+      if (write == nullptr && modify == nullptr) {
+        mExecute(4, read, nullptr, nullptr);
+      }
+      break;
+
+    default:
+      mExecute(5, read, modify, write);
+      break;
+  }
+}

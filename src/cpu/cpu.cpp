@@ -3,38 +3,49 @@
 void CPU::do_cycle() {
   if (mCycle == 1) {
     mAddress = mProgramCounter;
-    mInstruction = (Instruction)mReadMemory();
     mProgramCounter++;
+
+    mInstruction = (Instruction)mReadMemory();
 
   } else {
     switch (mInstruction) {
-      // 0x00
-      case ORA_INDIRECT_X:
-        mInstructionSet.ORAIndirectX();
-        break;
-
-      // 0x05
-      case ORA_ZERO_PAGE:
-        mInstructionSet.ORAZeroPage();
-        break;
-
-      // 0x06
-      case ASL_ZERO_PAGE:
-        mInstructionSet.ASLZeroPage();
-        break;
-
-      // 0x65
-      case ADC_ZERO_PAGE:
-        mInstructionSet.ADCZeroPage();
-        break;
-
-      // 0x69
+      // ADC
       case ADC_IMMEDIATE:
         mInstructionSet.ADCImmediate();
         break;
 
+      case ADC_ZERO_PAGE:
+
+        mInstructionSet.ADCZeroPage();
+        break;
+
+      case ADC_ZERO_PAGE_X:
+        mInstructionSet.ADCZeroPageX();
+        break;
+
+      case ADC_ABSOLUTE:
+
+        mInstructionSet.ADCAbsolute();
+        break;
+
+      case ADC_ABSOLUTE_X:
+        mInstructionSet.ADCAbsoluteX();
+        break;
+
+      case ADC_ABSOLUTE_Y:
+        mInstructionSet.ADCAbsoluteY();
+        break;
+
+      case ADC_INDIRECT_X:
+        mInstructionSet.ADCIndirectX();
+        break;
+
+      case ADC_INDIRECT_Y:
+        mInstructionSet.ADCIndirectY();
+        break;
+
       default:
-        mCycle = 1;
+        mCycle = 0;
         break;
     }
   }
