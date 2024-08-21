@@ -116,6 +116,20 @@ void CPU::doCycle() {
         mInstructionSet.BEQRelative();
         break;
 
+      // BIT
+      case BIT_ZERO_PAGE:
+        mInstructionSet.BITZeroPage();
+        break;
+
+      case BIT_ABSOLUTE:
+        mInstructionSet.BITAbsolute();
+        break;
+
+      // BMI
+      case BMI_RELATIVE:
+        mInstructionSet.BMIRelative();
+        break;
+
       default:
         mCycle = 0;
         break;

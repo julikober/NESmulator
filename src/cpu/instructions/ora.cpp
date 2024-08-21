@@ -10,7 +10,8 @@ void CPU::InstructionSet::ORAZeroPage() {
       break;
 
     case 3:
-      mCpu.mAccumulator = mCpu.mOr(mCpu.mAccumulator, mCpu.mReadMemory());
+      mCpu.mAccumul#include "cpu.hpp"
+ator = mCpu.mOr(mCpu.mAccumulator, mCpu.mReadMemory());
 
     default:
       mCpu.mCycle = 1;

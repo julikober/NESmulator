@@ -27,12 +27,15 @@ enum Instruction {
 
   AND_INDIRECT_X = 0x21,
 
+  BIT_ZERO_PAGE = 0x24,
   AND_ZERO_PAGE = 0x25,
 
   AND_IMMEDIATE = 0x29,
 
+  BIT_ABSOLUTE = 0x2C,
   AND_ABSOLUTE = 0x2D,
 
+  BMI_RELATIVE = 0x30,
   AND_INDIRECT_Y = 0x31,
 
   AND_ZERO_PAGE_X = 0x35,
@@ -91,6 +94,12 @@ class CPU {
 
     // BEQ
     bool mCheckBEQ();
+
+    // BIT
+    void mReadBIT();
+
+    // BMI
+    bool mCheckBMI();
 
     // Addressing modes
     void mExecuteAccumulator(void (InstructionSet::*read)(),
@@ -171,6 +180,13 @@ class CPU {
 
     // BEQ
     void BEQRelative();
+
+    // BIT
+    void BITZeroPage();
+    void BITAbsolute();
+
+    // BMI
+    void BMIRelative();
 
     // ORA
     void ORAZeroPage();
