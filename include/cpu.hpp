@@ -21,6 +21,8 @@ enum Instruction {
 
   ASL_ABSOLUTE = 0x0E,
 
+  BPL_RELATIVE = 0x10,
+
   ASL_ZERO_PAGE_X = 0x16,
 
   ASL_ABSOLUTE_X = 0x1E,
@@ -64,6 +66,8 @@ enum Instruction {
 
   BCS_RELATIVE = 0xB0,
 
+  BNE_RELATIVE = 0xD0,
+
   BEQ_RELATIVE = 0xF0
 
 };
@@ -100,6 +104,12 @@ class CPU {
 
     // BMI
     bool mCheckBMI();
+
+    // BNE
+    bool mCheckBNE();
+
+    // BPL
+    bool mCheckBPL();
 
     // Addressing modes
     void mExecuteAccumulator(void (InstructionSet::*read)(),
@@ -187,6 +197,12 @@ class CPU {
 
     // BMI
     void BMIRelative();
+
+    // BNE
+    void BNERelative();
+
+    // BPL
+    void BPLRelative();
 
     // ORA
     void ORAZeroPage();

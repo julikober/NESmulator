@@ -133,6 +133,16 @@ void CPU::doCycle() {
       default:
         mCycle = 0;
         break;
+
+      // BNE
+      case BNE_RELATIVE:
+        mInstructionSet.BNERelative();
+        break;
+
+      // BPL
+      case BPL_RELATIVE:
+        mInstructionSet.BPLRelative();
+        break;
     }
   }
   mCycle++;
