@@ -1,12 +1,15 @@
 #include "cpu.hpp"
 
+void CPU::mFetchInstruction() {
+  mAddress = mProgramCounter;
+  mProgramCounter++;
+
+  mInstruction = (Instruction)mReadMemory();
+}
+
 void CPU::doCycle() {
   if (mCycle == 1) {
-    mAddress = mProgramCounter;
-    mProgramCounter++;
-
-    mInstruction = (Instruction)mReadMemory();
-
+    mFetchInstruction();
   } else {
     switch (mInstruction) {
       // ADC

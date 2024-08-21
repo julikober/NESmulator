@@ -1,9 +1,9 @@
 #include "cpu.hpp"
 
-void CPU::InstructionSet::mExecute(
-    int startCycle, void (InstructionSet::*read)(),
-    void (InstructionSet::*modify)(),
-    void (InstructionSet::*write)()) {
+void CPU::InstructionSet::mExecute(int startCycle,
+                                   void (InstructionSet::*read)(),
+                                   void (InstructionSet::*modify)(),
+                                   void (InstructionSet::*write)()) {
   if (read != nullptr && modify == nullptr && write == nullptr) {
     (this->*read)();
     mCpu.mCycle = 0;
@@ -22,27 +22,24 @@ void CPU::InstructionSet::mExecute(
   }
 }
 
-void CPU::InstructionSet::mExecuteAccumulator(
-    void (InstructionSet::*read)(),
-    void (InstructionSet::*modify)(),
-    void (InstructionSet::*write)()) {
+void CPU::InstructionSet::mExecuteAccumulator(void (InstructionSet::*read)(),
+                                              void (InstructionSet::*modify)(),
+                                              void (InstructionSet::*write)()) {
   mExecute(2, read, modify, write);
 }
 
-void CPU::InstructionSet::mExecuteImmediate(
-    void (InstructionSet::*read)(),
-    void (InstructionSet::*modify)(),
-    void (InstructionSet::*write)()) {
+void CPU::InstructionSet::mExecuteImmediate(void (InstructionSet::*read)(),
+                                            void (InstructionSet::*modify)(),
+                                            void (InstructionSet::*write)()) {
   mCpu.mAddress = mCpu.mProgramCounter;
   mCpu.mProgramCounter++;
 
   mExecute(2, modify, write);
 }
 
-void CPU::InstructionSet::mExecuteZeroPage(
-    void (InstructionSet::*read)(),
-    void (InstructionSet::*modify)(),
-    void (InstructionSet::*write)()) {
+void CPU::InstructionSet::mExecuteZeroPage(void (InstructionSet::*read)(),
+                                           void (InstructionSet::*modify)(),
+                                           void (InstructionSet::*write)()) {
   switch (mCpu.mCycle) {
     case 2:
       mCpu.mAddress = mCpu.mProgramCounter;
@@ -57,10 +54,9 @@ void CPU::InstructionSet::mExecuteZeroPage(
   }
 }
 
-void CPU::InstructionSet::mExecuteZeroPageX(
-    void (InstructionSet::*read)(),
-    void (InstructionSet::*modify)(),
-    void (InstructionSet::*write)()) {
+void CPU::InstructionSet::mExecuteZeroPageX(void (InstructionSet::*read)(),
+                                            void (InstructionSet::*modify)(),
+                                            void (InstructionSet::*write)()) {
   switch (mCpu.mCycle) {
     case 2:
       mCpu.mAddress = mCpu.mProgramCounter;
@@ -79,10 +75,9 @@ void CPU::InstructionSet::mExecuteZeroPageX(
   }
 }
 
-void CPU::InstructionSet::mExecuteZeroPageY(
-    void (InstructionSet::*read)(),
-    void (InstructionSet::*modify)(),
-    void (InstructionSet::*write)()) {
+void CPU::InstructionSet::mExecuteZeroPageY(void (InstructionSet::*read)(),
+                                            void (InstructionSet::*modify)(),
+                                            void (InstructionSet::*write)()) {
   switch (mCpu.mCycle) {
     case 2:
       mCpu.mAddress = mCpu.mProgramCounter;
@@ -101,10 +96,9 @@ void CPU::InstructionSet::mExecuteZeroPageY(
   }
 }
 
-void CPU::InstructionSet::mExecuteAbsolute(
-    void (InstructionSet::*read)(),
-    void (InstructionSet::*modify)(),
-    void (InstructionSet::*write)()) {
+void CPU::InstructionSet::mExecuteAbsolute(void (InstructionSet::*read)(),
+                                           void (InstructionSet::*modify)(),
+                                           void (InstructionSet::*write)()) {
   switch (mCpu.mCycle) {
     case 2:
       mCpu.mAddress = mCpu.mProgramCounter;
@@ -127,10 +121,9 @@ void CPU::InstructionSet::mExecuteAbsolute(
   }
 }
 
-void CPU::InstructionSet::mExecuteAbsoluteX(
-    void (InstructionSet::*read)(),
-    void (InstructionSet::*modify)(),
-    void (InstructionSet::*write)()) {
+void CPU::InstructionSet::mExecuteAbsoluteX(void (InstructionSet::*read)(),
+                                            void (InstructionSet::*modify)(),
+                                            void (InstructionSet::*write)()) {
   switch (mCpu.mCycle) {
     case 2:
       mCpu.mAddress = mCpu.mProgramCounter;
@@ -164,10 +157,9 @@ void CPU::InstructionSet::mExecuteAbsoluteX(
   }
 }
 
-void CPU::InstructionSet::mExecuteAbsoluteY(
-    void (InstructionSet::*read)(),
-    void (InstructionSet::*modify)(),
-    void (InstructionSet::*write)()) {
+void CPU::InstructionSet::mExecuteAbsoluteY(void (InstructionSet::*read)(),
+                                            void (InstructionSet::*modify)(),
+                                            void (InstructionSet::*write)()) {
   switch (mCpu.mCycle) {
     case 2:
       mCpu.mAddress = mCpu.mProgramCounter;
@@ -201,10 +193,9 @@ void CPU::InstructionSet::mExecuteAbsoluteY(
   }
 }
 
-void CPU::InstructionSet::mExecuteIndirectX(
-    void (InstructionSet::*read)(),
-    void (InstructionSet::*modify)(),
-    void (InstructionSet::*write)()) {
+void CPU::InstructionSet::mExecuteIndirectX(void (InstructionSet::*read)(),
+                                            void (InstructionSet::*modify)(),
+                                            void (InstructionSet::*write)()) {
   switch (mCpu.mCycle) {
     case 2:
       mCpu.mAddress = mCpu.mProgramCounter;
@@ -233,10 +224,9 @@ void CPU::InstructionSet::mExecuteIndirectX(
   }
 }
 
-void CPU::InstructionSet::mExecuteIndirectY(
-    void (InstructionSet::*read)(),
-    void (InstructionSet::*modify)(),
-    void (InstructionSet::*write)()) {
+void CPU::InstructionSet::mExecuteIndirectY(void (InstructionSet::*read)(),
+                                            void (InstructionSet::*modify)(),
+                                            void (InstructionSet::*write)()) {
   switch (mCpu.mCycle) {
     case 2:
       mCpu.mAddress = mCpu.mProgramCounter;
@@ -268,6 +258,47 @@ void CPU::InstructionSet::mExecuteIndirectY(
 
     default:
       mExecute(6, read, modify, write);
+      break;
+  }
+}
+
+void CPU::InstructionSet::mExecuteRelative(
+    bool (InstructionSet::*condition)()) {
+  switch (mCpu.mCycle) {
+    case 2:
+      mCpu.mAddress = mCpu.mProgramCounter;
+      mCpu.mProgramCounter++;
+
+      mCpu.mBuffer = mCpu.mReadMemory();
+      break;
+
+    case 3:
+      if ((this->*condition)()) {
+        mCpu.mSetProgramCounterLow(mCpu.mGetProgramCounterLow() + mCpu.mBuffer);
+      } else {
+        mCpu.mCycle = 1;
+        mCpu.mFetchInstruction();
+      }
+      break;
+
+    case 4:
+      if (mCpu.mGetProgramCounterLow() - mCpu.mBuffer < 0) {
+        mCpu.mSetProgramCounterHigh(mCpu.mGetProgramCounterHigh() + 1);
+      } else if (mCpu.mGetProgramCounterLow() - mCpu.mBuffer > 0xFF) {
+        mCpu.mSetProgramCounterHigh(mCpu.mGetProgramCounterHigh() - 1);
+      } else {
+        mCpu.mCycle = 1;
+        mCpu.mFetchInstruction();
+      }
+      break;
+
+    case 5:
+      mCpu.mCycle = 1;
+      mCpu.mFetchInstruction();
+      break;
+
+    default:
+      mCpu.mCycle = 0;
       break;
   }
 }
