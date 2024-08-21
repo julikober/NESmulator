@@ -57,6 +57,12 @@ enum Instruction {
 
   ADC_ABSOLUTE_X = 0x7D,
 
+  BCC_RELATIVE = 0x90,
+
+  BCS_RELATIVE = 0xB0,
+
+  BEQ_RELATIVE = 0xF0
+
 };
 
 class CPU {
@@ -76,6 +82,15 @@ class CPU {
     void mModifyASL();
     void mWriteASL();
     void mReadASLAccumulator();
+
+    // BCC
+    bool mCheckBCC();
+
+    // BCS
+    bool mCheckBCS();
+
+    // BEQ
+    bool mCheckBEQ();
 
     // Addressing modes
     void mExecuteAccumulator(void (InstructionSet::*read)(),
@@ -147,6 +162,15 @@ class CPU {
     void ASLZeroPageX();
     void ASLAbsolute();
     void ASLAbsoluteX();
+
+    // BCC
+    void BCCRelative();
+
+    // BCS
+    void BCSRelative();
+
+    // BEQ
+    void BEQRelative();
 
     // ORA
     void ORAZeroPage();

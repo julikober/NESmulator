@@ -80,6 +80,42 @@ void CPU::doCycle() {
         mInstructionSet.ANDIndirectY();
         break;
 
+      // ASL
+      case ASL_ACCUMULATOR:
+        mInstructionSet.ASLAccumulator();
+        break;
+
+      case ASL_ZERO_PAGE:
+        mInstructionSet.ASLZeroPage();
+        break;
+
+      case ASL_ZERO_PAGE_X:
+        mInstructionSet.ASLZeroPageX();
+        break;
+
+      case ASL_ABSOLUTE:
+        mInstructionSet.ASLAbsolute();
+        break;
+
+      case ASL_ABSOLUTE_X:
+        mInstructionSet.ASLAbsoluteX();
+        break;
+
+      // BCC
+      case BCC_RELATIVE:
+        mInstructionSet.BCCRelative();
+        break;
+
+      // BCS
+      case BCS_RELATIVE:
+        mInstructionSet.BCSRelative();
+        break;
+
+      // BEQ
+      case BEQ_RELATIVE:
+        mInstructionSet.BEQRelative();
+        break;
+
       default:
         mCycle = 0;
         break;
