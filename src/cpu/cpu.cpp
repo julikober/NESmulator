@@ -143,6 +143,36 @@ void CPU::doCycle() {
       case BPL_RELATIVE:
         mInstructionSet.BPLRelative();
         break;
+
+      // BVC
+      case BVC_RELATIVE:
+        mInstructionSet.BVCRelative();
+        break;
+
+      // BVS
+      case BVS_RELATIVE:
+        mInstructionSet.BVSRelative();
+        break;
+
+      // CLC
+      case CLC_IMPLIED:
+        mInstructionSet.CLCImplied();
+        break;
+
+      // CLD
+      case CLD_IMPLIED:
+        mInstructionSet.CLDImplied();
+        break;
+
+      // CLI
+      case CLI_IMPLIED:
+        mInstructionSet.CLIImplied();
+        break;
+
+      // CLV
+      case CLV_IMPLIED:
+        mInstructionSet.CLVImplied();
+        break;
     }
   }
   mCycle++;

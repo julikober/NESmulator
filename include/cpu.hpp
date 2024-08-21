@@ -8,7 +8,7 @@ enum StatusFlag {
   CARRY = 1 << 0,
   ZERO = 1 << 1,
   INTERRUPT_DISABLE = 1 << 2,
-  // DECIMAL_MODE = 1 << 3, // Not used in NES
+  DECIMAL = 1 << 3,  // Not used in NES
   BREAK = 1 << 4,
   OVERFLOW = 1 << 6,
   NEGATIVE = 1 << 7
@@ -24,6 +24,8 @@ enum Instruction {
   BPL_RELATIVE = 0x10,
 
   ASL_ZERO_PAGE_X = 0x16,
+
+  CLC_IMPLIED = 0x18,
 
   ASL_ABSOLUTE_X = 0x1E,
 
@@ -46,6 +48,10 @@ enum Instruction {
 
   AND_ABSOLUTE_X = 0x3D,
 
+  BVC_RELATIVE = 0x50,
+
+  CLI_IMPLIED = 0x58,
+
   ADC_INDIRECT_X = 0x61,
 
   ADC_ZERO_PAGE = 0x65,
@@ -54,6 +60,7 @@ enum Instruction {
 
   ADC_ABSOLUTE = 0x6D,
 
+  BVS_RELATIVE = 0x70,
   ADC_INDIRECT_Y = 0x71,
 
   ADC_ZERO_PAGE_X = 0x75,
@@ -66,7 +73,11 @@ enum Instruction {
 
   BCS_RELATIVE = 0xB0,
 
+  CLV_IMPLIED = 0xB8,
+
   BNE_RELATIVE = 0xD0,
+
+  CLD_IMPLIED = 0xD8,
 
   BEQ_RELATIVE = 0xF0
 
@@ -110,6 +121,12 @@ class CPU {
 
     // BPL
     bool mCheckBPL();
+
+    // BVC
+    bool mCheckBVC();
+
+    // BVS
+    bool mCheckBVS();
 
     // Addressing modes
     void mExecuteAccumulator(void (InstructionSet::*read)(),
@@ -203,6 +220,24 @@ class CPU {
 
     // BPL
     void BPLRelative();
+
+    // BVC
+    void BVCRelative();
+
+    // BVS
+    void BVSRelative();
+
+    // CLC
+    void CLCImplied();
+
+    // CLD
+    void CLDImplied();
+
+    // CLI
+    void CLIImplied();
+
+    // CLV
+    void CLVImplied();
 
     // ORA
     void ORAZeroPage();
