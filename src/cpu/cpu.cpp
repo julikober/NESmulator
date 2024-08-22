@@ -184,6 +184,39 @@ void CPU::doCycle() {
         mInstructionSet.CLVImplied();
         break;
 
+      // CMP
+      case CMP_IMMEDIATE:
+        mInstructionSet.CMPImmediate();
+        break;
+
+      case CMP_ZERO_PAGE:
+        mInstructionSet.CMPZeroPage();
+        break;
+
+      case CMP_ZERO_PAGE_X:
+        mInstructionSet.CMPZeroPageX();
+        break;
+
+      case CMP_ABSOLUTE:
+        mInstructionSet.CMPAbsolute();
+        break;
+
+      case CMP_ABSOLUTE_X:
+        mInstructionSet.CMPAbsoluteX();
+        break;
+
+      case CMP_ABSOLUTE_Y:
+        mInstructionSet.CMPAbsoluteY();
+        break;
+
+      case CMP_INDIRECT_X:
+        mInstructionSet.CMPIndirectX();
+        break;
+
+      case CMP_INDIRECT_Y:
+        mInstructionSet.CMPIndirectY();
+        break;
+
       default:
         mCycle = 0;
         break;

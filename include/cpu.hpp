@@ -75,12 +75,15 @@ enum Instruction {
 
   CLV_IMPLIED = 0xB8,
 
+  CPY_IMMEDIATE = 0xC0,
   CMP_INDIRECT_X = 0xC1,
 
+  CPY_ZERO_PAGE = 0xC4,
   CMP_ZERO_PAGE = 0xC5,
 
   CMP_IMMEDIATE = 0xC9,
 
+  CPY_ABSOLUTE = 0xCC,
   CMP_ABSOLUTE = 0xCD,
 
   BNE_RELATIVE = 0xD0,
@@ -92,6 +95,12 @@ enum Instruction {
   CMP_ABSOLUTE_Y = 0xD9,
 
   CMP_ABSOLUTE_X = 0xDD,
+
+  CPX_IMMEDIATE = 0xE0,
+
+  CPX_ZERO_PAGE = 0xE4,
+
+  CPX_ABSOLUTE = 0xEC,
 
   BEQ_RELATIVE = 0xF0
 
@@ -156,6 +165,12 @@ class CPU {
 
     // CMP
     void mReadCMP();
+
+    // CPX
+    void mReadCPX();
+
+    // CPY
+    void mReadCPY();
 
     // Addressing modes
     void mExecuteImplied(void (InstructionSet::*action)());
@@ -278,6 +293,16 @@ class CPU {
     void CMPAbsoluteY();
     void CMPIndirectX();
     void CMPIndirectY();
+
+    // CPX
+    void CPXImmediate();
+    void CPXZeroPage();
+    void CPXAbsolute();
+
+    // CPY
+    void CPYImmediate();
+    void CPYZeroPage();
+    void CPYAbsolute();
 
     // ORA
     void ORAZeroPage();
