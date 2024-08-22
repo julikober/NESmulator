@@ -7,6 +7,20 @@ void CPU::mFetchInstruction() {
   mInstruction = (Instruction)mReadMemory();
 }
 
+void CPU::mSetZeroAndNegative(uint8_t value) {
+  if (value == 0) {
+    mSetFlag(ZERO);
+  } else {
+    mClearFlag(ZERO);
+  }
+
+  if (value & (1 << 7)) {
+    mSetFlag(NEGATIVE);
+  } else {
+    mClearFlag(NEGATIVE);
+  }
+}
+
 void CPU::doCycle() {
   if (mCycle == 1) {
     mFetchInstruction();
@@ -130,10 +144,6 @@ void CPU::doCycle() {
         mInstructionSet.BMIRelative();
         break;
 
-      default:
-        mCycle = 0;
-        break;
-
       // BNE
       case BNE_RELATIVE:
         mInstructionSet.BNERelative();
@@ -172,6 +182,10 @@ void CPU::doCycle() {
       // CLV
       case CLV_IMPLIED:
         mInstructionSet.CLVImplied();
+        break;
+
+      default:
+        mCycle = 0;
         break;
     }
   }

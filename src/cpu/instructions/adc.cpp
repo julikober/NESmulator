@@ -1,7 +1,23 @@
 #include "cpu.hpp"
 
 void CPU::InstructionSet::mReadADC() {
-  mCpu.mAccumulator = mCpu.mAddWithCarry(mCpu.mAccumulator, mCpu.mReadMemory());
+  OperationOutput output =
+      mCpu.mSum(mCpu.mAccumulator, mCpu.mReadMemory(), true);
+  mCpu.mAccumulator = output.value;
+
+  mCpu.mSetZeroAndNegative(mCpu.mAccumulator);
+
+  if (output.carry) {
+    mCpu.mSetFlag(CARRY);
+  } else {
+    mCpu.mClearFlag(CARRY);
+  }
+
+  if (output.overflow) {
+    mCpu.mSetFlag(OVERFLOW);
+  } else {
+    mCpu.mClearFlag(OVERFLOW);
+  }
 }
 
 void CPU::InstructionSet::ADCImmediate() {

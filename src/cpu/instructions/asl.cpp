@@ -3,13 +3,31 @@
 void CPU::InstructionSet::mReadASL() { mCpu.mBuffer = mCpu.mReadMemory(); }
 
 void CPU::InstructionSet::mModifyASL() {
-  mCpu.mBuffer = mCpu.mShiftLeft(mCpu.mBuffer);
+  OperationOutput output = mCpu.mSum(mCpu.mBuffer, mCpu.mBuffer);
+  mCpu.mBuffer = output.value;
+
+  mCpu.mSetZeroAndNegative(mCpu.mBuffer);
+
+  if (output.carry) {
+    mCpu.mSetFlag(CARRY);
+  } else {
+    mCpu.mClearFlag(CARRY);
+  }
 }
 
 void CPU::InstructionSet::mWriteASL() { mCpu.mWriteMemory(mCpu.mBuffer); }
 
 void CPU::InstructionSet::mReadASLAccumulator() {
-  mCpu.mAccumulator = mCpu.mShiftLeft(mCpu.mAccumulator);
+  OperationOutput output = mCpu.mSum(mCpu.mAccumulator, mCpu.mAccumulator);
+  mCpu.mAccumulator = output.value;
+
+  mCpu.mSetZeroAndNegative(mCpu.mAccumulator);
+
+  if (output.carry) {
+    mCpu.mSetFlag(CARRY);
+  } else {
+    mCpu.mClearFlag(CARRY);
+  }
 }
 
 void CPU::InstructionSet::ASLAccumulator() {

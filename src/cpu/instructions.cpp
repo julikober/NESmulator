@@ -22,6 +22,11 @@ void CPU::InstructionSet::mExecute(int startCycle,
   }
 }
 
+void CPU::InstructionSet::mExecuteImplied(void (InstructionSet::*action)()) {
+  (this->*action)();
+  mCpu.mCycle = 0;
+}
+
 void CPU::InstructionSet::mExecuteAccumulator(void (InstructionSet::*read)(),
                                               void (InstructionSet::*modify)(),
                                               void (InstructionSet::*write)()) {

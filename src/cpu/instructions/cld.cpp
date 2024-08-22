@@ -1,3 +1,7 @@
 #include "cpu.hpp"
 
-void CPU::InstructionSet::CLDImplied() { mCpu.mClearFlag(DECIMAL); }
+void CPU::InstructionSet::mExecuteCLD() { mCpu.mClearFlag(DECIMAL); }
+
+void CPU::InstructionSet::CLDImplied() {
+  mExecuteImmediate(&InstructionSet::mExecuteCLD);
+}

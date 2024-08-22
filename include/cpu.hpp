@@ -128,7 +128,20 @@ class CPU {
     // BVS
     bool mCheckBVS();
 
+    // CLC
+    void mExecuteCLC();
+
+    // CLD
+    void mExecuteCLD();
+
+    // CLI
+    void mExecuteCLI();
+
+    // CLV
+    void mExecuteCLV();
+
     // Addressing modes
+    void mExecuteImplied(void (InstructionSet::*action)());
     void mExecuteAccumulator(void (InstructionSet::*read)(),
                              void (InstructionSet::*modify)() = nullptr,
                              void (InstructionSet::*write)() = nullptr);
@@ -284,24 +297,30 @@ class CPU {
     mAddress = (mAddress & 0xFF00) | value;
   }
 
+  // Read and write memory
+  inline uint8_t mReadMemory() { return mMemory.read(mAddress); }
+  inline void mWriteMemory(uint8_t value) { mMemory.write(mAddress, value); }
+
   // Getters and setters for status flags
   inline void mSetFlag(uint8_t flags) { mStatus |= flags; };
   inline void mClearFlag(uint8_t flags) { mStatus &= ~flags; };
   inline bool mCheckFlag(uint8_t flags) { return mStatus & flags; };
 
-  // Read and write memory
+  // Method for automatically setting or clearing zero and negative flags
+  void mSetZeroAndNegative(uint8_t value);
 
-  inline uint8_t mReadMemory() { return mMemory.read(mAddress); }
-  inline void mWriteMemory(uint8_t value) { mMemory.write(mAddress, value); }
+  struct OperationOutput {
+    uint8_t value;
+    bool overflow;
+    bool carry;
+  };
 
   // Arithmatic and logical operations affecting status flags
-  uint8_t mAddWithCarry(uint8_t a, uint8_t b);
-  uint8_t mSubtractWithCarry(uint8_t a, uint8_t b);
-  uint8_t mAnd(uint8_t a, uint8_t b);
-  uint8_t mOr(uint8_t a, uint8_t b);
-  uint8_t mXor(uint8_t a, uint8_t b);
-  uint8_t mShiftRight(uint8_t value);
-  uint8_t mShiftLeft(uint8_t value);
+  OperationOutput mSum(uint8_t a, uint8_t b, bool checkCarry = false);
+  OperationOutput mAnd(uint8_t a, uint8_t b);
+  OperationOutput mOr(uint8_t a, uint8_t b);
+  OperationOutput mEor(uint8_t a, uint8_t b);
+  OperationOutput mShiftRight(uint8_t a);
 
  public:
   CPU(Memory& memory)

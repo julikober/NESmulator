@@ -1,3 +1,7 @@
 #include "cpu.hpp"
 
-void CPU::InstructionSet::CLCImplied() { mCpu.mClearFlag(CARRY); }
+void CPU::InstructionSet::mExecuteCLC() { mCpu.mClearFlag(CARRY); }
+
+void CPU::InstructionSet::CLCImplied() {
+  mExecuteImplied(&InstructionSet::mExecuteCLC);
+}

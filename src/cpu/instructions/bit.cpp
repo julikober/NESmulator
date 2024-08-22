@@ -9,11 +9,7 @@ void CPU::InstructionSet::mReadBIT() {
     mCpu.mClearFlag(OVERFLOW);
   }
 
-  if (mCpu.mReadMemory() & (1 << 7)) {
-    mCpu.mSetFlag(NEGATIVE);
-  } else {
-    mCpu.mClearFlag(NEGATIVE);
-  }
+  mCpu.mSetZeroAndNegative(mCpu.mReadMemory());
 }
 
 void CPU::InstructionSet::BITZeroPage() {
