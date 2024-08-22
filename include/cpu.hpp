@@ -80,21 +80,25 @@ enum Instruction {
 
   CPY_ZERO_PAGE = 0xC4,
   CMP_ZERO_PAGE = 0xC5,
+  DEC_ZERO_PAGE = 0xC6,
 
   CMP_IMMEDIATE = 0xC9,
 
   CPY_ABSOLUTE = 0xCC,
   CMP_ABSOLUTE = 0xCD,
+  DEC_ABSOLUTE = 0xCE,
 
   BNE_RELATIVE = 0xD0,
   CMP_INDIRECT_Y = 0xD1,
 
   CMP_ZERO_PAGE_X = 0xD5,
+  DEC_ZERO_PAGE_X = 0xD6,
 
   CLD_IMPLIED = 0xD8,
   CMP_ABSOLUTE_Y = 0xD9,
 
   CMP_ABSOLUTE_X = 0xDD,
+  DEC_ABSOLUTE_X = 0xDE,
 
   CPX_IMMEDIATE = 0xE0,
 
@@ -171,6 +175,11 @@ class CPU {
 
     // CPY
     void mReadCPY();
+
+    // DEC
+    void mReadDEC();
+    void mModifyDEC();
+    void mWriteDEC();
 
     // Addressing modes
     void mExecuteImplied(void (InstructionSet::*action)());
@@ -307,6 +316,12 @@ class CPU {
     // ORA
     void ORAZeroPage();
     void ORAIndirectX();
+
+    // DEC
+    void DECZeroPage();
+    void DECZeroPageX();
+    void DECAbsolute();
+    void DECAbsoluteX();
   };
 
   Memory& mMemory;

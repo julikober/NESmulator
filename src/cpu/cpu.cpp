@@ -217,6 +217,49 @@ void CPU::doCycle() {
         mInstructionSet.CMPIndirectY();
         break;
 
+      // CPX
+      case CPX_IMMEDIATE:
+        mInstructionSet.CPXImmediate();
+        break;
+
+      case CPX_ZERO_PAGE:
+        mInstructionSet.CPXZeroPage();
+        break;
+
+      case CPX_ABSOLUTE:
+        mInstructionSet.CPXAbsolute();
+        break;
+
+      // CPY
+      case CPY_IMMEDIATE:
+        mInstructionSet.CPYImmediate();
+        break;
+
+      case CPY_ZERO_PAGE:
+        mInstructionSet.CPYZeroPage();
+        break;
+
+      case CPY_ABSOLUTE:
+        mInstructionSet.CPYAbsolute();
+        break;
+
+      // DEC
+      case DEC_ZERO_PAGE:
+        mInstructionSet.DECZeroPage();
+        break;
+
+      case DEC_ZERO_PAGE_X:
+        mInstructionSet.DECZeroPageX();
+        break;
+
+      case DEC_ABSOLUTE:
+        mInstructionSet.DECAbsolute();
+        break;
+
+      case DEC_ABSOLUTE_X:
+        mInstructionSet.DECAbsoluteX();
+        break;
+
       default:
         mCycle = 0;
         break;
