@@ -303,6 +303,33 @@ void CPU::doCycle() {
         mInstructionSet.EORIndirectY();
         break;
 
+      // INC
+      case INC_ZERO_PAGE:
+        mInstructionSet.INCZeroPage();
+        break;
+
+      case INC_ZERO_PAGE_X:
+        mInstructionSet.INCZeroPageX();
+        break;
+
+      case INC_ABSOLUTE:
+        mInstructionSet.INCAbsolute();
+        break;
+
+      case INC_ABSOLUTE_X:
+        mInstructionSet.INCAbsoluteX();
+        break;
+
+      // INX
+      case INX_IMPLIED:
+        mInstructionSet.INXImplied();
+        break;
+
+      // INY
+      case INY_IMPLIED:
+        mInstructionSet.INYImplied();
+        break;
+
       default:
         mCycle = 0;
         break;

@@ -98,6 +98,7 @@ enum Instruction {
   CMP_ZERO_PAGE = 0xC5,
   DEC_ZERO_PAGE = 0xC6,
 
+  INY_IMPLIED = 0xC8,
   CMP_IMMEDIATE = 0xC9,
   DEX_IMPLIED = 0xCA,
 
@@ -121,9 +122,18 @@ enum Instruction {
 
   CPX_ZERO_PAGE = 0xE4,
 
-  CPX_ABSOLUTE = 0xEC,
+  INC_ZERO_PAGE = 0xE6,
 
-  BEQ_RELATIVE = 0xF0
+  INX_IMPLIED = 0xE8,
+
+  CPX_ABSOLUTE = 0xEC,
+  INC_ABSOLUTE = 0xEE,
+
+  BEQ_RELATIVE = 0xF0,
+
+  INC_ZERO_PAGE_X = 0xF6,
+
+  INC_ABSOLUTE_X = 0xFE,
 
 };
 
@@ -206,6 +216,17 @@ class CPU {
 
     // EOR
     void mReadEOR();
+
+    // INC
+    void mReadINC();
+    void mModifyINC();
+    void mWriteINC();
+
+    // INX
+    void mExecuteINX();
+
+    // INY
+    void mExecuteINY();
 
     // Addressing modes
     void mExecuteImplied(void (InstructionSet::*action)());
@@ -361,6 +382,18 @@ class CPU {
     void EORIndirectX();
     void EORIndirectY();
 
+    // INC
+    void INCZeroPage();
+    void INCZeroPageX();
+    void INCAbsolute();
+    void INCAbsoluteX();
+
+    // INX
+    void INXImplied();
+
+    // INY
+    void INYImplied();
+
     // ORA
     void ORAZeroPage();
     void ORAIndirectX();
@@ -424,7 +457,7 @@ class CPU {
     bool carry;
   };
 
-  // Arithmatic and logical operations affecting status flags
+  // Arithmetic and logical operations affecting status flags
   OperationOutput mSum(uint8_t a, uint8_t b, bool c = 0);
   OperationOutput mAnd(uint8_t a, uint8_t b);
   OperationOutput mOr(uint8_t a, uint8_t b);
