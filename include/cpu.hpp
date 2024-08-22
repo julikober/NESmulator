@@ -86,10 +86,35 @@ enum Instruction {
   DEY_IMPLIED = 0x88,
 
   BCC_RELATIVE = 0x90,
+  LDA_INDIRECT_X = 0x91,
+
+  LDY_IMMEDIATE = 0xA0,
+
+  LDX_IMMEDIATE = 0xA2,
+
+  LDY_ZERO_PAGE = 0xA4,
+  LDA_ZERO_PAGE = 0xA5,
+  LDX_ZERO_PAGE = 0xA6,
+
+  LDA_IMMEDIATE = 0xA9,
+
+  LDY_ABSOLUTE = 0xAC,
+  LDA_ABSOLUTE = 0xAD,
+  LDX_ABSOLUTE = 0xAE,
 
   BCS_RELATIVE = 0xB0,
+  LDA_INDIRECT_Y = 0xB1,
+
+  LDY_ZERO_PAGE_X = 0xB4,
+  LDA_ZERO_PAGE_X = 0xB5,
+  LDX_ZERO_PAGE_Y = 0xB6,
 
   CLV_IMPLIED = 0xB8,
+  LDA_ABSOLUTE_Y = 0xB9,
+
+  LDY_ABSOLUTE_X = 0xBC,
+  LDA_ABSOLUTE_X = 0xBD,
+  LDX_ABSOLUTE_Y = 0xBE,
 
   CPY_IMMEDIATE = 0xC0,
   CMP_INDIRECT_X = 0xC1,
@@ -227,6 +252,15 @@ class CPU {
 
     // INY
     void mExecuteINY();
+
+    // LDA
+    void mReadLDA();
+
+    // LDX
+    void mReadLDX();
+
+    // LDY
+    void mReadLDY();
 
     // Addressing modes
     void mExecuteImplied(void (InstructionSet::*action)());
@@ -393,6 +427,30 @@ class CPU {
 
     // INY
     void INYImplied();
+
+    // LDA
+    void LDAImmediate();
+    void LDAZeroPage();
+    void LDAZeroPageX();
+    void LDAAbsolute();
+    void LDAAbsoluteX();
+    void LDAAbsoluteY();
+    void LDAIndirectX();
+    void LDAIndirectY();
+
+    // LDX
+    void LDXImmediate();
+    void LDXZeroPage();
+    void LDXZeroPageY();
+    void LDXAbsolute();
+    void LDXAbsoluteY();
+
+    // LDY
+    void LDYImmediate();
+    void LDYZeroPage();
+    void LDYZeroPageX();
+    void LDYAbsolute();
+    void LDYAbsoluteX();
 
     // ORA
     void ORAZeroPage();

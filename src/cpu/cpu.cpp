@@ -330,6 +330,81 @@ void CPU::doCycle() {
         mInstructionSet.INYImplied();
         break;
 
+      // LDA
+      case LDA_IMMEDIATE:
+        mInstructionSet.LDAImmediate();
+        break;
+
+      case LDA_ZERO_PAGE:
+        mInstructionSet.LDAZeroPage();
+        break;
+
+      case LDA_ZERO_PAGE_X:
+        mInstructionSet.LDAZeroPageX();
+        break;
+
+      case LDA_ABSOLUTE:
+        mInstructionSet.LDAAbsolute();
+        break;
+
+      case LDA_ABSOLUTE_X:
+        mInstructionSet.LDAAbsoluteX();
+        break;
+
+      case LDA_ABSOLUTE_Y:
+        mInstructionSet.LDAAbsoluteY();
+        break;
+
+      case LDA_INDIRECT_X:
+        mInstructionSet.LDAIndirectX();
+        break;
+
+      case LDA_INDIRECT_Y:
+        mInstructionSet.LDAIndirectY();
+        break;
+
+      // LDX
+      case LDX_IMMEDIATE:
+        mInstructionSet.LDXImmediate();
+        break;
+
+      case LDX_ZERO_PAGE:
+        mInstructionSet.LDXZeroPage();
+        break;
+
+      case LDX_ZERO_PAGE_Y:
+        mInstructionSet.LDXZeroPageY();
+        break;
+
+      case LDX_ABSOLUTE:
+        mInstructionSet.LDXAbsolute();
+        break;
+
+      case LDX_ABSOLUTE_Y:
+        mInstructionSet.LDXAbsoluteY();
+        break;
+
+      // LDY
+      case LDY_IMMEDIATE:
+        mInstructionSet.LDYImmediate();
+        break;
+
+      case LDY_ZERO_PAGE:
+        mInstructionSet.LDYZeroPage();
+        break;
+
+      case LDY_ZERO_PAGE_X:
+        mInstructionSet.LDYZeroPageX();
+        break;
+
+      case LDY_ABSOLUTE:
+        mInstructionSet.LDYAbsolute();
+        break;
+
+      case LDY_ABSOLUTE_X:
+        mInstructionSet.LDYAbsoluteX();
+        break;
+
       default:
         mCycle = 0;
         break;
