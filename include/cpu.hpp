@@ -48,9 +48,23 @@ enum Instruction {
 
   AND_ABSOLUTE_X = 0x3D,
 
+  EOR_INDIRECT_X = 0x41,
+
+  EOR_ZERO_PAGE = 0x45,
+
+  EOR_IMMEDIATE = 0x49,
+
+  EOR_ABSOLUTE = 0x4D,
+
   BVC_RELATIVE = 0x50,
+  EOR_INDIRECT_Y = 0x51,
+
+  EOR_ZERO_PAGE_X = 0x55,
 
   CLI_IMPLIED = 0x58,
+  EOR_ABSOLUTE_Y = 0x59,
+
+  EOR_ABSOLUTE_X = 0x5D,
 
   ADC_INDIRECT_X = 0x61,
 
@@ -189,6 +203,9 @@ class CPU {
 
     // DEY
     void mExecuteDEY();
+
+    // EOR
+    void mReadEOR();
 
     // Addressing modes
     void mExecuteImplied(void (InstructionSet::*action)());
@@ -333,6 +350,16 @@ class CPU {
 
     // DEY
     void DEYImplied();
+
+    // EOR
+    void EORImmediate();
+    void EORZeroPage();
+    void EORZeroPageX();
+    void EORAbsolute();
+    void EORAbsoluteX();
+    void EORAbsoluteY();
+    void EORIndirectX();
+    void EORIndirectY();
 
     // ORA
     void ORAZeroPage();

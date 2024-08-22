@@ -270,6 +270,39 @@ void CPU::doCycle() {
         mInstructionSet.DEYImplied();
         break;
 
+      // EOR
+      case EOR_IMMEDIATE:
+        mInstructionSet.EORImmediate();
+        break;
+
+      case EOR_ZERO_PAGE:
+        mInstructionSet.EORZeroPage();
+        break;
+
+      case EOR_ZERO_PAGE_X:
+        mInstructionSet.EORZeroPageX();
+        break;
+
+      case EOR_ABSOLUTE:
+        mInstructionSet.EORAbsolute();
+        break;
+
+      case EOR_ABSOLUTE_X:
+        mInstructionSet.EORAbsoluteX();
+        break;
+
+      case EOR_ABSOLUTE_Y:
+        mInstructionSet.EORAbsoluteY();
+        break;
+
+      case EOR_INDIRECT_X:
+        mInstructionSet.EORIndirectX();
+        break;
+
+      case EOR_INDIRECT_Y:
+        mInstructionSet.EORIndirectY();
+        break;
+
       default:
         mCycle = 0;
         break;
