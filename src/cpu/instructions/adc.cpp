@@ -2,7 +2,7 @@
 
 void CPU::InstructionSet::mReadADC() {
   OperationOutput output =
-      mCpu.mSum(mCpu.mAccumulator, mCpu.mReadMemory(), true);
+      mCpu.mSum(mCpu.mAccumulator, mCpu.mReadMemory(), mCpu.mCheckFlag(CARRY));
   mCpu.mAccumulator = output.value;
 
   mCpu.mSetZeroAndNegative(mCpu.mAccumulator);

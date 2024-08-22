@@ -75,9 +75,23 @@ enum Instruction {
 
   CLV_IMPLIED = 0xB8,
 
+  CMP_INDIRECT_X = 0xC1,
+
+  CMP_ZERO_PAGE = 0xC5,
+
+  CMP_IMMEDIATE = 0xC9,
+
+  CMP_ABSOLUTE = 0xCD,
+
   BNE_RELATIVE = 0xD0,
+  CMP_INDIRECT_Y = 0xD1,
+
+  CMP_ZERO_PAGE_X = 0xD5,
 
   CLD_IMPLIED = 0xD8,
+  CMP_ABSOLUTE_Y = 0xD9,
+
+  CMP_ABSOLUTE_X = 0xDD,
 
   BEQ_RELATIVE = 0xF0
 
@@ -139,6 +153,9 @@ class CPU {
 
     // CLV
     void mExecuteCLV();
+
+    // CMP
+    void mReadCMP();
 
     // Addressing modes
     void mExecuteImplied(void (InstructionSet::*action)());
@@ -252,6 +269,16 @@ class CPU {
     // CLV
     void CLVImplied();
 
+    // CMP
+    void CMPImmediate();
+    void CMPZeroPage();
+    void CMPZeroPageX();
+    void CMPAbsolute();
+    void CMPAbsoluteX();
+    void CMPAbsoluteY();
+    void CMPIndirectX();
+    void CMPIndirectY();
+
     // ORA
     void ORAZeroPage();
     void ORAIndirectX();
@@ -316,7 +343,7 @@ class CPU {
   };
 
   // Arithmatic and logical operations affecting status flags
-  OperationOutput mSum(uint8_t a, uint8_t b, bool checkCarry = false);
+  OperationOutput mSum(uint8_t a, uint8_t b, bool c = 0);
   OperationOutput mAnd(uint8_t a, uint8_t b);
   OperationOutput mOr(uint8_t a, uint8_t b);
   OperationOutput mEor(uint8_t a, uint8_t b);
