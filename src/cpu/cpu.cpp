@@ -260,6 +260,16 @@ void CPU::doCycle() {
         mInstructionSet.DECAbsoluteX();
         break;
 
+      // DEX
+      case DEX_IMPLIED:
+        mInstructionSet.DEXImplied();
+        break;
+
+      // DEY
+      case DEY_IMPLIED:
+        mInstructionSet.DEYImplied();
+        break;
+
       default:
         mCycle = 0;
         break;

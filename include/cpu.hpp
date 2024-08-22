@@ -69,6 +69,8 @@ enum Instruction {
 
   ADC_ABSOLUTE_X = 0x7D,
 
+  DEY_IMPLIED = 0x88,
+
   BCC_RELATIVE = 0x90,
 
   BCS_RELATIVE = 0xB0,
@@ -83,6 +85,7 @@ enum Instruction {
   DEC_ZERO_PAGE = 0xC6,
 
   CMP_IMMEDIATE = 0xC9,
+  DEX_IMPLIED = 0xCA,
 
   CPY_ABSOLUTE = 0xCC,
   CMP_ABSOLUTE = 0xCD,
@@ -180,6 +183,12 @@ class CPU {
     void mReadDEC();
     void mModifyDEC();
     void mWriteDEC();
+
+    // DEX
+    void mExecuteDEX();
+
+    // DEY
+    void mExecuteDEY();
 
     // Addressing modes
     void mExecuteImplied(void (InstructionSet::*action)());
@@ -313,15 +322,21 @@ class CPU {
     void CPYZeroPage();
     void CPYAbsolute();
 
-    // ORA
-    void ORAZeroPage();
-    void ORAIndirectX();
-
     // DEC
     void DECZeroPage();
     void DECZeroPageX();
     void DECAbsolute();
     void DECAbsoluteX();
+
+    // DEX
+    void DEXImplied();
+
+    // DEY
+    void DEYImplied();
+
+    // ORA
+    void ORAZeroPage();
+    void ORAIndirectX();
   };
 
   Memory& mMemory;
