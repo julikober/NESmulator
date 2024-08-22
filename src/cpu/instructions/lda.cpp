@@ -1,6 +1,10 @@
 #include "cpu.hpp"
 
-void CPU::InstructionSet::mReadLDA() { mCpu.mAccumulator = mCpu.mReadMemory(); }
+void CPU::InstructionSet::mReadLDA() {
+  mCpu.mAccumulator = mCpu.mReadMemory();
+
+  mCpu.mSetZeroAndNegative(mCpu.mAccumulator);
+}
 
 void CPU::InstructionSet::LDAImmediate() {
   mExecuteImmediate(&CPU::InstructionSet::mReadLDA);

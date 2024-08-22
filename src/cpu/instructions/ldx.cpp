@@ -1,6 +1,10 @@
 #include "cpu.hpp"
 
-void CPU::InstructionSet::mReadLDX() { mCpu.mXIndex = mCpu.mReadMemory(); }
+void CPU::InstructionSet::mReadLDX() {
+  mCpu.mXIndex = mCpu.mReadMemory();
+
+  mCpu.mSetZeroAndNegative(mCpu.mXIndex);
+}
 
 void CPU::InstructionSet::LDXImmediate() {
   mExecuteImmediate(&CPU::InstructionSet::mReadLDX);
