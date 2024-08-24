@@ -405,6 +405,65 @@ void CPU::doCycle() {
         mInstructionSet.LDYAbsoluteX();
         break;
 
+      // LSR
+      case LSR_ACCUMULATOR:
+        mInstructionSet.LSRAccumulator();
+        break;
+
+      case LSR_ZERO_PAGE:
+        mInstructionSet.LSRZeroPage();
+        break;
+
+      case LSR_ZERO_PAGE_X:
+        mInstructionSet.LSRZeroPageX();
+        break;
+
+      case LSR_ABSOLUTE:
+        mInstructionSet.LSRAbsolute();
+        break;
+
+      case LSR_ABSOLUTE_X:
+        mInstructionSet.LSRAbsoluteX();
+        break;
+
+      // NOP
+      case NOP_IMPLIED:
+        mInstructionSet.NOPImplied();
+        break;
+
+      // ORA
+      case ORA_IMMEDIATE:
+        mInstructionSet.ORAImmediate();
+        break;
+
+      case ORA_ZERO_PAGE:
+        mInstructionSet.ORAZeroPage();
+        break;
+
+      case ORA_ZERO_PAGE_X:
+        mInstructionSet.ORAZeroPageX();
+        break;
+
+      case ORA_ABSOLUTE:
+        mInstructionSet.ORAAbsolute();
+        break;
+
+      case ORA_ABSOLUTE_X:
+        mInstructionSet.ORAAbsoluteX();
+        break;
+
+      case ORA_ABSOLUTE_Y:
+        mInstructionSet.ORAAbsoluteY();
+        break;
+
+      case ORA_INDIRECT_X:
+        mInstructionSet.ORAIndirectX();
+        break;
+
+      case ORA_INDIRECT_Y:
+        mInstructionSet.ORAIndirectY();
+        break;
+
       default:
         mCycle = 0;
         break;

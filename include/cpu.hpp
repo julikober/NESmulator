@@ -15,18 +15,27 @@ enum StatusFlag {
 };
 
 enum Instruction {
+  ORA_INDIRECT_X = 0x01,
+
+  ORA_ZERO_PAGE = 0x05,
   ASL_ZERO_PAGE = 0x06,
 
+  ORA_IMMEDIATE = 0x09,
   ASL_ACCUMULATOR = 0x0A,
 
+  ORA_ABSOLUTE = 0x0D,
   ASL_ABSOLUTE = 0x0E,
 
   BPL_RELATIVE = 0x10,
+  ORA_INDIRECT_Y = 0x11,
 
+  ORA_ZERO_PAGE_X = 0x15,
   ASL_ZERO_PAGE_X = 0x16,
 
   CLC_IMPLIED = 0x18,
+  ORA_ABSOLUTE_Y = 0x19,
 
+  ORA_ABSOLUTE_X = 0x1D,
   ASL_ABSOLUTE_X = 0x1E,
 
   AND_INDIRECT_X = 0x21,
@@ -51,20 +60,25 @@ enum Instruction {
   EOR_INDIRECT_X = 0x41,
 
   EOR_ZERO_PAGE = 0x45,
+  LSR_ZERO_PAGE = 0x46,
 
   EOR_IMMEDIATE = 0x49,
+  LSR_ACCUMULATOR = 0x4A,
 
   EOR_ABSOLUTE = 0x4D,
+  LSR_ABSOLUTE = 0x4E,
 
   BVC_RELATIVE = 0x50,
   EOR_INDIRECT_Y = 0x51,
 
   EOR_ZERO_PAGE_X = 0x55,
+  LSR_ZERO_PAGE_X = 0x56,
 
   CLI_IMPLIED = 0x58,
   EOR_ABSOLUTE_Y = 0x59,
 
   EOR_ABSOLUTE_X = 0x5D,
+  LSR_ABSOLUTE_X = 0x5E,
 
   ADC_INDIRECT_X = 0x61,
 
@@ -150,6 +164,8 @@ enum Instruction {
   INC_ZERO_PAGE = 0xE6,
 
   INX_IMPLIED = 0xE8,
+
+  NOP_IMPLIED = 0xEA,
 
   CPX_ABSOLUTE = 0xEC,
   INC_ABSOLUTE = 0xEE,
@@ -261,6 +277,18 @@ class CPU {
 
     // LDY
     void mReadLDY();
+
+    // LSR
+    void mReadLSR();
+    void mModifyLSR();
+    void mWriteLSR();
+    void mReadLSRAccumulator();
+
+    // NOP
+    void mExecuteNOP();
+
+    // ORA
+    void mReadORA();
 
     // Addressing modes
     void mExecuteImplied(void (InstructionSet::*action)());
@@ -452,9 +480,25 @@ class CPU {
     void LDYAbsolute();
     void LDYAbsoluteX();
 
+    // LSR
+    void LSRAccumulator();
+    void LSRZeroPage();
+    void LSRZeroPageX();
+    void LSRAbsolute();
+    void LSRAbsoluteX();
+
+    // NOP
+    void NOPImplied();
+
     // ORA
+    void ORAImmediate();
     void ORAZeroPage();
+    void ORAZeroPageX();
+    void ORAAbsolute();
+    void ORAAbsoluteX();
+    void ORAAbsoluteY();
     void ORAIndirectX();
+    void ORAIndirectY();
   };
 
   Memory& mMemory;
