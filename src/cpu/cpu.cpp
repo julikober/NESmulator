@@ -7,6 +7,20 @@ void CPU::mFetchInstruction() {
   mInstruction = (Instruction)mReadMemory();
 }
 
+void CPU::mPushStack(uint8_t value) {
+  mAddress = mStackPointer + M_STACK_OFFSET;
+
+  mWriteMemory(value);
+  mStackPointer--;
+}
+
+uint8_t CPU::mPopStack() {
+  mStackPointer++;
+  mAddress = mStackPointer + M_STACK_OFFSET;
+
+  return mReadMemory();
+}
+
 void CPU::mSetZeroAndNegative(uint8_t value) {
   if (value == 0) {
     mSetFlag(ZERO);
@@ -462,6 +476,26 @@ void CPU::doCycle() {
 
       case ORA_INDIRECT_Y:
         mInstructionSet.ORAIndirectY();
+        break;
+
+      // PHA
+      case PHA_IMPLIED:
+        mInstructionSet.PHAImplied();
+        break;
+
+      // PHP
+      case PHP_IMPLIED:
+        mInstructionSet.PHPImplied();
+        break;
+
+      // PLA
+      case PLA_IMPLIED:
+        mInstructionSet.PLAImplied();
+        break;
+
+      // PLP
+      case PLP_IMPLIED:
+        mInstructionSet.PLPImplied();
         break;
 
       default:

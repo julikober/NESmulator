@@ -20,6 +20,7 @@ enum Instruction {
   ORA_ZERO_PAGE = 0x05,
   ASL_ZERO_PAGE = 0x06,
 
+  PHP_IMPLIED = 0x08,
   ORA_IMMEDIATE = 0x09,
   ASL_ACCUMULATOR = 0x0A,
 
@@ -43,6 +44,7 @@ enum Instruction {
   BIT_ZERO_PAGE = 0x24,
   AND_ZERO_PAGE = 0x25,
 
+  PLP_IMPLIED = 0x28,
   AND_IMMEDIATE = 0x29,
 
   BIT_ABSOLUTE = 0x2C,
@@ -62,6 +64,7 @@ enum Instruction {
   EOR_ZERO_PAGE = 0x45,
   LSR_ZERO_PAGE = 0x46,
 
+  PHA_IMPLIED = 0x48,
   EOR_IMMEDIATE = 0x49,
   LSR_ACCUMULATOR = 0x4A,
 
@@ -84,6 +87,7 @@ enum Instruction {
 
   ADC_ZERO_PAGE = 0x65,
 
+  PLA_IMPLIED = 0x68,
   ADC_IMMEDIATE = 0x69,
 
   ADC_ABSOLUTE = 0x6D,
@@ -289,6 +293,18 @@ class CPU {
 
     // ORA
     void mReadORA();
+
+    // PHA
+    void mExecutePHA();
+
+    // PHP
+    void mExecutePHP();
+
+    // PLA
+    void mExecutePLA();
+
+    // PLP
+    void mExecutePLP();
 
     // Addressing modes
     void mExecuteImplied(void (InstructionSet::*action)());
@@ -499,6 +515,18 @@ class CPU {
     void ORAAbsoluteY();
     void ORAIndirectX();
     void ORAIndirectY();
+
+    // PHA
+    void PHAImplied();
+
+    // PHP
+    void PHPImplied();
+
+    // PLA
+    void PLAImplied();
+
+    // PLP
+    void PLPImplied();
   };
 
   Memory& mMemory;
@@ -511,6 +539,9 @@ class CPU {
   uint8_t mXIndex;
   uint8_t mYIndex;
   uint8_t mStatus;
+
+  // Stack offset
+  static const uint8_t M_STACK_OFFSET = 0x0100;
 
   // Other registers and abstractions
   Instruction mInstruction;
@@ -544,6 +575,9 @@ class CPU {
   // Read and write memory
   inline uint8_t mReadMemory() { return mMemory.read(mAddress); }
   inline void mWriteMemory(uint8_t value) { mMemory.write(mAddress, value); }
+
+  void mPushStack(uint8_t value);
+  uint8_t mPopStack();
 
   // Getters and setters for status flags
   inline void mSetFlag(uint8_t flags) { mStatus |= flags; };
