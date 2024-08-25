@@ -59,6 +59,7 @@ enum Instruction {
   AND_ZERO_PAGE_X = 0x35,
   ROL_ZERO_PAGE_X = 0x36,
 
+  SEC_IMPLIED = 0x38,
   AND_ABSOLUTE_Y = 0x39,
 
   AND_ABSOLUTE_X = 0x3D,
@@ -106,6 +107,7 @@ enum Instruction {
   ADC_ZERO_PAGE_X = 0x75,
   ROR_ZERO_PAGE_X = 0x76,
 
+  SEI_IMPLIED = 0x78,
   ADC_ABSOLUTE_Y = 0x79,
 
   ADC_ABSOLUTE_X = 0x7D,
@@ -172,22 +174,30 @@ enum Instruction {
   DEC_ABSOLUTE_X = 0xDE,
 
   CPX_IMMEDIATE = 0xE0,
+  SBC_INDIRECT_X = 0xE1,
 
   CPX_ZERO_PAGE = 0xE4,
-
+  SBC_ZERO_PAGE = 0xE5,
   INC_ZERO_PAGE = 0xE6,
 
   INX_IMPLIED = 0xE8,
-
+  SBC_IMMEDIATE = 0xE9,
   NOP_IMPLIED = 0xEA,
 
   CPX_ABSOLUTE = 0xEC,
+  SBC_ABSOLUTE = 0xED,
   INC_ABSOLUTE = 0xEE,
 
   BEQ_RELATIVE = 0xF0,
+  SBC_INDIRECT_Y = 0xF1,
 
+  SBC_ZERO_PAGE_X = 0xF5,
   INC_ZERO_PAGE_X = 0xF6,
 
+  SED_IMPLIED = 0xF8,
+  SBC_ABSOLUTE_Y = 0xF9,
+
+  SBC_ABSOLUTE_X = 0xFD,
   INC_ABSOLUTE_X = 0xFE,
 
 };
@@ -327,6 +337,18 @@ class CPU {
     void mModifyROR();
     void mWriteROR();
     void mReadRORAccumulator();
+
+    // SBC
+    void mReadSBC();
+
+    // SEC
+    void mExecuteSEC();
+
+    // SED
+    void mExecuteSED();
+
+    // SEI
+    void mExecuteSEI();
 
     // Addressing modes
     void mExecuteImplied(void (InstructionSet::*action)());
@@ -563,6 +585,25 @@ class CPU {
     void RORZeroPageX();
     void RORAbsolute();
     void RORAbsoluteX();
+
+    // SBC
+    void SBCImmediate();
+    void SBCZeroPage();
+    void SBCZeroPageX();
+    void SBCAbsolute();
+    void SBCAbsoluteX();
+    void SBCAbsoluteY();
+    void SBCIndirectX();
+    void SBCIndirectY();
+
+    // SEC
+    void SECImplied();
+
+    // SED
+    void SEDImplied();
+
+    // SEI
+    void SEIImplied();
   };
 
   Memory& mMemory;

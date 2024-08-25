@@ -498,6 +498,96 @@ void CPU::doCycle() {
         mInstructionSet.PLPImplied();
         break;
 
+      // ROL
+      case ROL_ACCUMULATOR:
+        mInstructionSet.ROLAccumulator();
+        break;
+
+      case ROL_ZERO_PAGE:
+        mInstructionSet.ROLZeroPage();
+        break;
+
+      case ROL_ZERO_PAGE_X:
+        mInstructionSet.ROLZeroPageX();
+        break;
+
+      case ROL_ABSOLUTE:
+        mInstructionSet.ROLAbsolute();
+        break;
+
+      case ROL_ABSOLUTE_X:
+        mInstructionSet.ROLAbsoluteX();
+        break;
+
+      // ROR
+      case ROR_ACCUMULATOR:
+        mInstructionSet.RORAccumulator();
+        break;
+
+      case ROR_ZERO_PAGE:
+        mInstructionSet.RORZeroPage();
+        break;
+
+      case ROR_ZERO_PAGE_X:
+        mInstructionSet.RORZeroPageX();
+        break;
+
+      case ROR_ABSOLUTE:
+        mInstructionSet.RORAbsolute();
+        break;
+
+      case ROR_ABSOLUTE_X:
+        mInstructionSet.RORAbsoluteX();
+        break;
+
+      // SBC
+      case SBC_IMMEDIATE:
+        mInstructionSet.SBCImmediate();
+        break;
+
+      case SBC_ZERO_PAGE:
+        mInstructionSet.SBCZeroPage();
+        break;
+
+      case SBC_ZERO_PAGE_X:
+        mInstructionSet.SBCZeroPageX();
+        break;
+
+      case SBC_ABSOLUTE:
+        mInstructionSet.SBCAbsolute();
+        break;
+
+      case SBC_ABSOLUTE_X:
+        mInstructionSet.SBCAbsoluteX();
+        break;
+
+      case SBC_ABSOLUTE_Y:
+        mInstructionSet.SBCAbsoluteY();
+        break;
+
+      case SBC_INDIRECT_X:
+        mInstructionSet.SBCIndirectX();
+        break;
+
+      case SBC_INDIRECT_Y:
+        mInstructionSet.SBCIndirectY();
+        break;
+
+      // SEC
+      case SEC_IMPLIED:
+        mInstructionSet.SECImplied();
+        break;
+
+      // SED
+      case SED_IMPLIED:
+        mInstructionSet.SEDImplied();
+        break;
+
+      // SEI
+      case SEI_IMPLIED:
+        mInstructionSet.SEIImplied();
+        break;
+
       default:
         mCycle = 0;
         break;
