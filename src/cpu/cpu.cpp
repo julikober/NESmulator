@@ -11,11 +11,9 @@ void CPU::mPushStack(uint8_t value) {
   mAddress = mStackPointer + M_STACK_OFFSET;
 
   mWriteMemory(value);
-  mStackPointer--;
 }
 
 uint8_t CPU::mPopStack() {
-  mStackPointer++;
   mAddress = mStackPointer + M_STACK_OFFSET;
 
   return mReadMemory();

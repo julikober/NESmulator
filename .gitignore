@@ -36,3 +36,6 @@ build/
 
 # Extenstions
 .VSCodeCounter
+
+# Testing folder
+testing/

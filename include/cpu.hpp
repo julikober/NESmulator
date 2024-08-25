@@ -15,6 +15,7 @@ enum StatusFlag {
 };
 
 enum Instruction {
+  BRK_IMPLIED = 0x00,
   ORA_INDIRECT_X = 0x01,
 
   ORA_ZERO_PAGE = 0x05,
@@ -266,6 +267,8 @@ class CPU {
     // BPL
     bool mCheckBPL();
 
+    // BRK does not use any addressing mode functions. It is a special case
+
     // BVC
     bool mCheckBVC();
 
@@ -339,17 +342,13 @@ class CPU {
     // ORA
     void mReadORA();
 
-    // PHA
-    void mExecutePHA();
+    // PHA does not use any addressing mode functions. It is a special case
 
-    // PHP
-    void mExecutePHP();
+    // PHP does not use any addressing mode functions. It is a special case
 
-    // PLA
-    void mExecutePLA();
+    // PLA does not use any addressing mode functions. It is a special case
 
-    // PLP
-    void mExecutePLP();
+    // PLP does not use any addressing mode functions. It is a special case
 
     // ROL
     void mReadROL();
@@ -495,6 +494,9 @@ class CPU {
 
     // BPL
     void BPLRelative();
+
+    // BRK
+    void BRKImplied();
 
     // BVC
     void BVCRelative();
