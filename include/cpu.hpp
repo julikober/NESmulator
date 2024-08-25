@@ -66,6 +66,7 @@ enum Instruction {
   AND_ABSOLUTE_X = 0x3D,
   ROL_ABSOLUTE_X = 0x3E,
 
+  RTI_IMPLIED = 0x40,
   EOR_INDIRECT_X = 0x41,
 
   EOR_ZERO_PAGE = 0x45,
@@ -90,6 +91,7 @@ enum Instruction {
   EOR_ABSOLUTE_X = 0x5D,
   LSR_ABSOLUTE_X = 0x5E,
 
+  RTS_IMPLIED = 0x60,
   ADC_INDIRECT_X = 0x61,
 
   ADC_ZERO_PAGE = 0x65,
@@ -361,6 +363,10 @@ class CPU {
     void mModifyROR();
     void mWriteROR();
     void mReadRORAccumulator();
+
+    // RTI does not use any addressing mode functions. It is a special case
+
+    // RTS does not use any addressing mode functions. It is a special case
 
     // SBC
     void mReadSBC();
@@ -639,6 +645,12 @@ class CPU {
     void RORZeroPageX();
     void RORAbsolute();
     void RORAbsoluteX();
+
+    // RTI
+    void RTIImplied();
+
+    // RTS
+    void RTSImplied();
 
     // SBC
     void SBCImmediate();

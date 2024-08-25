@@ -166,6 +166,11 @@ void CPU::doCycle() {
         mInstructionSet.BPLRelative();
         break;
 
+      // BRK
+      case BRK_IMPLIED:
+        mInstructionSet.BRKImplied();
+        break;
+
       // BVC
       case BVC_RELATIVE:
         mInstructionSet.BVCRelative();
@@ -536,6 +541,16 @@ void CPU::doCycle() {
 
       case ROR_ABSOLUTE_X:
         mInstructionSet.RORAbsoluteX();
+        break;
+
+      // RTI
+      case RTI_IMPLIED:
+        mInstructionSet.RTIImplied();
+        break;
+
+      // RTS
+      case RTS_IMPLIED:
+        mInstructionSet.RTSImplied();
         break;
 
       // SBC
