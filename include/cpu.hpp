@@ -43,21 +43,26 @@ enum Instruction {
 
   BIT_ZERO_PAGE = 0x24,
   AND_ZERO_PAGE = 0x25,
+  ROL_ZERO_PAGE = 0x26,
 
   PLP_IMPLIED = 0x28,
   AND_IMMEDIATE = 0x29,
+  ROL_ACCUMULATOR = 0x2A,
 
   BIT_ABSOLUTE = 0x2C,
   AND_ABSOLUTE = 0x2D,
+  ROL_ABSOLUTE = 0x2E,
 
   BMI_RELATIVE = 0x30,
   AND_INDIRECT_Y = 0x31,
 
   AND_ZERO_PAGE_X = 0x35,
+  ROL_ZERO_PAGE_X = 0x36,
 
   AND_ABSOLUTE_Y = 0x39,
 
   AND_ABSOLUTE_X = 0x3D,
+  ROL_ABSOLUTE_X = 0x3E,
 
   EOR_INDIRECT_X = 0x41,
 
@@ -86,20 +91,25 @@ enum Instruction {
   ADC_INDIRECT_X = 0x61,
 
   ADC_ZERO_PAGE = 0x65,
+  ROR_ZERO_PAGE = 0x66,
 
   PLA_IMPLIED = 0x68,
   ADC_IMMEDIATE = 0x69,
+  ROR_ACCUMULATOR = 0x6A,
 
   ADC_ABSOLUTE = 0x6D,
+  ROR_ABSOLUTE = 0x6E,
 
   BVS_RELATIVE = 0x70,
   ADC_INDIRECT_Y = 0x71,
 
   ADC_ZERO_PAGE_X = 0x75,
+  ROR_ZERO_PAGE_X = 0x76,
 
   ADC_ABSOLUTE_Y = 0x79,
 
   ADC_ABSOLUTE_X = 0x7D,
+  ROR_ABSOLUTE_X = 0x7E,
 
   DEY_IMPLIED = 0x88,
 
@@ -305,6 +315,18 @@ class CPU {
 
     // PLP
     void mExecutePLP();
+
+    // ROL
+    void mReadROL();
+    void mModifyROL();
+    void mWriteROL();
+    void mReadROLAccumulator();
+
+    // ROR
+    void mReadROR();
+    void mModifyROR();
+    void mWriteROR();
+    void mReadRORAccumulator();
 
     // Addressing modes
     void mExecuteImplied(void (InstructionSet::*action)());
@@ -527,6 +549,20 @@ class CPU {
 
     // PLP
     void PLPImplied();
+
+    // ROL
+    void ROLAccumulator();
+    void ROLZeroPage();
+    void ROLZeroPageX();
+    void ROLAbsolute();
+    void ROLAbsoluteX();
+
+    // ROR
+    void RORAccumulator();
+    void RORZeroPage();
+    void RORZeroPageX();
+    void RORAbsolute();
+    void RORAbsoluteX();
   };
 
   Memory& mMemory;
