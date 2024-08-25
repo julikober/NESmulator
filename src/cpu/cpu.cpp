@@ -707,3 +707,14 @@ void CPU::doCycle() {
   }
   mCycle++;
 }
+
+void CPU::loadState(uint16_t programCounter, uint8_t stackPointer,
+                    uint8_t accumulator, uint8_t xIndex, uint8_t yIndex,
+                    uint8_t status) {
+  mProgramCounter = programCounter;
+  mStackPointer = stackPointer;
+  mAccumulator = accumulator;
+  mXIndex = xIndex;
+  mYIndex = yIndex;
+  mStatus = status;
+}

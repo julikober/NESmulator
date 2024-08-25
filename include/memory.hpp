@@ -13,7 +13,7 @@ class Memory {
       mMemory[i] = 0;
     }
   };
-  ~Memory(){};
+  ~Memory() {};
 
   inline uint8_t read(uint16_t address) { return mMemory[address]; };
 
@@ -21,7 +21,14 @@ class Memory {
     mMemory[address] = value;
   };
 
-  void loadFile(const char* filename) { // Currently for debugging purposes only
+  void clear() {
+    for (int i = 0; i < 0xFFFF; i++) {
+      mMemory[i] = 0;
+    }
+  }
+
+  void loadFile(
+      const char* filename) {  // Currently for debugging purposes only
     FILE* file = fopen(filename, "rb");
     if (file == nullptr) {
       printf("Error: Could not open file %s\n", filename);

@@ -10,9 +10,7 @@ void CPU::InstructionSet::RTIImplied() {
       break;
 
     case 4:
-      mCpu.mStatus = mCpu.mPopStack() &
-                     (CARRY | ZERO | INTERRUPT_DISABLE | DECIMAL | OVERFLOW |
-                      NEGATIVE);  // Ignore BREAK flag when pulling from stack
+      mCpu.mStatus = (mCpu.mPopStack() | UNUSED) & ~BREAK;
 
       mCpu.mStackPointer++;
       break;

@@ -10,6 +10,7 @@ enum StatusFlag {
   INTERRUPT_DISABLE = 1 << 2,
   DECIMAL = 1 << 3,  // Not used in NES
   BREAK = 1 << 4,
+  UNUSED = 1 << 5,  // Always set to 1
   OVERFLOW = 1 << 6,
   NEGATIVE = 1 << 7
 };
@@ -735,7 +736,7 @@ class CPU {
   uint8_t mStatus;
 
   // Stack offset
-  static const uint8_t M_STACK_OFFSET = 0x0100;
+  static const uint16_t M_STACK_OFFSET = 0x0100;
 
   // Other registers and abstractions
   Instruction mInstruction;
@@ -808,11 +809,16 @@ class CPU {
   ~CPU() {};
 
   void doCycle();
+  void loadState(uint16_t programCounter, uint8_t stackPointer,
+                 uint8_t accumulator, uint8_t xIndex, uint8_t yIndex,
+                 uint8_t status);
 
   void dumpRegisters() {  // For debugging purposes only
-    printf("PC: %04X Instruction: %02X Cycle: %d SP: %02X A: %02X X: %02X Y: %02X P: ",
-           mProgramCounter, mInstruction, mCycle, mStackPointer, mAccumulator, mXIndex,
-           mYIndex);
+    printf(
+        "PC: %04X Instruction: %02X Cycle: %d SP: %02X A: %02X X: %02X Y: %02X "
+        "P: ",
+        mProgramCounter, mInstruction, mCycle, mStackPointer, mAccumulator,
+        mXIndex, mYIndex);
 
     if (mCheckFlag(NEGATIVE)) {
       printf("N");

@@ -6,7 +6,7 @@ void CPU::InstructionSet::PHPImplied() {
       break;
 
     case 3:
-      mCpu.mPushStack(mCpu.mStatus);
+      mCpu.mPushStack(mCpu.mStatus | BREAK);
       mCpu.mStackPointer--;
 
     default:

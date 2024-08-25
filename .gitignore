@@ -38,4 +38,4 @@ build/
 .VSCodeCounter
 
 # Testing folder
-testing/
+testing/ProcessorTests/

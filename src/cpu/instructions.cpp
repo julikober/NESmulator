@@ -11,11 +11,11 @@ void CPU::InstructionSet::mExecute(int startCycle,
     (this->*write)();
     mCpu.mCycle = 0;
   } else if (read != nullptr && modify != nullptr && write != nullptr) {
-    if (mCpu.mCycle = startCycle) {
+    if (mCpu.mCycle == startCycle) {
       (this->*read)();
-    } else if (mCpu.mCycle = startCycle + 1) {
+    } else if (mCpu.mCycle == startCycle + 1) {
       (this->*modify)();
-    } else if (mCpu.mCycle = startCycle + 2) {
+    } else if (mCpu.mCycle == startCycle + 2) {
       (this->*write)();
       mCpu.mCycle = 0;
     }
@@ -279,27 +279,26 @@ void CPU::InstructionSet::mExecuteRelative(
 
     case 3:
       if ((this->*condition)()) {
-        mCpu.mSetProgramCounterLow(mCpu.mGetProgramCounterLow() + mCpu.mBuffer);
+        mCpu.mSetProgramCounterLow(mCpu.mGetProgramCounterLow() +
+                                   (int8_t)mCpu.mBuffer);
       } else {
-        mCpu.mCycle = 1;
-        mCpu.mFetchInstruction();
+        mCpu.mCycle = 0;
       }
       break;
 
     case 4:
-      if (mCpu.mGetProgramCounterLow() - mCpu.mBuffer < 0) {
+      if (mCpu.mGetProgramCounterLow() - (int8_t)mCpu.mBuffer < 0) {
         mCpu.mSetProgramCounterHigh(mCpu.mGetProgramCounterHigh() + 1);
-      } else if (mCpu.mGetProgramCounterLow() - mCpu.mBuffer > 0xFF) {
+      } else if (mCpu.mGetProgramCounterLow() - (int8_t)mCpu.mBuffer > 0xFF) {
         mCpu.mSetProgramCounterHigh(mCpu.mGetProgramCounterHigh() - 1);
+
       } else {
-        mCpu.mCycle = 1;
-        mCpu.mFetchInstruction();
+        mCpu.mCycle = 0;
       }
       break;
 
     case 5:
-      mCpu.mCycle = 1;
-      mCpu.mFetchInstruction();
+      mCpu.mCycle = 0;
       break;
 
     default:

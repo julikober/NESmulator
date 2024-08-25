@@ -43,7 +43,7 @@ void CPU::InstructionSet::JMPIndirect() {
       break;
 
     case 5:
-      mCpu.mAddress = (uint8_t)(mCpu.mAddress + 1);
+      mCpu.mSetAddressLow(mCpu.mAddress + 1);
 
       mCpu.mSetProgramCounterHigh(mCpu.mReadMemory());
       mCpu.mSetProgramCounterLow(mCpu.mBuffer);
