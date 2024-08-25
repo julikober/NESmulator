@@ -1,17 +1,17 @@
-#include <iostream>
 #include <cstdint>
-#include "memory.hpp"
+#include <iostream>
+
 #include "cpu.hpp"
+#include "memory.hpp"
 
 int main(void) {
   Memory memory = Memory();
   CPU cpu = CPU(memory);
-  memory.loadFile("test.bin");
+  memory.loadFile("testing/6502_functional_test.bin");
 
-  cpu.doCycle();
-  cpu.doCycle();
-  cpu.doCycle();
-  cpu.doCycle();
-  memory.dumpMemory();
-  cpu.dumpRegisters();  
+  while (1) {
+
+    cpu.doCycle();
+    cpu.dumpRegisters();
+  }
 }

@@ -6,4 +6,6 @@ void CPU::InstructionSet::mExecuteDEX() {
   mCpu.mSetZeroAndNegative(mCpu.mXIndex);
 }
 
-void CPU::InstructionSet::DEXImplied() { mExecuteDEX(); }
+void CPU::InstructionSet::DEXImplied() {
+  mExecuteImplied(&InstructionSet::mExecuteDEX);
+}

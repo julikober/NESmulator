@@ -798,20 +798,21 @@ class CPU {
   CPU(Memory& memory)
       : mMemory(memory),
         mInstructionSet(*this),
-        mProgramCounter(0),
+        mProgramCounter(0x400),
         mStackPointer(0xFF),
         mAccumulator(0),
         mXIndex(0),
         mYIndex(0),
-        mStatus(0),
+        mStatus(INTERRUPT_DISABLE),
         mCycle(1) {};
   ~CPU() {};
 
   void doCycle();
 
   void dumpRegisters() {  // For debugging purposes only
-    printf("PC: %04X SP: %02X A: %02X X: %02X Y: %02X P: ", mProgramCounter,
-           mStackPointer, mAccumulator, mXIndex, mYIndex);
+    printf("PC: %04X Instruction: %02X Cycle: %d SP: %02X A: %02X X: %02X Y: %02X P: ",
+           mProgramCounter, mInstruction, mCycle, mStackPointer, mAccumulator, mXIndex,
+           mYIndex);
 
     if (mCheckFlag(NEGATIVE)) {
       printf("N");

@@ -39,7 +39,7 @@ void CPU::InstructionSet::mExecuteImmediate(void (InstructionSet::*read)(),
   mCpu.mAddress = mCpu.mProgramCounter;
   mCpu.mProgramCounter++;
 
-  mExecute(2, modify, write);
+  mExecute(2, read, modify, write);
 }
 
 void CPU::InstructionSet::mExecuteZeroPage(void (InstructionSet::*read)(),

@@ -6,4 +6,6 @@ void CPU::InstructionSet::mExecuteDEY() {
   mCpu.mSetZeroAndNegative(mCpu.mYIndex);
 }
 
-void CPU::InstructionSet::DEYImplied() { mExecuteDEY(); }
+void CPU::InstructionSet::DEYImplied() {
+  mExecuteImplied(&InstructionSet::mExecuteDEY);
+}
