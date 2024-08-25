@@ -40,6 +40,7 @@ enum Instruction {
   ORA_ABSOLUTE_X = 0x1D,
   ASL_ABSOLUTE_X = 0x1E,
 
+  JSR_ABSOLUTE = 0x20,
   AND_INDIRECT_X = 0x21,
 
   BIT_ZERO_PAGE = 0x24,
@@ -76,6 +77,7 @@ enum Instruction {
   EOR_IMMEDIATE = 0x49,
   LSR_ACCUMULATOR = 0x4A,
 
+  JMP_ABSOLUTE = 0x4C,
   EOR_ABSOLUTE = 0x4D,
   LSR_ABSOLUTE = 0x4E,
 
@@ -101,6 +103,7 @@ enum Instruction {
   ADC_IMMEDIATE = 0x69,
   ROR_ACCUMULATOR = 0x6A,
 
+  JMP_INDIRECT = 0x6C,
   ADC_ABSOLUTE = 0x6D,
   ROR_ABSOLUTE = 0x6E,
 
@@ -322,6 +325,10 @@ class CPU {
 
     // INY
     void mExecuteINY();
+
+    // JMP does not use any addressing mode functions. It is a special case
+
+    // JSR does not use any addressing mode functions. It is a special case
 
     // LDA
     void mReadLDA();
@@ -575,6 +582,13 @@ class CPU {
 
     // INY
     void INYImplied();
+
+    // JMP
+    void JMPAbsolute();
+    void JMPIndirect();
+
+    // JSR
+    void JSRAbsolute();
 
     // LDA
     void LDAImmediate();

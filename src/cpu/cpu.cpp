@@ -347,6 +347,20 @@ void CPU::doCycle() {
         mInstructionSet.INYImplied();
         break;
 
+      // JMP
+      case JMP_ABSOLUTE:
+        mInstructionSet.JMPAbsolute();
+        break;
+
+      case JMP_INDIRECT:
+        mInstructionSet.JMPIndirect();
+        break;
+
+      // JSR
+      case JSR_ABSOLUTE:
+        mInstructionSet.JSRAbsolute();
+        break;
+
       // LDA
       case LDA_IMMEDIATE:
         mInstructionSet.LDAImmediate();
