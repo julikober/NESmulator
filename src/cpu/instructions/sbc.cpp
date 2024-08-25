@@ -12,6 +12,12 @@ void CPU::InstructionSet::mReadSBC() {
   } else {
     mCpu.mClearFlag(CARRY);
   }
+
+  if (output.overflow) {
+    mCpu.mSetFlag(OVERFLOW);
+  } else {
+    mCpu.mClearFlag(OVERFLOW);
+  }
 }
 
 void CPU::InstructionSet::SBCImmediate() {

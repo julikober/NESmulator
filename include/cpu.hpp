@@ -121,6 +121,8 @@ enum Instruction {
 
   DEY_IMPLIED = 0x88,
 
+  TXA_IMPLIED = 0x8A,
+
   STY_ABSOLUTE = 0x8C,
   STA_ABSOLUTE = 0x8D,
   STX_ABSOLUTE = 0x8E,
@@ -132,7 +134,9 @@ enum Instruction {
   STA_ZERO_PAGE_X = 0x95,
   STX_ZERO_PAGE_Y = 0x96,
 
+  TYA_IMPLIED = 0x98,
   STA_ABSOLUTE_Y = 0x99,
+  TXS_IMPLIED = 0x9A,
 
   STA_ABSOLUTE_X = 0x9D,
 
@@ -144,7 +148,9 @@ enum Instruction {
   LDA_ZERO_PAGE = 0xA5,
   LDX_ZERO_PAGE = 0xA6,
 
+  TAY_IMPLIED = 0xA8,
   LDA_IMMEDIATE = 0xA9,
+  TAX_IMPLIED = 0xAA,
 
   LDY_ABSOLUTE = 0xAC,
   LDA_ABSOLUTE = 0xAD,
@@ -159,6 +165,7 @@ enum Instruction {
 
   CLV_IMPLIED = 0xB8,
   LDA_ABSOLUTE_Y = 0xB9,
+  TSX_IMPLIED = 0xBA,
 
   LDY_ABSOLUTE_X = 0xBC,
   LDA_ABSOLUTE_X = 0xBD,
@@ -376,6 +383,24 @@ class CPU {
 
     // STY
     void mWriteSTY();
+
+    // TAX
+    void mExecuteTAX();
+
+    // TAY
+    void mExecuteTAY();
+
+    // TSX
+    void mExecuteTSX();
+
+    // TXA
+    void mExecuteTXA();
+
+    // TXS
+    void mExecuteTXS();
+
+    // TYA
+    void mExecuteTYA();
 
     // Addressing modes
     void mExecuteImplied(void (InstructionSet::*action)());
@@ -650,6 +675,24 @@ class CPU {
     void STYZeroPage();
     void STYZeroPageX();
     void STYAbsolute();
+
+    // TAX
+    void TAXImplied();
+
+    // TAY
+    void TAYImplied();
+
+    // TSX
+    void TSXImplied();
+
+    // TXA
+    void TXAImplied();
+
+    // TXS
+    void TXSImplied();
+
+    // TYA
+    void TYAImplied();
   };
 
   Memory& mMemory;

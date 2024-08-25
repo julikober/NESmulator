@@ -643,6 +643,36 @@ void CPU::doCycle() {
         mInstructionSet.STYAbsolute();
         break;
 
+      // TAX
+      case TAX_IMPLIED:
+        mInstructionSet.TAXImplied();
+        break;
+
+      // TAY
+      case TAY_IMPLIED:
+        mInstructionSet.TAYImplied();
+        break;
+
+      // TSX
+      case TSX_IMPLIED:
+        mInstructionSet.TSXImplied();
+        break;
+
+      // TXA
+      case TXA_IMPLIED:
+        mInstructionSet.TXAImplied();
+        break;
+
+      // TXS
+      case TXS_IMPLIED:
+        mInstructionSet.TXSImplied();
+        break;
+
+      // TYA
+      case TYA_IMPLIED:
+        mInstructionSet.TYAImplied();
+        break;
+
       default:
         mCycle = 0;
         break;
