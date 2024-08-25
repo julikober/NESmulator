@@ -113,13 +113,31 @@ enum Instruction {
   ADC_ABSOLUTE_X = 0x7D,
   ROR_ABSOLUTE_X = 0x7E,
 
+  STA_INDIRECT_X = 0x81,
+
+  STY_ZERO_PAGE = 0x84,
+  STA_ZERO_PAGE = 0x85,
+  STX_ZERO_PAGE = 0x86,
+
   DEY_IMPLIED = 0x88,
 
+  STY_ABSOLUTE = 0x8C,
+  STA_ABSOLUTE = 0x8D,
+  STX_ABSOLUTE = 0x8E,
+
   BCC_RELATIVE = 0x90,
-  LDA_INDIRECT_X = 0x91,
+  STA_INDIRECT_Y = 0x91,
+
+  STY_ZERO_PAGE_X = 0x94,
+  STA_ZERO_PAGE_X = 0x95,
+  STX_ZERO_PAGE_Y = 0x96,
+
+  STA_ABSOLUTE_Y = 0x99,
+
+  STA_ABSOLUTE_X = 0x9D,
 
   LDY_IMMEDIATE = 0xA0,
-
+  LDA_INDIRECT_X = 0xA1,
   LDX_IMMEDIATE = 0xA2,
 
   LDY_ZERO_PAGE = 0xA4,
@@ -350,45 +368,54 @@ class CPU {
     // SEI
     void mExecuteSEI();
 
+    // STA
+    void mWriteSTA();
+
+    // STX
+    void mWriteSTX();
+
+    // STY
+    void mWriteSTY();
+
     // Addressing modes
     void mExecuteImplied(void (InstructionSet::*action)());
-    void mExecuteAccumulator(void (InstructionSet::*read)(),
+    void mExecuteAccumulator(void (InstructionSet::*read)() = nullptr,
                              void (InstructionSet::*modify)() = nullptr,
                              void (InstructionSet::*write)() = nullptr);
-    void mExecuteImmediate(void (InstructionSet::*read)(),
+    void mExecuteImmediate(void (InstructionSet::*read)() = nullptr,
                            void (InstructionSet::*modify)() = nullptr,
                            void (InstructionSet::*write)() = nullptr);
-    void mExecuteZeroPage(void (InstructionSet::*read)(),
+    void mExecuteZeroPage(void (InstructionSet::*read)() = nullptr,
                           void (InstructionSet::*modify)() = nullptr,
                           void (InstructionSet::*write)() = nullptr);
-    void mExecuteZeroPageX(void (InstructionSet::*read)(),
+    void mExecuteZeroPageX(void (InstructionSet::*read)() = nullptr,
                            void (InstructionSet::*modify)() = nullptr,
                            void (InstructionSet::*write)() = nullptr);
-    void mExecuteZeroPageY(void (InstructionSet::*read)(),
+    void mExecuteZeroPageY(void (InstructionSet::*read)() = nullptr,
                            void (InstructionSet::*modify)() = nullptr,
                            void (InstructionSet::*write)() = nullptr);
-    void mExecuteAbsolute(void (InstructionSet::*read)(),
+    void mExecuteAbsolute(void (InstructionSet::*read)() = nullptr,
                           void (InstructionSet::*modify)() = nullptr,
                           void (InstructionSet::*write)() = nullptr);
-    void mExecuteAbsoluteX(void (InstructionSet::*read)(),
+    void mExecuteAbsoluteX(void (InstructionSet::*read)() = nullptr,
                            void (InstructionSet::*modify)() = nullptr,
                            void (InstructionSet::*write)() = nullptr);
-    void mExecuteAbsoluteY(void (InstructionSet::*read)(),
+    void mExecuteAbsoluteY(void (InstructionSet::*read)() = nullptr,
                            void (InstructionSet::*modify)() = nullptr,
                            void (InstructionSet::*write)() = nullptr);
-    // void mExecuteIndirect(void (InstructionSet::*read)(),
+    // void mExecuteIndirect(void (InstructionSet::*read)() =  nullptr,
     //                       void (InstructionSet::*modify)() = nullptr,
     //                       void (InstructionSet::*write)() = nullptr);
-    void mExecuteIndirectX(void (InstructionSet::*read)(),
+    void mExecuteIndirectX(void (InstructionSet::*read)() = nullptr,
                            void (InstructionSet::*modify)() = nullptr,
                            void (InstructionSet::*write)() = nullptr);
-    void mExecuteIndirectY(void (InstructionSet::*read)(),
+    void mExecuteIndirectY(void (InstructionSet::*read)() = nullptr,
                            void (InstructionSet::*modify)() = nullptr,
                            void (InstructionSet::*write)() = nullptr);
     void mExecuteRelative(bool (InstructionSet::*condition)());
 
     // Execute instruction
-    void mExecute(int startCycle, void (InstructionSet::*read)(),
+    void mExecute(int startCycle, void (InstructionSet::*read)() = nullptr,
                   void (InstructionSet::*modify)() = nullptr,
                   void (InstructionSet::*write)() = nullptr);
 
@@ -604,6 +631,25 @@ class CPU {
 
     // SEI
     void SEIImplied();
+
+    // STA
+    void STAZeroPage();
+    void STAZeroPageX();
+    void STAAbsolute();
+    void STAAbsoluteX();
+    void STAAbsoluteY();
+    void STAIndirectX();
+    void STAIndirectY();
+
+    // STX
+    void STXZeroPage();
+    void STXZeroPageY();
+    void STXAbsolute();
+
+    // STY
+    void STYZeroPage();
+    void STYZeroPageX();
+    void STYAbsolute();
   };
 
   Memory& mMemory;

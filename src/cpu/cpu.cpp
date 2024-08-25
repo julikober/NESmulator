@@ -588,6 +588,61 @@ void CPU::doCycle() {
         mInstructionSet.SEIImplied();
         break;
 
+      // STA
+      case STA_ZERO_PAGE:
+        mInstructionSet.STAZeroPage();
+        break;
+
+      case STA_ZERO_PAGE_X:
+        mInstructionSet.STAZeroPageX();
+        break;
+
+      case STA_ABSOLUTE:
+        mInstructionSet.STAAbsolute();
+        break;
+
+      case STA_ABSOLUTE_X:
+        mInstructionSet.STAAbsoluteX();
+        break;
+
+      case STA_ABSOLUTE_Y:
+        mInstructionSet.STAAbsoluteY();
+        break;
+
+      case STA_INDIRECT_X:
+        mInstructionSet.STAIndirectX();
+        break;
+
+      case STA_INDIRECT_Y:
+        mInstructionSet.STAIndirectY();
+        break;
+
+      // STX
+      case STX_ZERO_PAGE:
+        mInstructionSet.STXZeroPage();
+        break;
+
+      case STX_ZERO_PAGE_Y:
+        mInstructionSet.STXZeroPageY();
+        break;
+
+      case STX_ABSOLUTE:
+        mInstructionSet.STXAbsolute();
+        break;
+
+      // STY
+      case STY_ZERO_PAGE:
+        mInstructionSet.STYZeroPage();
+        break;
+
+      case STY_ZERO_PAGE_X:
+        mInstructionSet.STYZeroPageX();
+        break;
+
+      case STY_ABSOLUTE:
+        mInstructionSet.STYAbsolute();
+        break;
+
       default:
         mCycle = 0;
         break;
