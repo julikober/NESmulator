@@ -25,6 +25,7 @@ enum Instruction {
   PHP_IMPLIED = 0x08,
   ORA_IMMEDIATE = 0x09,
   ASL_ACCUMULATOR = 0x0A,
+  ANC_IMMEDIATE_1 = 0x0B,
 
   ORA_ABSOLUTE = 0x0D,
   ASL_ABSOLUTE = 0x0E,
@@ -51,7 +52,7 @@ enum Instruction {
   PLP_IMPLIED = 0x28,
   AND_IMMEDIATE = 0x29,
   ROL_ACCUMULATOR = 0x2A,
-
+  ANC_IMMEDIATE_2 = 0x2B,
   BIT_ABSOLUTE = 0x2C,
   AND_ABSOLUTE = 0x2D,
   ROL_ABSOLUTE = 0x2E,
@@ -77,7 +78,7 @@ enum Instruction {
   PHA_IMPLIED = 0x48,
   EOR_IMMEDIATE = 0x49,
   LSR_ACCUMULATOR = 0x4A,
-
+  ALR_IMMEDIATE = 0x4B,
   JMP_ABSOLUTE = 0x4C,
   EOR_ABSOLUTE = 0x4D,
   LSR_ABSOLUTE = 0x4E,
@@ -415,6 +416,13 @@ class CPU {
     // TYA
     void mExecuteTYA();
 
+    // Unofficial instructions
+    // ALR
+    void mReadALR();
+
+    // ANC
+    void mReadANC();
+
     // Addressing modes
     void mExecuteImplied(void (InstructionSet::*action)());
     void mExecuteAccumulator(void (InstructionSet::*read)() = nullptr,
@@ -722,6 +730,13 @@ class CPU {
 
     // TYA
     void TYAImplied();
+
+    // Unofficial instructions
+    // ALR
+    void ALRImmediate();
+
+    // ANC
+    void ANCImmediate();
   };
 
   Memory& mMemory;

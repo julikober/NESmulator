@@ -700,6 +700,21 @@ void CPU::doCycle() {
         mInstructionSet.TYAImplied();
         break;
 
+      // Unofficial opcodes
+      // ALR
+      case ALR_IMMEDIATE:
+        mInstructionSet.ALRImmediate();
+        break;
+
+      // ANC
+      case ANC_IMMEDIATE_1:
+        mInstructionSet.ANCImmediate();
+        break;
+
+      case ANC_IMMEDIATE_2:
+        mInstructionSet.ANCImmediate();
+        break;
+
       default:
         mCycle = 0;
         break;
