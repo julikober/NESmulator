@@ -720,6 +720,11 @@ void CPU::doCycle() {
         mInstructionSet.ARRImmediate();
         break;
 
+      // AXS
+      case AXS_IMMEDIATE:
+        mInstructionSet.AXSImmediate();
+        break;
+
       // DCP
       case DCP_ZERO_PAGE:
         mInstructionSet.DCPZeroPage();
@@ -839,6 +844,52 @@ void CPU::doCycle() {
 
       case RLA_INDIRECT_Y:
         mInstructionSet.RLAIndirectY();
+        break;
+
+      // RRA
+      case RRA_ZERO_PAGE:
+        mInstructionSet.RRAZeroPage();
+        break;
+
+      case RRA_ZERO_PAGE_X:
+        mInstructionSet.RRAZeroPageX();
+        break;
+
+      case RRA_ABSOLUTE:
+        mInstructionSet.RRAAbsolute();
+        break;
+
+      case RRA_ABSOLUTE_X:
+        mInstructionSet.RRAAbsoluteX();
+        break;
+
+      case RRA_ABSOLUTE_Y:
+        mInstructionSet.RRAAbsoluteY();
+        break;
+
+      case RRA_INDIRECT_X:
+        mInstructionSet.RRAIndirectX();
+        break;
+
+      case RRA_INDIRECT_Y:
+        mInstructionSet.RRAIndirectY();
+        break;
+
+      // SAX
+      case SAX_ZERO_PAGE:
+        mInstructionSet.SAXZeroPage();
+        break;
+
+      case SAX_ZERO_PAGE_Y:
+        mInstructionSet.SAXZeroPageY();
+        break;
+
+      case SAX_ABSOLUTE:
+        mInstructionSet.SAXAbsolute();
+        break;
+
+      case SAX_INDIRECT_X:
+        mInstructionSet.SAXIndirectX();
         break;
 
       // XAA

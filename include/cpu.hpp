@@ -103,9 +103,11 @@ enum Instruction {
   RTS_IMPLIED = 0x60,
   ADC_INDIRECT_X = 0x61,
 
+  RRA_INDIRECT_X = 0x63,
+
   ADC_ZERO_PAGE = 0x65,
   ROR_ZERO_PAGE = 0x66,
-
+  RRA_ZERO_PAGE = 0x67,
   PLA_IMPLIED = 0x68,
   ADC_IMMEDIATE = 0x69,
   ROR_ACCUMULATOR = 0x6A,
@@ -113,25 +115,31 @@ enum Instruction {
   JMP_INDIRECT = 0x6C,
   ADC_ABSOLUTE = 0x6D,
   ROR_ABSOLUTE = 0x6E,
-
+  RRA_ABSOLUTE = 0x6F,
   BVS_RELATIVE = 0x70,
   ADC_INDIRECT_Y = 0x71,
 
+  RRA_INDIRECT_Y = 0x73,
+
   ADC_ZERO_PAGE_X = 0x75,
   ROR_ZERO_PAGE_X = 0x76,
-
+  RRA_ZERO_PAGE_X = 0x77,
   SEI_IMPLIED = 0x78,
   ADC_ABSOLUTE_Y = 0x79,
 
+  RRA_ABSOLUTE_Y = 0x7B,
+
   ADC_ABSOLUTE_X = 0x7D,
   ROR_ABSOLUTE_X = 0x7E,
+  RRA_ABSOLUTE_X = 0x7F,
 
   STA_INDIRECT_X = 0x81,
 
+  SAX_INDIRECT_X = 0x83,
   STY_ZERO_PAGE = 0x84,
   STA_ZERO_PAGE = 0x85,
   STX_ZERO_PAGE = 0x86,
-
+  SAX_ZERO_PAGE = 0x87,
   DEY_IMPLIED = 0x88,
 
   TXA_IMPLIED = 0x8A,
@@ -139,14 +147,14 @@ enum Instruction {
   STY_ABSOLUTE = 0x8C,
   STA_ABSOLUTE = 0x8D,
   STX_ABSOLUTE = 0x8E,
-
+  SAX_ABSOLUTE = 0x8F,
   BCC_RELATIVE = 0x90,
   STA_INDIRECT_Y = 0x91,
 
   STY_ZERO_PAGE_X = 0x94,
   STA_ZERO_PAGE_X = 0x95,
   STX_ZERO_PAGE_Y = 0x96,
-
+  SAX_ZERO_PAGE_Y = 0x97,
   TYA_IMPLIED = 0x98,
   STA_ABSOLUTE_Y = 0x99,
   TXS_IMPLIED = 0x9A,
@@ -196,7 +204,7 @@ enum Instruction {
   INY_IMPLIED = 0xC8,
   CMP_IMMEDIATE = 0xC9,
   DEX_IMPLIED = 0xCA,
-
+  AXS_IMMEDIATE = 0xCB,
   CPY_ABSOLUTE = 0xCC,
   CMP_ABSOLUTE = 0xCD,
   DEC_ABSOLUTE = 0xCE,
@@ -442,6 +450,9 @@ class CPU {
     // ARR
     void mReadARR();
 
+    // AXS
+    void mReadAXS();
+
     // DCP
     void mReadDCP();
     void mModifyDCP();
@@ -464,6 +475,14 @@ class CPU {
     void mReadRLA();
     void mModifyRLA();
     void mWriteRLA();
+
+    // RRA
+    void mReadRRA();
+    void mModifyRRA();
+    void mWriteRRA();
+
+    // SAX
+    void mWriteSAX();
 
     // XAA
     void mReadXAA();
@@ -786,6 +805,9 @@ class CPU {
     // ARR
     void ARRImmediate();
 
+    // AXS
+    void AXSImmediate();
+
     // DCP
     void DCPZeroPage();
     void DCPZeroPageX();
@@ -824,6 +846,21 @@ class CPU {
     void RLAAbsoluteY();
     void RLAIndirectX();
     void RLAIndirectY();
+
+    // RRA
+    void RRAZeroPage();
+    void RRAZeroPageX();
+    void RRAAbsolute();
+    void RRAAbsoluteX();
+    void RRAAbsoluteY();
+    void RRAIndirectX();
+    void RRAIndirectY();
+
+    // SAX
+    void SAXZeroPage();
+    void SAXZeroPageY();
+    void SAXAbsolute();
+    void SAXIndirectX();
 
     // XAA
     void XAAImmediate();

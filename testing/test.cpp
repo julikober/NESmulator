@@ -12,7 +12,7 @@ int main(void) {
   Json::Value root;
   std::ifstream ifs;
 
-  ifs.open("testing/ProcessorTests/nes6502/v1/ab.json");
+  ifs.open("testing/ProcessorTests/nes6502/v1/cb.json");
   ifs >> root;
   ifs.close();
 
