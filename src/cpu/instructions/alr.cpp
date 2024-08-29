@@ -2,7 +2,7 @@
 
 void CPU::InstructionSet::mReadALR() {
   OperationOutput output =
-      mCpu.mShiftRight(mCpu.mReadMemory() & mCpu.mAccumulator);
+      mCpu.mShiftRight(mCpu.mAccumulator & mCpu.mReadMemory());
   mCpu.mAccumulator = output.value;
 
   mCpu.mSetZeroAndNegative(mCpu.mAccumulator);

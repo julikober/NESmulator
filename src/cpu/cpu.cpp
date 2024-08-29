@@ -778,6 +778,69 @@ void CPU::doCycle() {
         mInstructionSet.ISCIndirectY();
         break;
 
+      // LAS
+      case LAS_ABSOLUTE_Y:
+        mInstructionSet.LASAbsoluteY();
+        break;
+
+      // LAX
+      case LAX_IMMEDIATE:
+        mInstructionSet.LAXImmediate();
+        break;
+
+      case LAX_ZERO_PAGE:
+        mInstructionSet.LAXZeroPage();
+        break;
+
+      case LAX_ZERO_PAGE_Y:
+        mInstructionSet.LAXZeroPageY();
+        break;
+
+      case LAX_ABSOLUTE:
+        mInstructionSet.LAXAbsolute();
+        break;
+
+      case LAX_ABSOLUTE_Y:
+        mInstructionSet.LAXAbsoluteY();
+        break;
+
+      case LAX_INDIRECT_X:
+        mInstructionSet.LAXIndirectX();
+        break;
+
+      case LAX_INDIRECT_Y:
+        mInstructionSet.LAXIndirectY();
+        break;
+
+      // RLA
+      case RLA_ZERO_PAGE:
+        mInstructionSet.RLAZeroPage();
+        break;
+
+      case RLA_ZERO_PAGE_X:
+        mInstructionSet.RLAZeroPageX();
+        break;
+
+      case RLA_ABSOLUTE:
+        mInstructionSet.RLAAbsolute();
+        break;
+
+      case RLA_ABSOLUTE_X:
+        mInstructionSet.RLAAbsoluteX();
+        break;
+
+      case RLA_ABSOLUTE_Y:
+        mInstructionSet.RLAAbsoluteY();
+        break;
+
+      case RLA_INDIRECT_X:
+        mInstructionSet.RLAIndirectX();
+        break;
+
+      case RLA_INDIRECT_Y:
+        mInstructionSet.RLAIndirectY();
+        break;
+
       // XAA
       case XAA_IMMEDIATE:
         mInstructionSet.XAAImmediate();

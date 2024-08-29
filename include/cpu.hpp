@@ -45,10 +45,11 @@ enum Instruction {
   JSR_ABSOLUTE = 0x20,
   AND_INDIRECT_X = 0x21,
 
+  RLA_INDIRECT_X = 0x23,
   BIT_ZERO_PAGE = 0x24,
   AND_ZERO_PAGE = 0x25,
   ROL_ZERO_PAGE = 0x26,
-
+  RLA_ZERO_PAGE = 0x27,
   PLP_IMPLIED = 0x28,
   AND_IMMEDIATE = 0x29,
   ROL_ACCUMULATOR = 0x2A,
@@ -56,19 +57,23 @@ enum Instruction {
   BIT_ABSOLUTE = 0x2C,
   AND_ABSOLUTE = 0x2D,
   ROL_ABSOLUTE = 0x2E,
-
+  RLA_ABSOLUTE = 0x2F,
   BMI_RELATIVE = 0x30,
   AND_INDIRECT_Y = 0x31,
 
+  RLA_INDIRECT_Y = 0x33,
+
   AND_ZERO_PAGE_X = 0x35,
   ROL_ZERO_PAGE_X = 0x36,
-
+  RLA_ZERO_PAGE_X = 0x37,
   SEC_IMPLIED = 0x38,
   AND_ABSOLUTE_Y = 0x39,
 
+  RLA_ABSOLUTE_Y = 0x3B,
+
   AND_ABSOLUTE_X = 0x3D,
   ROL_ABSOLUTE_X = 0x3E,
-
+  RLA_ABSOLUTE_X = 0x3F,
   RTI_IMPLIED = 0x40,
   EOR_INDIRECT_X = 0x41,
 
@@ -151,34 +156,35 @@ enum Instruction {
   LDY_IMMEDIATE = 0xA0,
   LDA_INDIRECT_X = 0xA1,
   LDX_IMMEDIATE = 0xA2,
-
+  LAX_INDIRECT_X = 0xA3,
   LDY_ZERO_PAGE = 0xA4,
   LDA_ZERO_PAGE = 0xA5,
   LDX_ZERO_PAGE = 0xA6,
-
+  LAX_ZERO_PAGE = 0xA7,
   TAY_IMPLIED = 0xA8,
   LDA_IMMEDIATE = 0xA9,
   TAX_IMPLIED = 0xAA,
-
+  LAX_IMMEDIATE = 0xAB,
   LDY_ABSOLUTE = 0xAC,
   LDA_ABSOLUTE = 0xAD,
   LDX_ABSOLUTE = 0xAE,
-
+  LAX_ABSOLUTE = 0xAF,
   BCS_RELATIVE = 0xB0,
   LDA_INDIRECT_Y = 0xB1,
 
+  LAX_INDIRECT_Y = 0xB3,
   LDY_ZERO_PAGE_X = 0xB4,
   LDA_ZERO_PAGE_X = 0xB5,
   LDX_ZERO_PAGE_Y = 0xB6,
-
+  LAX_ZERO_PAGE_Y = 0xB7,
   CLV_IMPLIED = 0xB8,
   LDA_ABSOLUTE_Y = 0xB9,
   TSX_IMPLIED = 0xBA,
-
+  LAS_ABSOLUTE_Y = 0xBB,
   LDY_ABSOLUTE_X = 0xBC,
   LDA_ABSOLUTE_X = 0xBD,
   LDX_ABSOLUTE_Y = 0xBE,
-
+  LAX_ABSOLUTE_Y = 0xBF,
   CPY_IMMEDIATE = 0xC0,
   CMP_INDIRECT_X = 0xC1,
 
@@ -445,6 +451,19 @@ class CPU {
     void mReadISC();
     void mModifyISC();
     void mWriteISC();
+
+    // LAS
+    void mReadLAS();
+
+    // LAX
+    void mReadLAX();
+    void mReadLAXImmediate();  // Involves undeterministic constant, so it
+                               // differs from the regular readLAX
+
+    // RLA
+    void mReadRLA();
+    void mModifyRLA();
+    void mWriteRLA();
 
     // XAA
     void mReadXAA();
@@ -784,6 +803,27 @@ class CPU {
     void ISCAbsoluteY();
     void ISCIndirectX();
     void ISCIndirectY();
+
+    // LAS
+    void LASAbsoluteY();
+
+    // LAX
+    void LAXImmediate();
+    void LAXZeroPage();
+    void LAXZeroPageY();
+    void LAXAbsolute();
+    void LAXAbsoluteY();
+    void LAXIndirectX();
+    void LAXIndirectY();
+
+    // RLA
+    void RLAZeroPage();
+    void RLAZeroPageX();
+    void RLAAbsolute();
+    void RLAAbsoluteX();
+    void RLAAbsoluteY();
+    void RLAIndirectX();
+    void RLAIndirectY();
 
     // XAA
     void XAAImmediate();
