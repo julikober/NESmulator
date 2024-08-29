@@ -715,6 +715,16 @@ void CPU::doCycle() {
         mInstructionSet.ANCImmediate();
         break;
 
+      // ARR
+      case ARR_IMMEDIATE:
+        mInstructionSet.ARRImmediate();
+        break;
+
+      // XAA
+      case XAA_IMMEDIATE:
+        mInstructionSet.XAAImmediate();
+        break;
+
       default:
         mCycle = 0;
         break;

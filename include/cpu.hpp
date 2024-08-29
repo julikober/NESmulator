@@ -104,7 +104,7 @@ enum Instruction {
   PLA_IMPLIED = 0x68,
   ADC_IMMEDIATE = 0x69,
   ROR_ACCUMULATOR = 0x6A,
-
+  ARR_IMMEDIATE = 0x6B,
   JMP_INDIRECT = 0x6C,
   ADC_ABSOLUTE = 0x6D,
   ROR_ABSOLUTE = 0x6E,
@@ -130,7 +130,7 @@ enum Instruction {
   DEY_IMPLIED = 0x88,
 
   TXA_IMPLIED = 0x8A,
-
+  XAA_IMMEDIATE = 0x8B,
   STY_ABSOLUTE = 0x8C,
   STA_ABSOLUTE = 0x8D,
   STX_ABSOLUTE = 0x8E,
@@ -422,6 +422,12 @@ class CPU {
 
     // ANC
     void mReadANC();
+
+    // ARR
+    void mReadARR();
+
+    // XAA
+    void mReadXAA();
 
     // Addressing modes
     void mExecuteImplied(void (InstructionSet::*action)());
@@ -737,6 +743,12 @@ class CPU {
 
     // ANC
     void ANCImmediate();
+
+    // ARR
+    void ARRImmediate();
+
+    // XAA
+    void XAAImmediate();
   };
 
   Memory& mMemory;
