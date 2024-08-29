@@ -720,6 +720,64 @@ void CPU::doCycle() {
         mInstructionSet.ARRImmediate();
         break;
 
+      // DCP
+      case DCP_ZERO_PAGE:
+        mInstructionSet.DCPZeroPage();
+        break;
+
+      case DCP_ZERO_PAGE_X:
+        mInstructionSet.DCPZeroPageX();
+        break;
+
+      case DCP_ABSOLUTE:
+        mInstructionSet.DCPAbsolute();
+        break;
+
+      case DCP_ABSOLUTE_X:
+        mInstructionSet.DCPAbsoluteX();
+        break;
+
+      case DCP_ABSOLUTE_Y:
+        mInstructionSet.DCPAbsoluteY();
+        break;
+
+      case DCP_INDIRECT_X:
+        mInstructionSet.DCPIndirectX();
+        break;
+
+      case DCP_INDIRECT_Y:
+        mInstructionSet.DCPIndirectY();
+        break;
+
+      // ISC
+      case ISC_ZERO_PAGE:
+        mInstructionSet.ISCZeroPage();
+        break;
+
+      case ISC_ZERO_PAGE_X:
+        mInstructionSet.ISCZeroPageX();
+        break;
+
+      case ISC_ABSOLUTE:
+        mInstructionSet.ISCAbsolute();
+        break;
+
+      case ISC_ABSOLUTE_X:
+        mInstructionSet.ISCAbsoluteX();
+        break;
+
+      case ISC_ABSOLUTE_Y:
+        mInstructionSet.ISCAbsoluteY();
+        break;
+
+      case ISC_INDIRECT_X:
+        mInstructionSet.ISCIndirectX();
+        break;
+
+      case ISC_INDIRECT_Y:
+        mInstructionSet.ISCIndirectY();
+        break;
+
       // XAA
       case XAA_IMMEDIATE:
         mInstructionSet.XAAImmediate();

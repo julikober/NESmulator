@@ -182,10 +182,11 @@ enum Instruction {
   CPY_IMMEDIATE = 0xC0,
   CMP_INDIRECT_X = 0xC1,
 
+  DCP_INDIRECT_X = 0xC3,
   CPY_ZERO_PAGE = 0xC4,
   CMP_ZERO_PAGE = 0xC5,
   DEC_ZERO_PAGE = 0xC6,
-
+  DCP_ZERO_PAGE = 0xC7,
   INY_IMPLIED = 0xC8,
   CMP_IMMEDIATE = 0xC9,
   DEX_IMPLIED = 0xCA,
@@ -193,26 +194,31 @@ enum Instruction {
   CPY_ABSOLUTE = 0xCC,
   CMP_ABSOLUTE = 0xCD,
   DEC_ABSOLUTE = 0xCE,
-
+  DCP_ABSOLUTE = 0xCF,
   BNE_RELATIVE = 0xD0,
   CMP_INDIRECT_Y = 0xD1,
 
+  DCP_INDIRECT_Y = 0xD3,
+
   CMP_ZERO_PAGE_X = 0xD5,
   DEC_ZERO_PAGE_X = 0xD6,
-
+  DCP_ZERO_PAGE_X = 0xD7,
   CLD_IMPLIED = 0xD8,
   CMP_ABSOLUTE_Y = 0xD9,
 
+  DCP_ABSOLUTE_Y = 0xDB,
+
   CMP_ABSOLUTE_X = 0xDD,
   DEC_ABSOLUTE_X = 0xDE,
-
+  DCP_ABSOLUTE_X = 0xDF,
   CPX_IMMEDIATE = 0xE0,
   SBC_INDIRECT_X = 0xE1,
 
+  ISC_INDIRECT_X = 0xE3,
   CPX_ZERO_PAGE = 0xE4,
   SBC_ZERO_PAGE = 0xE5,
   INC_ZERO_PAGE = 0xE6,
-
+  ISC_ZERO_PAGE = 0xE7,
   INX_IMPLIED = 0xE8,
   SBC_IMMEDIATE = 0xE9,
   NOP_IMPLIED = 0xEA,
@@ -220,19 +226,23 @@ enum Instruction {
   CPX_ABSOLUTE = 0xEC,
   SBC_ABSOLUTE = 0xED,
   INC_ABSOLUTE = 0xEE,
-
+  ISC_ABSOLUTE = 0xEF,
   BEQ_RELATIVE = 0xF0,
   SBC_INDIRECT_Y = 0xF1,
 
+  ISC_INDIRECT_Y = 0xF3,
+
   SBC_ZERO_PAGE_X = 0xF5,
   INC_ZERO_PAGE_X = 0xF6,
-
+  ISC_ZERO_PAGE_X = 0xF7,
   SED_IMPLIED = 0xF8,
   SBC_ABSOLUTE_Y = 0xF9,
 
+  ISC_ABSOLUTE_Y = 0xFB,
+
   SBC_ABSOLUTE_X = 0xFD,
   INC_ABSOLUTE_X = 0xFE,
-
+  ISC_ABSOLUTE_X = 0xFF
 };
 
 class CPU {
@@ -425,6 +435,16 @@ class CPU {
 
     // ARR
     void mReadARR();
+
+    // DCP
+    void mReadDCP();
+    void mModifyDCP();
+    void mWriteDCP();
+
+    // ISC
+    void mReadISC();
+    void mModifyISC();
+    void mWriteISC();
 
     // XAA
     void mReadXAA();
@@ -746,6 +766,24 @@ class CPU {
 
     // ARR
     void ARRImmediate();
+
+    // DCP
+    void DCPZeroPage();
+    void DCPZeroPageX();
+    void DCPAbsolute();
+    void DCPAbsoluteX();
+    void DCPAbsoluteY();
+    void DCPIndirectX();
+    void DCPIndirectY();
+
+    // ISC
+    void ISCZeroPage();
+    void ISCZeroPageX();
+    void ISCAbsolute();
+    void ISCAbsoluteX();
+    void ISCAbsoluteY();
+    void ISCIndirectX();
+    void ISCIndirectY();
 
     // XAA
     void XAAImmediate();
