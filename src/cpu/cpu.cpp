@@ -701,6 +701,15 @@ void CPU::doCycle() {
         break;
 
       // Unofficial opcodes
+      // AHX
+      case AHX_ABSOLUTE_Y:
+        mInstructionSet.AHXAbsoluteY();
+        break;
+
+      case AHX_INDIRECT_Y:
+        mInstructionSet.AHXIndirectY();
+        break;
+
       // ALR
       case ALR_IMMEDIATE:
         mInstructionSet.ALRImmediate();
@@ -890,6 +899,16 @@ void CPU::doCycle() {
 
       case SAX_INDIRECT_X:
         mInstructionSet.SAXIndirectX();
+        break;
+
+      // SHX
+      case SHX_ABSOLUTE_Y:
+        mInstructionSet.SHXAbsoluteY();
+        break;
+
+      // SHY
+      case SHY_ABSOLUTE_X:
+        mInstructionSet.SHYAbsoluteX();
         break;
 
       // XAA

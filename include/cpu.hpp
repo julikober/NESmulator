@@ -151,6 +151,7 @@ enum Instruction {
   BCC_RELATIVE = 0x90,
   STA_INDIRECT_Y = 0x91,
 
+  AHX_INDIRECT_Y = 0x93,
   STY_ZERO_PAGE_X = 0x94,
   STA_ZERO_PAGE_X = 0x95,
   STX_ZERO_PAGE_Y = 0x96,
@@ -159,8 +160,10 @@ enum Instruction {
   STA_ABSOLUTE_Y = 0x99,
   TXS_IMPLIED = 0x9A,
 
+  SHY_ABSOLUTE_X = 0x9C,
   STA_ABSOLUTE_X = 0x9D,
-
+  SHX_ABSOLUTE_Y = 0x9E,
+  AHX_ABSOLUTE_Y = 0x9F,
   LDY_IMMEDIATE = 0xA0,
   LDA_INDIRECT_X = 0xA1,
   LDX_IMMEDIATE = 0xA2,
@@ -441,6 +444,10 @@ class CPU {
     void mExecuteTYA();
 
     // Unofficial instructions
+    // AHX
+    void mWriteAHXAbsoluteY();  // Needs 2 functions for different
+    void mWriteAHXIndirectY();  // addressing modes
+
     // ALR
     void mReadALR();
 
@@ -483,6 +490,12 @@ class CPU {
 
     // SAX
     void mWriteSAX();
+
+    // SHX
+    void mWriteSHX();
+
+    // SHY
+    void mWriteSHY();
 
     // XAA
     void mReadXAA();
@@ -796,6 +809,10 @@ class CPU {
     void TYAImplied();
 
     // Unofficial instructions
+    // AHX
+    void AHXAbsoluteY();
+    void AHXIndirectY();
+
     // ALR
     void ALRImmediate();
 
@@ -861,6 +878,12 @@ class CPU {
     void SAXZeroPageY();
     void SAXAbsolute();
     void SAXIndirectX();
+
+    // SHX
+    void SHXAbsoluteY();
+
+    // SHY
+    void SHYAbsoluteX();
 
     // XAA
     void XAAImmediate();
