@@ -20,7 +20,7 @@ enum Instruction {
   ORA_INDIRECT_X = 0x01,
 
   U_SLO_INDIRECT_X = 0x03,
-
+  U_NOP_ZERO_PAGE_1 = 0x04,
   ORA_ZERO_PAGE = 0x05,
   ASL_ZERO_PAGE = 0x06,
   U_SLO_ZERO_PAGE = 0x07,
@@ -28,7 +28,7 @@ enum Instruction {
   ORA_IMMEDIATE = 0x09,
   ASL_ACCUMULATOR = 0x0A,
   U_ANC_IMMEDIATE_1 = 0x0B,
-
+  U_NOP_ABSOLUTE = 0x0C,
   ORA_ABSOLUTE = 0x0D,
   ASL_ABSOLUTE = 0x0E,
   U_SLO_ABSOLUTE = 0x0F,
@@ -36,15 +36,15 @@ enum Instruction {
   ORA_INDIRECT_Y = 0x11,
 
   U_SLO_INDIRECT_Y = 0x13,
-
+  U_NOP_ZERO_PAGE_X_1 = 0x14,
   ORA_ZERO_PAGE_X = 0x15,
   ASL_ZERO_PAGE_X = 0x16,
   U_SLO_ZERO_PAGE_X = 0x17,
   CLC_IMPLIED = 0x18,
   ORA_ABSOLUTE_Y = 0x19,
-
+  U_NOP_IMPLIED_1 = 0x1A,
   U_SLO_ABSOLUTE_Y = 0x1B,
-
+  U_NOP_ABSOLUTE_X_1 = 0x1C,
   ORA_ABSOLUTE_X = 0x1D,
   ASL_ABSOLUTE_X = 0x1E,
   U_SLO_ABSOLUTE_X = 0x1F,
@@ -68,15 +68,15 @@ enum Instruction {
   AND_INDIRECT_Y = 0x31,
 
   U_RLA_INDIRECT_Y = 0x33,
-
+  U_NOP_ZERO_PAGE_X_2 = 0x34,
   AND_ZERO_PAGE_X = 0x35,
   ROL_ZERO_PAGE_X = 0x36,
   U_RLA_ZERO_PAGE_X = 0x37,
   SEC_IMPLIED = 0x38,
   AND_ABSOLUTE_Y = 0x39,
-
+  U_NOP_IMPLIED_2 = 0x3A,
   U_RLA_ABSOLUTE_Y = 0x3B,
-
+  U_NOP_ABSOLUTE_X_2 = 0x3C,
   AND_ABSOLUTE_X = 0x3D,
   ROL_ABSOLUTE_X = 0x3E,
   U_RLA_ABSOLUTE_X = 0x3F,
@@ -84,7 +84,7 @@ enum Instruction {
   EOR_INDIRECT_X = 0x41,
 
   U_SRE_INDIRECT_X = 0x43,
-
+  U_NOP_ZERO_PAGE_2 = 0x44,
   EOR_ZERO_PAGE = 0x45,
   LSR_ZERO_PAGE = 0x46,
   U_SRE_ZERO_PAGE = 0x47,
@@ -100,15 +100,15 @@ enum Instruction {
   EOR_INDIRECT_Y = 0x51,
 
   U_SRE_INDIRECT_Y = 0x53,
-
+  U_NOP_ZERO_PAGE_X_3 = 0x54,
   EOR_ZERO_PAGE_X = 0x55,
   LSR_ZERO_PAGE_X = 0x56,
   U_SRE_ZERO_PAGE_X = 0x57,
   CLI_IMPLIED = 0x58,
   EOR_ABSOLUTE_Y = 0x59,
-
+  U_NOP_IMPLIED_3 = 0x5A,
   U_SRE_ABSOLUTE_Y = 0x5B,
-
+  U_NOP_ABSOLUTE_X_3 = 0x5C,
   EOR_ABSOLUTE_X = 0x5D,
   LSR_ABSOLUTE_X = 0x5E,
   U_SRE_ABSOLUTE_X = 0x5F,
@@ -116,7 +116,7 @@ enum Instruction {
   ADC_INDIRECT_X = 0x61,
 
   U_RRA_INDIRECT_X = 0x63,
-
+  U_NOP_ZERO_PAGE_3 = 0x64,
   ADC_ZERO_PAGE = 0x65,
   ROR_ZERO_PAGE = 0x66,
   U_RRA_ZERO_PAGE = 0x67,
@@ -132,28 +132,28 @@ enum Instruction {
   ADC_INDIRECT_Y = 0x71,
 
   U_RRA_INDIRECT_Y = 0x73,
-
+  U_NOP_ZERO_PAGE_X_4 = 0x74,
   ADC_ZERO_PAGE_X = 0x75,
   ROR_ZERO_PAGE_X = 0x76,
   U_RRA_ZERO_PAGE_X = 0x77,
   SEI_IMPLIED = 0x78,
   ADC_ABSOLUTE_Y = 0x79,
-
+  U_NOP_IMPLIED_4 = 0x7A,
   U_RRA_ABSOLUTE_Y = 0x7B,
-
+  U_NOP_ABSOLUTE_X_4 = 0x7C,
   ADC_ABSOLUTE_X = 0x7D,
   ROR_ABSOLUTE_X = 0x7E,
   U_RRA_ABSOLUTE_X = 0x7F,
-
+  U_NOP_IMMEDIATE_1 = 0x80,
   STA_INDIRECT_X = 0x81,
-
+  U_NOP_IMMEDIATE_2 = 0x82,
   U_SAX_INDIRECT_X = 0x83,
   STY_ZERO_PAGE = 0x84,
   STA_ZERO_PAGE = 0x85,
   STX_ZERO_PAGE = 0x86,
   U_SAX_ZERO_PAGE = 0x87,
   DEY_IMPLIED = 0x88,
-
+  U_NOP_IMMEDIATE_3 = 0x89,
   TXA_IMPLIED = 0x8A,
   U_XAA_IMMEDIATE = 0x8B,
   STY_ABSOLUTE = 0x8C,
@@ -210,7 +210,7 @@ enum Instruction {
   U_LAX_ABSOLUTE_Y = 0xBF,
   CPY_IMMEDIATE = 0xC0,
   CMP_INDIRECT_X = 0xC1,
-
+  U_NOP_IMMEDIATE_4 = 0xC2,
   U_DCP_INDIRECT_X = 0xC3,
   CPY_ZERO_PAGE = 0xC4,
   CMP_ZERO_PAGE = 0xC5,
@@ -228,21 +228,21 @@ enum Instruction {
   CMP_INDIRECT_Y = 0xD1,
 
   U_DCP_INDIRECT_Y = 0xD3,
-
+  U_NOP_ZERO_PAGE_X_5 = 0xD4,
   CMP_ZERO_PAGE_X = 0xD5,
   DEC_ZERO_PAGE_X = 0xD6,
   U_DCP_ZERO_PAGE_X = 0xD7,
   CLD_IMPLIED = 0xD8,
   CMP_ABSOLUTE_Y = 0xD9,
-
+  U_NOP_IMPLIED_5 = 0xDA,
   U_DCP_ABSOLUTE_Y = 0xDB,
-
+  U_NOP_ABSOLUTE_X_5 = 0xDC,
   CMP_ABSOLUTE_X = 0xDD,
   DEC_ABSOLUTE_X = 0xDE,
   U_DCP_ABSOLUTE_X = 0xDF,
   CPX_IMMEDIATE = 0xE0,
   SBC_INDIRECT_X = 0xE1,
-
+  U_NOP_IMMEDIATE_5 = 0xE2,
   U_ISC_INDIRECT_X = 0xE3,
   CPX_ZERO_PAGE = 0xE4,
   SBC_ZERO_PAGE = 0xE5,
@@ -260,15 +260,15 @@ enum Instruction {
   SBC_INDIRECT_Y = 0xF1,
 
   U_ISC_INDIRECT_Y = 0xF3,
-
+  U_NOP_ZERO_PAGE_X_6 = 0xF4,
   SBC_ZERO_PAGE_X = 0xF5,
   INC_ZERO_PAGE_X = 0xF6,
   U_ISC_ZERO_PAGE_X = 0xF7,
   SED_IMPLIED = 0xF8,
   SBC_ABSOLUTE_Y = 0xF9,
-
+  U_NOP_IMPLIED_6 = 0xFA,
   U_ISC_ABSOLUTE_Y = 0xFB,
-
+  U_NOP_ABSOLUTE_X_6 = 0xFC,
   SBC_ABSOLUTE_X = 0xFD,
   INC_ABSOLUTE_X = 0xFE,
   U_ISC_ABSOLUTE_X = 0xFF
@@ -879,6 +879,13 @@ class CPU {
     void LAXAbsoluteY();
     void LAXIndirectX();
     void LAXIndirectY();
+
+    // NOP (Unofficial, Implied already implemented in official instructions)
+    void NOPImmediate();
+    void NOPZeroPage();
+    void NOPZeroPageX();
+    void NOPAbsolute();
+    void NOPAbsoluteX();
 
     // RLA
     void RLAZeroPage();

@@ -826,6 +826,115 @@ void CPU::doCycle() {
         mInstructionSet.LAXIndirectY();
         break;
 
+      // NOP (unofficial)
+      case U_NOP_IMPLIED_1:
+        mInstructionSet.NOPImplied();
+        break;
+
+      case U_NOP_IMPLIED_2:
+        mInstructionSet.NOPImplied();
+        break;
+
+      case U_NOP_IMPLIED_3:
+        mInstructionSet.NOPImplied();
+        break;
+
+      case U_NOP_IMPLIED_4:
+        mInstructionSet.NOPImplied();
+        break;
+
+      case U_NOP_IMPLIED_5:
+        mInstructionSet.NOPImplied();
+        break;
+
+      case U_NOP_IMPLIED_6:
+        mInstructionSet.NOPImplied();
+        break;
+
+      case U_NOP_IMMEDIATE_1:
+        mInstructionSet.NOPImmediate();
+        break;
+
+      case U_NOP_IMMEDIATE_2:
+        mInstructionSet.NOPImmediate();
+        break;
+
+      case U_NOP_IMMEDIATE_3:
+        mInstructionSet.NOPImmediate();
+        break;
+
+      case U_NOP_IMMEDIATE_4:
+        mInstructionSet.NOPImmediate();
+        break;
+
+      case U_NOP_IMMEDIATE_5:
+        mInstructionSet.NOPImmediate();
+        break;
+
+      case U_NOP_ZERO_PAGE_1:
+        mInstructionSet.NOPZeroPage();
+        break;
+
+      case U_NOP_ZERO_PAGE_2:
+        mInstructionSet.NOPZeroPage();
+        break;
+
+      case U_NOP_ZERO_PAGE_3:
+        mInstructionSet.NOPZeroPage();
+        break;
+
+      case U_NOP_ZERO_PAGE_X_1:
+        mInstructionSet.NOPZeroPageX();
+        break;
+
+      case U_NOP_ZERO_PAGE_X_2:
+        mInstructionSet.NOPZeroPageX();
+        break;
+
+      case U_NOP_ZERO_PAGE_X_3:
+        mInstructionSet.NOPZeroPageX();
+        break;
+
+      case U_NOP_ZERO_PAGE_X_4:
+        mInstructionSet.NOPZeroPageX();
+        break;
+
+      case U_NOP_ZERO_PAGE_X_5:
+        mInstructionSet.NOPZeroPageX();
+        break;
+
+      case U_NOP_ZERO_PAGE_X_6:
+        mInstructionSet.NOPZeroPageX();
+        break;
+
+      case U_NOP_ABSOLUTE:
+        mInstructionSet.NOPAbsolute();
+        break;
+
+      case U_NOP_ABSOLUTE_X_1:
+        mInstructionSet.NOPAbsoluteX();
+        break;
+
+      case U_NOP_ABSOLUTE_X_2:
+        mInstructionSet.NOPAbsoluteX();
+        break;
+
+      case U_NOP_ABSOLUTE_X_3:
+        mInstructionSet.NOPAbsoluteX();
+        break;
+
+      case U_NOP_ABSOLUTE_X_4:
+        mInstructionSet.NOPAbsoluteX();
+        break;
+
+      case U_NOP_ABSOLUTE_X_5:
+        mInstructionSet.NOPAbsoluteX();
+        break;
+
+      case U_NOP_ABSOLUTE_X_6:
+        mInstructionSet.NOPAbsoluteX();
+        break;
+
       // RLA
       case U_RLA_ZERO_PAGE:
         mInstructionSet.RLAZeroPage();
