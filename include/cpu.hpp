@@ -19,9 +19,11 @@ enum Instruction {
   BRK_IMPLIED = 0x00,
   ORA_INDIRECT_X = 0x01,
 
+  SLO_INDIRECT_X = 0x03,
+
   ORA_ZERO_PAGE = 0x05,
   ASL_ZERO_PAGE = 0x06,
-
+  SLO_ZERO_PAGE = 0x07,
   PHP_IMPLIED = 0x08,
   ORA_IMMEDIATE = 0x09,
   ASL_ACCUMULATOR = 0x0A,
@@ -29,19 +31,23 @@ enum Instruction {
 
   ORA_ABSOLUTE = 0x0D,
   ASL_ABSOLUTE = 0x0E,
-
+  SLO_ABSOLUTE = 0x0F,
   BPL_RELATIVE = 0x10,
   ORA_INDIRECT_Y = 0x11,
 
+  SLO_INDIRECT_Y = 0x13,
+
   ORA_ZERO_PAGE_X = 0x15,
   ASL_ZERO_PAGE_X = 0x16,
-
+  SLO_ZERO_PAGE_X = 0x17,
   CLC_IMPLIED = 0x18,
   ORA_ABSOLUTE_Y = 0x19,
 
+  SLO_ABSOLUTE_Y = 0x1B,
+
   ORA_ABSOLUTE_X = 0x1D,
   ASL_ABSOLUTE_X = 0x1E,
-
+  SLO_ABSOLUTE_X = 0x1F,
   JSR_ABSOLUTE = 0x20,
   AND_INDIRECT_X = 0x21,
 
@@ -77,9 +83,11 @@ enum Instruction {
   RTI_IMPLIED = 0x40,
   EOR_INDIRECT_X = 0x41,
 
+  SRE_INDIRECT_X = 0x43,
+
   EOR_ZERO_PAGE = 0x45,
   LSR_ZERO_PAGE = 0x46,
-
+  SRE_ZERO_PAGE = 0x47,
   PHA_IMPLIED = 0x48,
   EOR_IMMEDIATE = 0x49,
   LSR_ACCUMULATOR = 0x4A,
@@ -87,19 +95,23 @@ enum Instruction {
   JMP_ABSOLUTE = 0x4C,
   EOR_ABSOLUTE = 0x4D,
   LSR_ABSOLUTE = 0x4E,
-
+  SRE_ABSOLUTE = 0x4F,
   BVC_RELATIVE = 0x50,
   EOR_INDIRECT_Y = 0x51,
 
+  SRE_INDIRECT_Y = 0x53,
+
   EOR_ZERO_PAGE_X = 0x55,
   LSR_ZERO_PAGE_X = 0x56,
-
+  SRE_ZERO_PAGE_X = 0x57,
   CLI_IMPLIED = 0x58,
   EOR_ABSOLUTE_Y = 0x59,
 
+  SRE_ABSOLUTE_Y = 0x5B,
+
   EOR_ABSOLUTE_X = 0x5D,
   LSR_ABSOLUTE_X = 0x5E,
-
+  SRE_ABSOLUTE_X = 0x5F,
   RTS_IMPLIED = 0x60,
   ADC_INDIRECT_X = 0x61,
 
@@ -497,6 +509,16 @@ class CPU {
     // SHY
     void mWriteSHY();
 
+    // SLO
+    void mReadSLO();
+    void mModifySLO();
+    void mWriteSLO();
+
+    // SRE
+    void mReadSRE();
+    void mModifySRE();
+    void mWriteSRE();
+
     // XAA
     void mReadXAA();
 
@@ -884,6 +906,24 @@ class CPU {
 
     // SHY
     void SHYAbsoluteX();
+
+    // SLO
+    void SLOZeroPage();
+    void SLOZeroPageX();
+    void SLOAbsolute();
+    void SLOAbsoluteX();
+    void SLOAbsoluteY();
+    void SLOIndirectX();
+    void SLOIndirectY();
+
+    // SRE
+    void SREZeroPage();
+    void SREZeroPageX();
+    void SREAbsolute();
+    void SREAbsoluteX();
+    void SREAbsoluteY();
+    void SREIndirectX();
+    void SREIndirectY();
 
     // XAA
     void XAAImmediate();

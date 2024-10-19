@@ -911,6 +911,64 @@ void CPU::doCycle() {
         mInstructionSet.SHYAbsoluteX();
         break;
 
+      // SLO
+      case SLO_ZERO_PAGE:
+        mInstructionSet.SLOZeroPage();
+        break;
+
+      case SLO_ZERO_PAGE_X:
+        mInstructionSet.SLOZeroPageX();
+        break;
+
+      case SLO_ABSOLUTE:
+        mInstructionSet.SLOAbsolute();
+        break;
+
+      case SLO_ABSOLUTE_X:
+        mInstructionSet.SLOAbsoluteX();
+        break;
+
+      case SLO_ABSOLUTE_Y:
+        mInstructionSet.SLOAbsoluteY();
+        break;
+
+      case SLO_INDIRECT_X:
+        mInstructionSet.SLOIndirectX();
+        break;
+
+      case SLO_INDIRECT_Y:
+        mInstructionSet.SLOIndirectY();
+        break;
+
+      // SRE
+      case SRE_ZERO_PAGE:
+        mInstructionSet.SREZeroPage();
+        break;
+
+      case SRE_ZERO_PAGE_X:
+        mInstructionSet.SREZeroPageX();
+        break;
+
+      case SRE_ABSOLUTE:
+        mInstructionSet.SREAbsolute();
+        break;
+
+      case SRE_ABSOLUTE_X:
+        mInstructionSet.SREAbsoluteX();
+        break;
+
+      case SRE_ABSOLUTE_Y:
+        mInstructionSet.SREAbsoluteY();
+        break;
+
+      case SRE_INDIRECT_X:
+        mInstructionSet.SREIndirectX();
+        break;
+
+      case SRE_INDIRECT_Y:
+        mInstructionSet.SREIndirectY();
+        break;
+
       // XAA
       case XAA_IMMEDIATE:
         mInstructionSet.XAAImmediate();
