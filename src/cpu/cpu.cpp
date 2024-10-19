@@ -702,275 +702,285 @@ void CPU::doCycle() {
 
       // Unofficial opcodes
       // AHX
-      case AHX_ABSOLUTE_Y:
+      case U_AHX_ABSOLUTE_Y:
         mInstructionSet.AHXAbsoluteY();
         break;
 
-      case AHX_INDIRECT_Y:
+      case U_AHX_INDIRECT_Y:
         mInstructionSet.AHXIndirectY();
         break;
 
       // ALR
-      case ALR_IMMEDIATE:
+      case U_ALR_IMMEDIATE:
         mInstructionSet.ALRImmediate();
         break;
 
       // ANC
-      case ANC_IMMEDIATE_1:
+      case U_ANC_IMMEDIATE_1:
         mInstructionSet.ANCImmediate();
         break;
 
-      case ANC_IMMEDIATE_2:
+      case U_ANC_IMMEDIATE_2:
         mInstructionSet.ANCImmediate();
         break;
 
       // ARR
-      case ARR_IMMEDIATE:
+      case U_ARR_IMMEDIATE:
         mInstructionSet.ARRImmediate();
         break;
 
       // AXS
-      case AXS_IMMEDIATE:
+      case U_AXS_IMMEDIATE:
         mInstructionSet.AXSImmediate();
         break;
 
       // DCP
-      case DCP_ZERO_PAGE:
+      case U_DCP_ZERO_PAGE:
         mInstructionSet.DCPZeroPage();
         break;
 
-      case DCP_ZERO_PAGE_X:
+      case U_DCP_ZERO_PAGE_X:
         mInstructionSet.DCPZeroPageX();
         break;
 
-      case DCP_ABSOLUTE:
+      case U_DCP_ABSOLUTE:
         mInstructionSet.DCPAbsolute();
         break;
 
-      case DCP_ABSOLUTE_X:
+      case U_DCP_ABSOLUTE_X:
         mInstructionSet.DCPAbsoluteX();
         break;
 
-      case DCP_ABSOLUTE_Y:
+      case U_DCP_ABSOLUTE_Y:
         mInstructionSet.DCPAbsoluteY();
         break;
 
-      case DCP_INDIRECT_X:
+      case U_DCP_INDIRECT_X:
         mInstructionSet.DCPIndirectX();
         break;
 
-      case DCP_INDIRECT_Y:
+      case U_DCP_INDIRECT_Y:
         mInstructionSet.DCPIndirectY();
         break;
 
       // ISC
-      case ISC_ZERO_PAGE:
+      case U_ISC_ZERO_PAGE:
         mInstructionSet.ISCZeroPage();
         break;
 
-      case ISC_ZERO_PAGE_X:
+      case U_ISC_ZERO_PAGE_X:
         mInstructionSet.ISCZeroPageX();
         break;
 
-      case ISC_ABSOLUTE:
+      case U_ISC_ABSOLUTE:
         mInstructionSet.ISCAbsolute();
         break;
 
-      case ISC_ABSOLUTE_X:
+      case U_ISC_ABSOLUTE_X:
         mInstructionSet.ISCAbsoluteX();
         break;
 
-      case ISC_ABSOLUTE_Y:
+      case U_ISC_ABSOLUTE_Y:
         mInstructionSet.ISCAbsoluteY();
         break;
 
-      case ISC_INDIRECT_X:
+      case U_ISC_INDIRECT_X:
         mInstructionSet.ISCIndirectX();
         break;
 
-      case ISC_INDIRECT_Y:
+      case U_ISC_INDIRECT_Y:
         mInstructionSet.ISCIndirectY();
         break;
 
       // LAS
-      case LAS_ABSOLUTE_Y:
+      case U_LAS_ABSOLUTE_Y:
         mInstructionSet.LASAbsoluteY();
         break;
 
       // LAX
-      case LAX_IMMEDIATE:
+      case U_LAX_IMMEDIATE:
         mInstructionSet.LAXImmediate();
         break;
 
-      case LAX_ZERO_PAGE:
+      case U_LAX_ZERO_PAGE:
         mInstructionSet.LAXZeroPage();
         break;
 
-      case LAX_ZERO_PAGE_Y:
+      case U_LAX_ZERO_PAGE_Y:
         mInstructionSet.LAXZeroPageY();
         break;
 
-      case LAX_ABSOLUTE:
+      case U_LAX_ABSOLUTE:
         mInstructionSet.LAXAbsolute();
         break;
 
-      case LAX_ABSOLUTE_Y:
+      case U_LAX_ABSOLUTE_Y:
         mInstructionSet.LAXAbsoluteY();
         break;
 
-      case LAX_INDIRECT_X:
+      case U_LAX_INDIRECT_X:
         mInstructionSet.LAXIndirectX();
         break;
 
-      case LAX_INDIRECT_Y:
+      case U_LAX_INDIRECT_Y:
         mInstructionSet.LAXIndirectY();
         break;
 
       // RLA
-      case RLA_ZERO_PAGE:
+      case U_RLA_ZERO_PAGE:
         mInstructionSet.RLAZeroPage();
         break;
 
-      case RLA_ZERO_PAGE_X:
+      case U_RLA_ZERO_PAGE_X:
         mInstructionSet.RLAZeroPageX();
         break;
 
-      case RLA_ABSOLUTE:
+      case U_RLA_ABSOLUTE:
         mInstructionSet.RLAAbsolute();
         break;
 
-      case RLA_ABSOLUTE_X:
+      case U_RLA_ABSOLUTE_X:
         mInstructionSet.RLAAbsoluteX();
         break;
 
-      case RLA_ABSOLUTE_Y:
+      case U_RLA_ABSOLUTE_Y:
         mInstructionSet.RLAAbsoluteY();
         break;
 
-      case RLA_INDIRECT_X:
+      case U_RLA_INDIRECT_X:
         mInstructionSet.RLAIndirectX();
         break;
 
-      case RLA_INDIRECT_Y:
+      case U_RLA_INDIRECT_Y:
         mInstructionSet.RLAIndirectY();
         break;
 
       // RRA
-      case RRA_ZERO_PAGE:
+      case U_RRA_ZERO_PAGE:
         mInstructionSet.RRAZeroPage();
         break;
 
-      case RRA_ZERO_PAGE_X:
+      case U_RRA_ZERO_PAGE_X:
         mInstructionSet.RRAZeroPageX();
         break;
 
-      case RRA_ABSOLUTE:
+      case U_RRA_ABSOLUTE:
         mInstructionSet.RRAAbsolute();
         break;
 
-      case RRA_ABSOLUTE_X:
+      case U_RRA_ABSOLUTE_X:
         mInstructionSet.RRAAbsoluteX();
         break;
 
-      case RRA_ABSOLUTE_Y:
+      case U_RRA_ABSOLUTE_Y:
         mInstructionSet.RRAAbsoluteY();
         break;
 
-      case RRA_INDIRECT_X:
+      case U_RRA_INDIRECT_X:
         mInstructionSet.RRAIndirectX();
         break;
 
-      case RRA_INDIRECT_Y:
+      case U_RRA_INDIRECT_Y:
         mInstructionSet.RRAIndirectY();
         break;
 
       // SAX
-      case SAX_ZERO_PAGE:
+      case U_SAX_ZERO_PAGE:
         mInstructionSet.SAXZeroPage();
         break;
 
-      case SAX_ZERO_PAGE_Y:
+      case U_SAX_ZERO_PAGE_Y:
         mInstructionSet.SAXZeroPageY();
         break;
 
-      case SAX_ABSOLUTE:
+      case U_SAX_ABSOLUTE:
         mInstructionSet.SAXAbsolute();
         break;
 
-      case SAX_INDIRECT_X:
+      case U_SAX_INDIRECT_X:
         mInstructionSet.SAXIndirectX();
         break;
 
       // SHX
-      case SHX_ABSOLUTE_Y:
+      case U_SHX_ABSOLUTE_Y:
         mInstructionSet.SHXAbsoluteY();
         break;
 
       // SHY
-      case SHY_ABSOLUTE_X:
+      case U_SHY_ABSOLUTE_X:
         mInstructionSet.SHYAbsoluteX();
         break;
 
       // SLO
-      case SLO_ZERO_PAGE:
+      case U_SLO_ZERO_PAGE:
         mInstructionSet.SLOZeroPage();
         break;
 
-      case SLO_ZERO_PAGE_X:
+      case U_SLO_ZERO_PAGE_X:
         mInstructionSet.SLOZeroPageX();
         break;
 
-      case SLO_ABSOLUTE:
+      case U_SLO_ABSOLUTE:
         mInstructionSet.SLOAbsolute();
         break;
 
-      case SLO_ABSOLUTE_X:
+      case U_SLO_ABSOLUTE_X:
         mInstructionSet.SLOAbsoluteX();
         break;
 
-      case SLO_ABSOLUTE_Y:
+      case U_SLO_ABSOLUTE_Y:
         mInstructionSet.SLOAbsoluteY();
         break;
 
-      case SLO_INDIRECT_X:
+      case U_SLO_INDIRECT_X:
         mInstructionSet.SLOIndirectX();
         break;
 
-      case SLO_INDIRECT_Y:
+      case U_SLO_INDIRECT_Y:
         mInstructionSet.SLOIndirectY();
         break;
 
       // SRE
-      case SRE_ZERO_PAGE:
+      case U_SRE_ZERO_PAGE:
         mInstructionSet.SREZeroPage();
         break;
 
-      case SRE_ZERO_PAGE_X:
+      case U_SRE_ZERO_PAGE_X:
         mInstructionSet.SREZeroPageX();
         break;
 
-      case SRE_ABSOLUTE:
+      case U_SRE_ABSOLUTE:
         mInstructionSet.SREAbsolute();
         break;
 
-      case SRE_ABSOLUTE_X:
+      case U_SRE_ABSOLUTE_X:
         mInstructionSet.SREAbsoluteX();
         break;
 
-      case SRE_ABSOLUTE_Y:
+      case U_SRE_ABSOLUTE_Y:
         mInstructionSet.SREAbsoluteY();
         break;
 
-      case SRE_INDIRECT_X:
+      case U_SRE_INDIRECT_X:
         mInstructionSet.SREIndirectX();
         break;
 
-      case SRE_INDIRECT_Y:
+      case U_SRE_INDIRECT_Y:
         mInstructionSet.SREIndirectY();
         break;
 
+      // TAS
+      case U_TAS_ABSOLUTE_Y:
+        mInstructionSet.TASAbsoluteY();
+        break;
+
+      // SBC (unofficial)
+      case U_SBC_IMMEDIATE:
+        mInstructionSet.SBCImmediate();
+        break;
+
       // XAA
-      case XAA_IMMEDIATE:
+      case U_XAA_IMMEDIATE:
         mInstructionSet.XAAImmediate();
         break;
 
