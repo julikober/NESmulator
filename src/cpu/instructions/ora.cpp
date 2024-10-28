@@ -1,4 +1,4 @@
-#include "cpu.hpp"
+#include "cpu/cpu.hpp"
 
 void CPU::InstructionSet::mReadORA() {
   mCpu.mAccumulator = mCpu.mOr(mCpu.mAccumulator, mCpu.mReadMemory()).value;

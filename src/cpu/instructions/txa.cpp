@@ -1,4 +1,4 @@
-#include "cpu.hpp"
+#include "cpu/cpu.hpp"
 
 void CPU::InstructionSet::mExecuteTXA() {
   mCpu.mAccumulator = mCpu.mXIndex;

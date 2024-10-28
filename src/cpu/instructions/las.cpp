@@ -1,4 +1,4 @@
-#include "cpu.hpp"
+#include "cpu/cpu.hpp"
 
 void CPU::InstructionSet::mReadLAS() {
   mCpu.mAccumulator = mCpu.mStackPointer & mCpu.mReadMemory();

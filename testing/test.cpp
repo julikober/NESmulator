@@ -1,9 +1,9 @@
 #include <fstream>
 #include <iostream>
 
-#include "cpu.hpp"
+#include "cpu/cpu.hpp"
 #include "json/json.h"
-#include "memory.hpp"
+#include "cpu/cpu_memory.hpp"
 
 // This is a test runner for the CPU. It reads a JSON file with test cases and
 // For this to work the cpu registers must be public.
@@ -12,11 +12,11 @@ int main(void) {
   Json::Value root;
   std::ifstream ifs;
 
-  ifs.open("testing/ProcessorTests/nes6502/v1/fc.json");
+  ifs.open("testing/ProcessorTests/nes6502/v1/00.json");
   ifs >> root;
   ifs.close();
 
-  Memory memory = Memory();
+  CPUMemory memory = CPUMemory();
   CPU cpu = CPU(memory);
 
   auto& test = root[0];

@@ -1,4 +1,4 @@
-#include "cpu.hpp"
+#include "cpu/cpu.hpp"
 
 void CPU::InstructionSet::mExecuteSEC() { mCpu.mSetFlag(CARRY); }
 

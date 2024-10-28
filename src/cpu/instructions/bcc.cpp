@@ -1,4 +1,4 @@
-#include "cpu.hpp"
+#include "cpu/cpu.hpp"
 
 bool CPU::InstructionSet::mCheckBCC() { return !mCpu.mCheckFlag(CARRY); }
 

@@ -1,4 +1,4 @@
-#include "cpu.hpp"
+#include "cpu/cpu.hpp"
 
 void CPU::InstructionSet::mWriteSAX() {
   mCpu.mWriteMemory(mCpu.mAccumulator & mCpu.mXIndex);

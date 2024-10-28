@@ -1,4 +1,4 @@
-#include "cpu.hpp"
+#include "cpu/cpu.hpp"
 
 void CPU::InstructionSet::mReadBIT() {
   OperationOutput output = mCpu.mAnd(mCpu.mAccumulator, mCpu.mReadMemory());

@@ -1,4 +1,4 @@
-#include "cpu.hpp"
+#include "cpu/cpu.hpp"
 
 CPU::OperationOutput CPU::mSum(uint8_t a, uint8_t b, bool c) {
   OperationOutput output;

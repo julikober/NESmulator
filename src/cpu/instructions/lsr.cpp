@@ -1,4 +1,4 @@
-#include "cpu.hpp"
+#include "cpu/cpu.hpp"
 
 void CPU::InstructionSet::mReadLSR() { mCpu.mBuffer = mCpu.mReadMemory(); }
 

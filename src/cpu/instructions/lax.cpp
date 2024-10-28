@@ -1,4 +1,4 @@
-#include "cpu.hpp"
+#include "cpu/cpu.hpp"
 
 #define UNDETERMINISTIC_CONSTANT \
   0xEE  // This constant varies from cpu to cpu. To match the test cases 0xEE

@@ -1,4 +1,4 @@
-#include "cpu.hpp"
+#include "cpu/cpu.hpp"
 
 void CPU::InstructionSet::mReadAND() {
   mCpu.mAccumulator = mCpu.mAnd(mCpu.mAccumulator, mCpu.mReadMemory()).value;

@@ -1,4 +1,4 @@
-#include "cpu.hpp"
+#include "cpu/cpu.hpp"
 
 void CPU::InstructionSet::mReadEOR() {
   mCpu.mAccumulator = mCpu.mEor(mCpu.mAccumulator, mCpu.mReadMemory()).value;

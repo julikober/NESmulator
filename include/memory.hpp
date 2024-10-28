@@ -1,13 +1,11 @@
 #pragma once
 
 #include <cstdint>
-#include <cstdio>
+#include <iostream>
 
 class Memory {
  public:
-  Memory() {
-
-  };
+  Memory() {};
   ~Memory() {};
 
   class Section {
@@ -27,8 +25,8 @@ class Memory {
     // Resolve mirror addresses
     uint16_t mResolveMirrors(uint16_t address) {
       if (address >= mirror.dstStart && address <= mirror.dstEnd) {
-        return mirror.srcStart +
-               (address - mirror.dstStart) % (mirror.srcEnd - mirror.srcStart);
+        return mirror.srcStart + (address - mirror.dstStart) %
+                                     (mirror.srcEnd - mirror.srcStart + 1);
       } else if (address >= mStart && address <= mEnd) {
         return address;
       } else {
@@ -60,14 +58,18 @@ class Memory {
 
     ~Section() { delete[] data; };
 
+    void clear();
+
     inline uint8_t read(uint16_t address) {
-      return data[mResolveMirrors(address)];
+      return data[mResolveMirrors(address) - mStart];
     };
 
     inline void write(uint16_t address, uint8_t value) {
-      data[mResolveMirrors(address)] = value;
+      data[mResolveMirrors(address) - mStart] = value;
     };
   };
+
+  virtual void clear() = 0;
 
   virtual uint8_t read(uint16_t address) = 0;
   virtual void write(uint16_t address, uint8_t value) = 0;

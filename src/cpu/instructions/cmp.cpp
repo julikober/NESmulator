@@ -1,4 +1,4 @@
-#include "cpu.hpp"
+#include "cpu/cpu.hpp"
 
 void CPU::InstructionSet::mReadCMP() {
   OperationOutput output = mCpu.mSum(mCpu.mAccumulator, ~mCpu.mReadMemory(), 1);

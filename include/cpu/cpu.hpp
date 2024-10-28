@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-#include "memory.hpp"
+#include "cpu_memory.hpp"
 
 enum StatusFlag {
   CARRY = 1 << 0,
@@ -290,7 +290,7 @@ enum Instruction {
 };
 
 class CPU {
- private:
+ public:
   class InstructionSet {
    private:
     CPU& mCpu;
@@ -960,7 +960,7 @@ class CPU {
     void XAAImmediate();
   };
 
-  Memory& mMemory;
+  CPUMemory& mMemory;
   InstructionSet mInstructionSet;
 
   // General purpose registers
@@ -1032,7 +1032,7 @@ class CPU {
   OperationOutput mShiftRight(uint8_t a);
 
  public:
-  CPU(Memory& memory)
+  CPU(CPUMemory& memory)
       : mMemory(memory),
         mInstructionSet(*this),
         mProgramCounter(0x400),
@@ -1099,5 +1099,5 @@ class CPU {
     printf(" Address: %04X ", mAddress);
 
     printf("\n");
-  }
+  };
 };

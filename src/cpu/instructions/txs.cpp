@@ -1,4 +1,4 @@
-#include "cpu.hpp"
+#include "cpu/cpu.hpp"
 
 void CPU::InstructionSet::mExecuteTXS() {
   mCpu.mStackPointer = mCpu.mXIndex;

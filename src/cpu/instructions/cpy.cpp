@@ -1,4 +1,4 @@
-#include "cpu.hpp"
+#include "cpu/cpu.hpp"
 
 void CPU::InstructionSet::mReadCPY() {
   OperationOutput output = mCpu.mSum(mCpu.mYIndex, ~mCpu.mReadMemory(), 1);
