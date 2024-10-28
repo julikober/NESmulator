@@ -792,6 +792,54 @@ void CPU::doCycle() {
         mInstructionSet.ISCIndirectY();
         break;
 
+      // JAM
+      case U_JAM_1:
+        mInstructionSet.JAM();
+        break;
+
+      case U_JAM_2:
+        mInstructionSet.JAM();
+        break;
+
+      case U_JAM_3:
+        mInstructionSet.JAM();
+        break;
+
+      case U_JAM_4:
+        mInstructionSet.JAM();
+        break;
+
+      case U_JAM_5:
+        mInstructionSet.JAM();
+
+      case U_JAM_6:
+        mInstructionSet.JAM();
+        break;
+
+      case U_JAM_7:
+        mInstructionSet.JAM();
+        break;
+
+      case U_JAM_8:
+        mInstructionSet.JAM();
+        break;
+
+      case U_JAM_9:
+        mInstructionSet.JAM();
+        break;
+
+      case U_JAM_10:
+        mInstructionSet.JAM();
+        break;
+
+      case U_JAM_11:
+        mInstructionSet.JAM();
+        break;
+
+      case U_JAM_12:
+        mInstructionSet.JAM();
+        break;
+
       // LAS
       case U_LAS_ABSOLUTE_Y:
         mInstructionSet.LASAbsoluteY();

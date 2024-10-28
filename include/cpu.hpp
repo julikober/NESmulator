@@ -18,7 +18,7 @@ enum StatusFlag {
 enum Instruction {
   BRK_IMPLIED = 0x00,
   ORA_INDIRECT_X = 0x01,
-
+  U_JAM_1 = 0x02,
   U_SLO_INDIRECT_X = 0x03,
   U_NOP_ZERO_PAGE_1 = 0x04,
   ORA_ZERO_PAGE = 0x05,
@@ -32,9 +32,10 @@ enum Instruction {
   ORA_ABSOLUTE = 0x0D,
   ASL_ABSOLUTE = 0x0E,
   U_SLO_ABSOLUTE = 0x0F,
+
   BPL_RELATIVE = 0x10,
   ORA_INDIRECT_Y = 0x11,
-
+  U_JAM_2 = 0x12,
   U_SLO_INDIRECT_Y = 0x13,
   U_NOP_ZERO_PAGE_X_1 = 0x14,
   ORA_ZERO_PAGE_X = 0x15,
@@ -48,9 +49,10 @@ enum Instruction {
   ORA_ABSOLUTE_X = 0x1D,
   ASL_ABSOLUTE_X = 0x1E,
   U_SLO_ABSOLUTE_X = 0x1F,
+
   JSR_ABSOLUTE = 0x20,
   AND_INDIRECT_X = 0x21,
-
+  U_JAM_3 = 0x22,
   U_RLA_INDIRECT_X = 0x23,
   BIT_ZERO_PAGE = 0x24,
   AND_ZERO_PAGE = 0x25,
@@ -64,9 +66,10 @@ enum Instruction {
   AND_ABSOLUTE = 0x2D,
   ROL_ABSOLUTE = 0x2E,
   U_RLA_ABSOLUTE = 0x2F,
+
   BMI_RELATIVE = 0x30,
   AND_INDIRECT_Y = 0x31,
-
+  U_JAM_4 = 0x32,
   U_RLA_INDIRECT_Y = 0x33,
   U_NOP_ZERO_PAGE_X_2 = 0x34,
   AND_ZERO_PAGE_X = 0x35,
@@ -80,9 +83,10 @@ enum Instruction {
   AND_ABSOLUTE_X = 0x3D,
   ROL_ABSOLUTE_X = 0x3E,
   U_RLA_ABSOLUTE_X = 0x3F,
+
   RTI_IMPLIED = 0x40,
   EOR_INDIRECT_X = 0x41,
-
+  U_JAM_5 = 0x42,
   U_SRE_INDIRECT_X = 0x43,
   U_NOP_ZERO_PAGE_2 = 0x44,
   EOR_ZERO_PAGE = 0x45,
@@ -96,9 +100,10 @@ enum Instruction {
   EOR_ABSOLUTE = 0x4D,
   LSR_ABSOLUTE = 0x4E,
   U_SRE_ABSOLUTE = 0x4F,
+
   BVC_RELATIVE = 0x50,
   EOR_INDIRECT_Y = 0x51,
-
+  U_JAM_6 = 0x52,
   U_SRE_INDIRECT_Y = 0x53,
   U_NOP_ZERO_PAGE_X_3 = 0x54,
   EOR_ZERO_PAGE_X = 0x55,
@@ -112,9 +117,10 @@ enum Instruction {
   EOR_ABSOLUTE_X = 0x5D,
   LSR_ABSOLUTE_X = 0x5E,
   U_SRE_ABSOLUTE_X = 0x5F,
+
   RTS_IMPLIED = 0x60,
   ADC_INDIRECT_X = 0x61,
-
+  U_JAM_7 = 0x62,
   U_RRA_INDIRECT_X = 0x63,
   U_NOP_ZERO_PAGE_3 = 0x64,
   ADC_ZERO_PAGE = 0x65,
@@ -128,9 +134,10 @@ enum Instruction {
   ADC_ABSOLUTE = 0x6D,
   ROR_ABSOLUTE = 0x6E,
   U_RRA_ABSOLUTE = 0x6F,
+
   BVS_RELATIVE = 0x70,
   ADC_INDIRECT_Y = 0x71,
-
+  U_JAM_8 = 0x72,
   U_RRA_INDIRECT_Y = 0x73,
   U_NOP_ZERO_PAGE_X_4 = 0x74,
   ADC_ZERO_PAGE_X = 0x75,
@@ -144,6 +151,7 @@ enum Instruction {
   ADC_ABSOLUTE_X = 0x7D,
   ROR_ABSOLUTE_X = 0x7E,
   U_RRA_ABSOLUTE_X = 0x7F,
+
   U_NOP_IMMEDIATE_1 = 0x80,
   STA_INDIRECT_X = 0x81,
   U_NOP_IMMEDIATE_2 = 0x82,
@@ -160,9 +168,10 @@ enum Instruction {
   STA_ABSOLUTE = 0x8D,
   STX_ABSOLUTE = 0x8E,
   U_SAX_ABSOLUTE = 0x8F,
+
   BCC_RELATIVE = 0x90,
   STA_INDIRECT_Y = 0x91,
-
+  U_JAM_9 = 0x92,
   U_AHX_INDIRECT_Y = 0x93,
   STY_ZERO_PAGE_X = 0x94,
   STA_ZERO_PAGE_X = 0x95,
@@ -176,6 +185,7 @@ enum Instruction {
   STA_ABSOLUTE_X = 0x9D,
   U_SHX_ABSOLUTE_Y = 0x9E,
   U_AHX_ABSOLUTE_Y = 0x9F,
+
   LDY_IMMEDIATE = 0xA0,
   LDA_INDIRECT_X = 0xA1,
   LDX_IMMEDIATE = 0xA2,
@@ -192,9 +202,10 @@ enum Instruction {
   LDA_ABSOLUTE = 0xAD,
   LDX_ABSOLUTE = 0xAE,
   U_LAX_ABSOLUTE = 0xAF,
+
   BCS_RELATIVE = 0xB0,
   LDA_INDIRECT_Y = 0xB1,
-
+  U_JAM_10 = 0xB2,
   U_LAX_INDIRECT_Y = 0xB3,
   LDY_ZERO_PAGE_X = 0xB4,
   LDA_ZERO_PAGE_X = 0xB5,
@@ -208,6 +219,7 @@ enum Instruction {
   LDA_ABSOLUTE_X = 0xBD,
   LDX_ABSOLUTE_Y = 0xBE,
   U_LAX_ABSOLUTE_Y = 0xBF,
+
   CPY_IMMEDIATE = 0xC0,
   CMP_INDIRECT_X = 0xC1,
   U_NOP_IMMEDIATE_4 = 0xC2,
@@ -224,9 +236,10 @@ enum Instruction {
   CMP_ABSOLUTE = 0xCD,
   DEC_ABSOLUTE = 0xCE,
   U_DCP_ABSOLUTE = 0xCF,
+
   BNE_RELATIVE = 0xD0,
   CMP_INDIRECT_Y = 0xD1,
-
+  U_JAM_11 = 0xD2,
   U_DCP_INDIRECT_Y = 0xD3,
   U_NOP_ZERO_PAGE_X_5 = 0xD4,
   CMP_ZERO_PAGE_X = 0xD5,
@@ -240,6 +253,7 @@ enum Instruction {
   CMP_ABSOLUTE_X = 0xDD,
   DEC_ABSOLUTE_X = 0xDE,
   U_DCP_ABSOLUTE_X = 0xDF,
+
   CPX_IMMEDIATE = 0xE0,
   SBC_INDIRECT_X = 0xE1,
   U_NOP_IMMEDIATE_5 = 0xE2,
@@ -256,9 +270,10 @@ enum Instruction {
   SBC_ABSOLUTE = 0xED,
   INC_ABSOLUTE = 0xEE,
   U_ISC_ABSOLUTE = 0xEF,
+
   BEQ_RELATIVE = 0xF0,
   SBC_INDIRECT_Y = 0xF1,
-
+  U_JAM_12 = 0xF2,
   U_ISC_INDIRECT_Y = 0xF3,
   U_NOP_ZERO_PAGE_X_6 = 0xF4,
   SBC_ZERO_PAGE_X = 0xF5,
@@ -867,6 +882,9 @@ class CPU {
     void ISCAbsoluteY();
     void ISCIndirectX();
     void ISCIndirectY();
+
+    // JAM
+    void JAM();
 
     // LAS
     void LASAbsoluteY();
