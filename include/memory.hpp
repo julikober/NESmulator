@@ -4,53 +4,71 @@
 #include <cstdio>
 
 class Memory {
- private:
-  uint8_t mMemory[0xFFFF];
-
  public:
   Memory() {
-    for (int i = 0; i < 0xFFFF; i++) {
-      mMemory[i] = 0;
-    }
+
   };
   ~Memory() {};
 
-  inline uint8_t read(uint16_t address) { return mMemory[address]; };
+  class Section {
+   private:
+    uint16_t mStart;
+    uint16_t mEnd;
 
-  inline void write(uint16_t address, uint8_t value) {
-    mMemory[address] = value;
-  };
+    struct Mirror {
+      uint16_t srcStart;
+      uint16_t srcEnd;
+      uint16_t dstStart;
+      uint16_t dstEnd;
+    } mirror;
 
-  void clear() {
-    for (int i = 0; i < 0xFFFF; i++) {
-      mMemory[i] = 0;
-    }
-  }
+    uint8_t* data;
 
-  void loadFile(
-      const char* filename) {  // Currently for debugging purposes only
-    FILE* file = fopen(filename, "rb");
-    if (file == nullptr) {
-      printf("Error: Could not open file %s\n", filename);
-      return;
-    }
-
-    fseek(file, 0, SEEK_END);
-    long size = ftell(file);
-    fseek(file, 0, SEEK_SET);
-
-    fread(mMemory, size, 1, file);
-    fclose(file);
-  }
-
-  void dumpMemory() {
-    // Print first page of memory
-    for (int i = 0; i <= 0x0F; i++) {
-      printf("\n%02X: ", i * 0x10);
-      for (int j = 0; j <= 0x0F; j++) {
-        printf("%02X ", mMemory[i * 0x10 + j]);
+    // Resolve mirror addresses
+    uint16_t mResolveMirrors(uint16_t address) {
+      if (address >= mirror.dstStart && address <= mirror.dstEnd) {
+        return mirror.srcStart +
+               (address - mirror.dstStart) % (mirror.srcEnd - mirror.srcStart);
+      } else if (address >= mStart && address <= mEnd) {
+        return address;
+      } else {
+        return 0;
       }
     }
-    printf("\n");
-  }
+
+   public:
+    Section(uint16_t start, uint16_t end) : mStart(start), mEnd(end) {
+      mirror.srcStart = start;
+      mirror.srcEnd = end;
+      mirror.dstStart = start;
+      mirror.dstEnd = end;
+
+      data = new uint8_t[end - start];
+    };
+
+    Section(uint16_t start, uint16_t end, uint16_t mirrorSrcStart,
+            uint16_t mirrorSrcEnd, uint16_t mirrorDstStart,
+            uint16_t mirrorDstEnd)
+        : mStart(start), mEnd(end) {
+      mirror.srcStart = mirrorSrcStart;
+      mirror.srcEnd = mirrorSrcEnd;
+      mirror.dstStart = mirrorDstStart;
+      mirror.dstEnd = mirrorDstEnd;
+
+      data = new uint8_t[end - start];
+    };
+
+    ~Section() { delete[] data; };
+
+    inline uint8_t read(uint16_t address) {
+      return data[mResolveMirrors(address)];
+    };
+
+    inline void write(uint16_t address, uint8_t value) {
+      data[mResolveMirrors(address)] = value;
+    };
+  };
+
+  virtual uint8_t read(uint16_t address) = 0;
+  virtual void write(uint16_t address, uint8_t value) = 0;
 };
