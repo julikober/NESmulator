@@ -3,45 +3,66 @@ BUILDDIR = build
 INCLUDEDIR = include
 TESTDIR = testing
 
-CPPFLAGS = -Wall -std=c++17 -I $(INCLUDEDIR) -g
+CPPFLAGS = -Wall -std=c++17 -I $(INCLUDEDIR)
 
-INSTRUCTION_FILES = $(wildcard $(SRCDIR)/cpu/instructions/*.cpp)
-INSTRUCTION_OBJS = $(patsubst $(SRCDIR)/cpu/instructions/%.cpp, $(BUILDDIR)/cpu/instructions/%.o, $(INSTRUCTION_FILES))
+# All
+all: dirs main
 
-all: $(BUILDDIR)/main
+# Memory
+MEMORY = memory
 
-$(BUILDDIR)/memory.o: $(SRCDIR)/memory.cpp $(INCLUDEDIR)/memory.hpp
-	g++ $(CPPFLAGS) -c -o $(BUILDDIR)/memory.o $(SRCDIR)/memory.cpp
+$(BUILDDIR)/$(MEMORY)/memory.o: $(SRCDIR)/$(MEMORY)/memory.cpp $(INCLUDEDIR)/$(MEMORY)/memory.hpp
+	g++ $(CPPFLAGS) -c $< -o $@
 
-$(BUILDDIR)/cpu/cpu_memory.o: $(SRCDIR)/cpu/cpu_memory.cpp $(INCLUDEDIR)/cpu/cpu_memory.hpp $(INCLUDEDIR)/memory.hpp
-	g++ $(CPPFLAGS) -c -o $(BUILDDIR)/cpu/cpu_memory.o $(SRCDIR)/cpu/cpu_memory.cpp
+# CPU
+CPU = cpu
+CPU_MEMORY = $(CPU)/memory
 
-$(BUILDDIR)/cpu/cpu.o: $(SRCDIR)/cpu/cpu.cpp $(INCLUDEDIR)/cpu/cpu.hpp
-	g++ $(CPPFLAGS) -c -o $(BUILDDIR)/cpu/cpu.o $(SRCDIR)/cpu/cpu.cpp
+CPU_MEMORY_SECTIONS = $(CPU_MEMORY)/sections
+CPU_MEMORY_SECTIONS_FILES = $(wildcard $(SRCDIR)/$(CPU_MEMORY_SECTIONS)/*.cpp)
+CPU_MEMORY_SECTIONS_OBJS = $(patsubst $(SRCDIR)/$(CPU_MEMORY_SECTIONS)/%.cpp, $(BUILDDIR)/$(CPU_MEMORY_SECTIONS)/%.o, $(CPU_MEMORY_SECTIONS_FILES))
 
-$(BUILDDIR)/cpu/instructions.o: $(SRCDIR)/cpu/instructions.cpp $(INCLUDEDIR)/cpu/cpu.hpp
-	g++ $(CPPFLAGS) -c -o $(BUILDDIR)/cpu/instructions.o $(SRCDIR)/cpu/instructions.cpp
+INSTRUCTIONS = $(CPU)/instructions
+INSTRUCTION_FILES = $(wildcard $(SRCDIR)/$(INSTRUCTIONS)/*.cpp)
+INSTRUCTION_OBJS = $(patsubst $(SRCDIR)/$(INSTRUCTIONS)/%.cpp, $(BUILDDIR)/$(INSTRUCTIONS)/%.o, $(INSTRUCTION_FILES))
 
-$(BUILDDIR)/cpu/instructions/%.o: $(SRCDIR)/cpu/instructions/%.cpp $(INCLUDEDIR)/cpu/cpu.hpp
-	g++ $(CPPFLAGS) -c -o $@ $<
+$(BUILDDIR)/$(CPU_MEMORY)/cpu_memory.o: $(SRCDIR)/$(CPU_MEMORY)/cpu_memory.cpp $(INCLUDEDIR)/$(CPU_MEMORY)/cpu_memory.hpp $(BUILDDIR)/$(MEMORY)/memory.o
+	g++ $(CPPFLAGS) -c $< -o $@
 
-$(BUILDDIR)/cpu/operations.o: $(SRCDIR)/cpu/operations.cpp $(INCLUDEDIR)/cpu/cpu.hpp
-	g++ $(CPPFLAGS) -c -o $(BUILDDIR)/cpu/operations.o $(SRCDIR)/cpu/operations.cpp
+$(BUILDDIR)/$(CPU_MEMORY_SECTIONS)/%.o: $(SRCDIR)/$(CPU_MEMORY_SECTIONS)/%.cpp $(INCLUDEDIR)/$(CPU_MEMORY)/cpu_memory.hpp
+	g++ $(CPPFLAGS) -c $< -o $@
 
-$(BUILDDIR)/cpu.a: $(BUILDDIR)/cpu/cpu.o $(BUILDDIR)/cpu/instructions.o $(INSTRUCTION_OBJS) $(BUILDDIR)/cpu/operations.o $(BUILDDIR)/cpu/cpu_memory.o $(BUILDDIR)/memory.o
-	ar rcs $(BUILDDIR)/cpu.a $(BUILDDIR)/cpu/cpu.o $(BUILDDIR)/cpu/instructions.o $(INSTRUCTION_OBJS) $(BUILDDIR)/cpu/operations.o $(BUILDDIR)/cpu/cpu_memory.o $(BUILDDIR)/memory.o
+$(BUILDDIR)/$(CPU)/operations.o: $(SRCDIR)/$(CPU)/operations.cpp $(INCLUDEDIR)/$(CPU)/cpu.hpp
+	g++ $(CPPFLAGS) -c $< -o $@
 
-$(BUILDDIR)/main: $(SRCDIR)/main.cpp $(BUILDDIR)/cpu.a
-	g++ $(CPPFLAGS) -o $(BUILDDIR)/main $(SRCDIR)/main.cpp $(BUILDDIR)/cpu.a
+$(BUILDDIR)/$(CPU)/instructions.o: $(SRCDIR)/$(CPU)/instructions.cpp $(INCLUDEDIR)/$(CPU)/cpu.hpp
+	g++ $(CPPFLAGS) -c $< -o $@
 
-$(BUILDDIR)/test: $(TESTDIR)/test.cpp $(BUILDDIR)/cpu.a
-	g++ $(CPPFLAGS) -ljsoncpp -o $(BUILDDIR)/test $(TESTDIR)/test.cpp $(BUILDDIR)/cpu.a
+$(BUILDDIR)/$(INSTRUCTIONS)/%.o: $(SRCDIR)/$(INSTRUCTIONS)/%.cpp $(INCLUDEDIR)/$(CPU)/cpu.hpp
+	g++ $(CPPFLAGS) -c $< -o $@
 
-test: $(BUILDDIR)/test
+$(BUILDDIR)/$(CPU)/cpu.o: $(SRCDIR)/$(CPU)/cpu.cpp $(INCLUDEDIR)/$(CPU)/cpu.hpp
+	g++ $(CPPFLAGS) -c $< -o $@
+
+$(BUILDDIR)/$(CPU)/cpu.a: $(BUILDDIR)/$(CPU)/cpu.o $(BUILDDIR)/$(CPU_MEMORY)/cpu_memory.o $(CPU_MEMORY_SECTIONS_OBJS) $(BUILDDIR)/$(CPU)/operations.o $(BUILDDIR)/$(CPU)/instructions.o $(INSTRUCTION_OBJS)
+	ar rcs $@ $^
+
+# Main
+main: $(SRCDIR)/main.cpp $(BUILDDIR)/$(CPU)/cpu.a
+	g++ $(CPPFLAGS) $^ -o $(BUILDDIR)/main
+
+# Test
+test: testing/test.cpp $(BUILDDIR)/$(CPU)/cpu.a
 	$(BUILDDIR)/test
 
+# Clean
 clean:
-	rm -rf $(BUILDDIR)/* && mkdir -p $(BUILDDIR)/cpu/instructions
+	rm -rf $(BUILDDIR)/*
 
+# Dirs
+dirs: 
+	mkdir -p $(BUILDDIR)/$(MEMORY) $(BUILDDIR)/$(CPU) $(BUILDDIR)/$(CPU_MEMORY) $(BUILDDIR)/$(CPU_MEMORY_SECTIONS) $(BUILDDIR)/$(INSTRUCTIONS)
+
+# Run
 run: all
 	$(BUILDDIR)/main

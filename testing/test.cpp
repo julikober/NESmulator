@@ -3,7 +3,7 @@
 
 #include "cpu/cpu.hpp"
 #include "json/json.h"
-#include "cpu/cpu_memory.hpp"
+#include "cpu/memory/cpu_memory.hpp"
 
 // This is a test runner for the CPU. It reads a JSON file with test cases and
 // For this to work the cpu registers must be public.

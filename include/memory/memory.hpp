@@ -1,7 +1,6 @@
 #pragma once
 
 #include <cstdint>
-#include <iostream>
 
 class Memory {
  public:
@@ -9,7 +8,7 @@ class Memory {
   ~Memory() {};
 
   class Section {
-   private:
+   protected:
     uint16_t mStart;
     uint16_t mEnd;
 
@@ -19,8 +18,6 @@ class Memory {
       uint16_t dstStart;
       uint16_t dstEnd;
     } mirror;
-
-    uint8_t* data;
 
     // Resolve mirror addresses
     uint16_t mResolveMirrors(uint16_t address) {
@@ -36,12 +33,10 @@ class Memory {
 
    public:
     Section(uint16_t start, uint16_t end) : mStart(start), mEnd(end) {
-      mirror.srcStart = start;
-      mirror.srcEnd = end;
-      mirror.dstStart = start;
-      mirror.dstEnd = end;
-
-      data = new uint8_t[end - start];
+      mirror.srcStart = 0;
+      mirror.srcEnd = 0;
+      mirror.dstStart = 0;
+      mirror.dstEnd = 0;
     };
 
     Section(uint16_t start, uint16_t end, uint16_t mirrorSrcStart,
@@ -52,24 +47,17 @@ class Memory {
       mirror.srcEnd = mirrorSrcEnd;
       mirror.dstStart = mirrorDstStart;
       mirror.dstEnd = mirrorDstEnd;
-
-      data = new uint8_t[end - start];
     };
 
-    ~Section() { delete[] data; };
+    ~Section() {};
 
-    void clear();
+    // void clear();
 
-    inline uint8_t read(uint16_t address) {
-      return data[mResolveMirrors(address) - mStart];
-    };
-
-    inline void write(uint16_t address, uint8_t value) {
-      data[mResolveMirrors(address) - mStart] = value;
-    };
+    virtual uint8_t read(uint16_t address) = 0;
+    virtual void write(uint16_t address, uint8_t value) = 0;
   };
 
-  virtual void clear() = 0;
+  // virtual void clear() = 0;
 
   virtual uint8_t read(uint16_t address) = 0;
   virtual void write(uint16_t address, uint8_t value) = 0;

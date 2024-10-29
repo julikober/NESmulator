@@ -1,8 +1,9 @@
 #pragma once
 
 #include <cstdint>
+#include <cstdio>
 
-#include "cpu_memory.hpp"
+#include "memory/cpu_memory.hpp"
 
 enum StatusFlag {
   CARRY = 1 << 0,
@@ -290,7 +291,7 @@ enum Instruction {
 };
 
 class CPU {
- public:
+ private:
   class InstructionSet {
    private:
     CPU& mCpu;
