@@ -6,7 +6,7 @@ TESTDIR = testing
 CPPFLAGS = -Wall -std=c++17 -I $(INCLUDEDIR)
 
 # All
-all: dirs main
+all: dirs $(BUILDDIR)/main
 
 # Memory
 MEMORY = memory
@@ -47,14 +47,6 @@ $(BUILDDIR)/$(CPU)/cpu.o: $(SRCDIR)/$(CPU)/cpu.cpp $(INCLUDEDIR)/$(CPU)/cpu.hpp
 $(BUILDDIR)/$(CPU)/cpu.a: $(BUILDDIR)/$(CPU)/cpu.o $(BUILDDIR)/$(CPU_MEMORY)/cpu_memory.o $(CPU_MEMORY_SECTIONS_OBJS) $(BUILDDIR)/$(CPU)/operations.o $(BUILDDIR)/$(CPU)/instructions.o $(INSTRUCTION_OBJS)
 	ar rcs $@ $^
 
-# Main
-main: $(SRCDIR)/main.cpp $(BUILDDIR)/$(CPU)/cpu.a
-	g++ $(CPPFLAGS) $^ -o $(BUILDDIR)/main
-
-# Test
-test: testing/test.cpp $(BUILDDIR)/$(CPU)/cpu.a
-	$(BUILDDIR)/test
-
 # Clean
 clean:
 	rm -rf $(BUILDDIR)/*
@@ -63,6 +55,17 @@ clean:
 dirs: 
 	mkdir -p $(BUILDDIR)/$(MEMORY) $(BUILDDIR)/$(CPU) $(BUILDDIR)/$(CPU_MEMORY) $(BUILDDIR)/$(CPU_MEMORY_SECTIONS) $(BUILDDIR)/$(INSTRUCTIONS)
 
+# Main
+$(BUILDDIR)/main: $(SRCDIR)/main.cpp $(BUILDDIR)/$(CPU)/cpu.a
+	g++ $(CPPFLAGS) $^ -o $@
+
 # Run
 run: all
 	$(BUILDDIR)/main
+
+# Test
+$(BUILDDIR)/test: $(TESTDIR)/test.cpp $(BUILDDIR)/$(CPU)/cpu.a
+	g++ $(CPPFLAGS) $^ -o $@
+
+test: $(BUILDDIR)/test
+	$(BUILDDIR)/test
