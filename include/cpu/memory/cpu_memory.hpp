@@ -26,14 +26,15 @@
 #define PRGROM_END 0xFFFF
 
 struct PPURegisters {
-  uint8_t& ppuCtrl1;
-  uint8_t& ppuCtrl2;
-  uint8_t& ppuStatus;
-  uint8_t& sprRamAddr;
-  uint8_t& sprRamIO;
-  uint8_t& vramAddr1;
-  uint8_t& vramAddr2;
-  uint8_t& vramIO;
+  uint8_t& PPUCTRL;
+  uint8_t& PPUMASK;
+  uint8_t& PPUSTATUS;
+  uint8_t& OAMADDR;
+  uint8_t& OAMDATA;
+  uint8_t& PPUSCROLL;
+  uint8_t& PPUADDR;
+  uint8_t& PPUDATA;
+  uint8_t& OAMDMA;
 };
 
 class CPUMemory : public Memory {
