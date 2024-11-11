@@ -7,7 +7,7 @@
 
 int main(void) {
   Logger& Logger = Logger::getInstance();
-  
+
   uint8_t ppuCtrl1 = 0x00;
   uint8_t ppuCtrl2 = 0x00;
   uint8_t ppuStatus = 0x00;

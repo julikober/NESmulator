@@ -1,7 +1,6 @@
 #include <sstream>
 
 #include "cpu/memory/cpu_memory.hpp"
-#include "memory/exceptions.hpp"
 
 #define ADDR_PPUCTRL 0x2000
 #define ADDR_PPUMASK 0x2001

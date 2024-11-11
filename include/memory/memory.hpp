@@ -2,6 +2,10 @@
 
 #include <cstdint>
 
+#include "exceptions.hpp"
+
+enum AccessType { READ, WRITE, READ_WRITE, NONE };
+
 class Memory {
  public:
   Memory() {};

@@ -44,8 +44,8 @@ class CPUMemory : public Memory {
     uint8_t mMemory[RAM_MIRROR_SRC_END - RAM_MIRROR_SRC_START + 1];
 
    public:
-    RAM(uint16_t start, uint16_t end)
-        : Section(start, end, RAM_MIRROR_SRC_START, RAM_MIRROR_SRC_END,
+    RAM()
+        : Section(RAM_START, RAM_END, RAM_MIRROR_SRC_START, RAM_MIRROR_SRC_END,
                   RAM_MIRROR_DST_START, RAM_MIRROR_DST_END) {};
 
     ~RAM() {};
@@ -60,11 +60,9 @@ class CPUMemory : public Memory {
     const struct PPURegisters mPPURegisters;
 
    public:
-    IO(uint16_t start, uint16_t end, uint16_t mirrorSrcStart,
-       uint16_t mirrorSrcEnd, uint16_t mirrorDstStart, uint16_t mirrorDstEnd,
-       const struct PPURegisters ppuRegisters)
-        : Section(start, end, mirrorSrcStart, mirrorSrcEnd, mirrorDstStart,
-                  mirrorDstEnd),
+    IO(const struct PPURegisters ppuRegisters)
+        : Section(IO_START, IO_END, IO_MIRROR_SRC_START, IO_MIRROR_SRC_END,
+                  IO_MIRROR_DST_START, IO_MIRROR_DST_END),
           mPPURegisters(ppuRegisters) {};
 
     ~IO() {};
@@ -83,9 +81,8 @@ class CPUMemory : public Memory {
 
  public:
   CPUMemory(const struct PPURegisters ppuRegisters)
-      : mRAM(RAM_START, RAM_END),
-        mIO(IO_START, IO_END, IO_MIRROR_SRC_START, IO_MIRROR_SRC_END,
-            IO_MIRROR_DST_START, IO_MIRROR_DST_END, ppuRegisters)
+      : mRAM(),
+        mIO(ppuRegisters)
   // mExpansionROM(EXPANSION_ROM_START, EXPANSION_ROM_END),
   // mSRAM(SRAM_START, SRAM_END),
   // mPRGROM(PRGROM_START, PRGROM_END)
