@@ -47,6 +47,18 @@ $(BUILDDIR)/$(CPU)/cpu.o: $(SRCDIR)/$(CPU)/cpu.cpp $(INCLUDEDIR)/$(CPU)/cpu.hpp
 $(BUILDDIR)/$(CPU)/cpu.a: $(BUILDDIR)/$(CPU)/cpu.o $(BUILDDIR)/$(CPU_MEMORY)/cpu_memory.o $(CPU_MEMORY_SECTIONS_OBJS) $(BUILDDIR)/$(CPU)/operations.o $(BUILDDIR)/$(CPU)/addressing.o $(INSTRUCTION_OBJS)
 	ar rcs $@ $^
 
+# PPU
+PPU = ppu
+
+$(BUILDDIR)/$(PPU)/registers.o: $(SRCDIR)/$(PPU)/registers.cpp $(INCLUDEDIR)/$(PPU)/ppu.hpp
+	g++ $(CPPFLAGS) -c $< -o $@
+
+$(BUILDDIR)/$(PPU)/ppu.o: $(SRCDIR)/$(PPU)/ppu.cpp $(INCLUDEDIR)/$(PPU)/ppu.hpp
+	g++ $(CPPFLAGS) -c $< -o $@
+
+$(BUILDDIR)/$(PPU)/ppu.a: $(BUILDDIR)/$(PPU)/ppu.o $(BUILDDIR)/$(PPU)/registers.o
+	ar rcs $@ $^
+
 # Logger
 LOGGER = logger
 $(BUILDDIR)/$(LOGGER)/logger.o: $(SRCDIR)/$(LOGGER)/logger.cpp $(INCLUDEDIR)/$(LOGGER)/logger.hpp
@@ -58,10 +70,10 @@ clean:
 
 # Dirs
 dirs: 
-	mkdir -p $(BUILDDIR)/$(MEMORY) $(BUILDDIR)/$(CPU) $(BUILDDIR)/$(CPU_MEMORY) $(BUILDDIR)/$(CPU_MEMORY_SECTIONS) $(BUILDDIR)/$(INSTRUCTIONS) $(BUILDDIR)/$(LOGGER)
+	mkdir -p $(BUILDDIR)/$(MEMORY) $(BUILDDIR)/$(CPU) $(BUILDDIR)/$(CPU_MEMORY) $(BUILDDIR)/$(CPU_MEMORY_SECTIONS) $(BUILDDIR)/$(INSTRUCTIONS) $(BUILDDIR)/$(PPU) $(BUILDDIR)/$(LOGGER)
 
 # Main
-$(BUILDDIR)/main: $(SRCDIR)/main.cpp $(BUILDDIR)/$(CPU)/cpu.a $(BUILDDIR)/$(LOGGER)/logger.o
+$(BUILDDIR)/main: $(SRCDIR)/main.cpp $(BUILDDIR)/$(CPU)/cpu.a $(BUILDDIR)/$(PPU)/ppu.a $(BUILDDIR)/$(LOGGER)/logger.o
 	g++ $(CPPFLAGS) $^ -o $@
 
 # Run

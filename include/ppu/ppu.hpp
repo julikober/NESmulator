@@ -43,7 +43,7 @@ class PPU {
     mRegisterAccess.mPPUMASK = WRITE;
     mRegisterAccess.mPPUSTATUS = READ;
     mRegisterAccess.mOAMADDR = WRITE;
-    mRegisterAccess.mOAMDATA = WRITE;
+    mRegisterAccess.mOAMDATA = READ_WRITE;
     mRegisterAccess.mPPUSCROLL = WRITE;
     mRegisterAccess.mPPUADDR = WRITE;
     mRegisterAccess.mPPUDATA = READ_WRITE;
