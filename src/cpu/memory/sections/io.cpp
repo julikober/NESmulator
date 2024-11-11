@@ -1,5 +1,7 @@
+#include <sstream>
+
 #include "cpu/memory/cpu_memory.hpp"
-#include <stdexcept>
+#include "memory/exceptions.hpp"
 
 #define ADDR_PPUCTRL 0x2000
 #define ADDR_PPUMASK 0x2001
@@ -13,27 +15,32 @@
 
 uint8_t &CPUMemory::IO::getRegister(uint16_t address) {
   switch (mResolveMirrors(address)) {
-  case ADDR_PPUCTRL:
-    return mPPURegisters.PPUCTRL;
-  case ADDR_PPUMASK:
-    return mPPURegisters.PPUMASK;
-  case ADDR_PPUSTATUS:
-    return mPPURegisters.PPUSTATUS;
-  case ADDR_OAMADDR:
-    return mPPURegisters.OAMADDR;
-  case ADDR_OAMDATA:
-    return mPPURegisters.OAMDATA;
-  case ADDR_PPUSCROLL:
-    return mPPURegisters.PPUSCROLL;
-  case ADDR_PPUADDR:
-    return mPPURegisters.PPUADDR;
-  case ADDR_PPUDATA:
-    return mPPURegisters.PPUDATA;
-  case ADDR_OAMDMA:
-    return mPPURegisters.OAMDMA;
+    case ADDR_PPUCTRL:
+      return mPPURegisters.PPUCTRL;
+    case ADDR_PPUMASK:
+      return mPPURegisters.PPUMASK;
+    case ADDR_PPUSTATUS:
+      return mPPURegisters.PPUSTATUS;
+    case ADDR_OAMADDR:
+      return mPPURegisters.OAMADDR;
+    case ADDR_OAMDATA:
+      return mPPURegisters.OAMDATA;
+    case ADDR_PPUSCROLL:
+      return mPPURegisters.PPUSCROLL;
+    case ADDR_PPUADDR:
+      return mPPURegisters.PPUADDR;
+    case ADDR_PPUDATA:
+      return mPPURegisters.PPUDATA;
+    case ADDR_OAMDMA:
+      return mPPURegisters.OAMDMA;
 
-  default:
-    throw std::runtime_error("Invalid address");
+    default:
+      std::stringstream exceptionMessage;
+
+      exceptionMessage << "Address 0x" << std::hex << address
+                       << " is not a valid IO register";
+
+      throw InvalidAddressException(exceptionMessage.str());
   }
 }
 

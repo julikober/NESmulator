@@ -24,7 +24,7 @@ int main(void) {
 
   CPUMemory memory = CPUMemory(ppuRegisters);
   memory.write(0x1000, 0x02);
-  memory.write(0x3509, 0x03);
+  memory.write(0x4011, 0x03);
 
   Logger.log("Memory written", INFO);
 
