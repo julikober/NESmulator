@@ -35,7 +35,7 @@ $(BUILDDIR)/$(CPU_MEMORY_SECTIONS)/%.o: $(SRCDIR)/$(CPU_MEMORY_SECTIONS)/%.cpp $
 $(BUILDDIR)/$(CPU)/operations.o: $(SRCDIR)/$(CPU)/operations.cpp $(INCLUDEDIR)/$(CPU)/cpu.hpp
 	g++ $(CPPFLAGS) -c $< -o $@
 
-$(BUILDDIR)/$(CPU)/instructions.o: $(SRCDIR)/$(CPU)/instructions.cpp $(INCLUDEDIR)/$(CPU)/cpu.hpp
+$(BUILDDIR)/$(CPU)/addressing.o: $(SRCDIR)/$(CPU)/addressing.cpp $(INCLUDEDIR)/$(CPU)/cpu.hpp
 	g++ $(CPPFLAGS) -c $< -o $@
 
 $(BUILDDIR)/$(INSTRUCTIONS)/%.o: $(SRCDIR)/$(INSTRUCTIONS)/%.cpp $(INCLUDEDIR)/$(CPU)/cpu.hpp
@@ -44,8 +44,13 @@ $(BUILDDIR)/$(INSTRUCTIONS)/%.o: $(SRCDIR)/$(INSTRUCTIONS)/%.cpp $(INCLUDEDIR)/$
 $(BUILDDIR)/$(CPU)/cpu.o: $(SRCDIR)/$(CPU)/cpu.cpp $(INCLUDEDIR)/$(CPU)/cpu.hpp
 	g++ $(CPPFLAGS) -c $< -o $@
 
-$(BUILDDIR)/$(CPU)/cpu.a: $(BUILDDIR)/$(CPU)/cpu.o $(BUILDDIR)/$(CPU_MEMORY)/cpu_memory.o $(CPU_MEMORY_SECTIONS_OBJS) $(BUILDDIR)/$(CPU)/operations.o $(BUILDDIR)/$(CPU)/instructions.o $(INSTRUCTION_OBJS)
+$(BUILDDIR)/$(CPU)/cpu.a: $(BUILDDIR)/$(CPU)/cpu.o $(BUILDDIR)/$(CPU_MEMORY)/cpu_memory.o $(CPU_MEMORY_SECTIONS_OBJS) $(BUILDDIR)/$(CPU)/operations.o $(BUILDDIR)/$(CPU)/addressing.o $(INSTRUCTION_OBJS)
 	ar rcs $@ $^
+
+# Logger
+LOGGER = logger
+$(BUILDDIR)/$(LOGGER)/logger.o: $(SRCDIR)/$(LOGGER)/logger.cpp $(INCLUDEDIR)/$(LOGGER)/logger.hpp
+	g++ $(CPPFLAGS) -c $< -o $@
 
 # Clean
 clean:
@@ -53,10 +58,10 @@ clean:
 
 # Dirs
 dirs: 
-	mkdir -p $(BUILDDIR)/$(MEMORY) $(BUILDDIR)/$(CPU) $(BUILDDIR)/$(CPU_MEMORY) $(BUILDDIR)/$(CPU_MEMORY_SECTIONS) $(BUILDDIR)/$(INSTRUCTIONS)
+	mkdir -p $(BUILDDIR)/$(MEMORY) $(BUILDDIR)/$(CPU) $(BUILDDIR)/$(CPU_MEMORY) $(BUILDDIR)/$(CPU_MEMORY_SECTIONS) $(BUILDDIR)/$(INSTRUCTIONS) $(BUILDDIR)/$(LOGGER)
 
 # Main
-$(BUILDDIR)/main: $(SRCDIR)/main.cpp $(BUILDDIR)/$(CPU)/cpu.a
+$(BUILDDIR)/main: $(SRCDIR)/main.cpp $(BUILDDIR)/$(CPU)/cpu.a $(BUILDDIR)/$(LOGGER)/logger.o
 	g++ $(CPPFLAGS) $^ -o $@
 
 # Run
@@ -64,7 +69,7 @@ run: all
 	$(BUILDDIR)/main
 
 # Test
-$(BUILDDIR)/test: $(TESTDIR)/test.cpp $(BUILDDIR)/$(CPU)/cpu.a
+$(BUILDDIR)/test: $(TESTDIR)/test.cpp $(BUILDDIR)/$(CPU)/cpu.a $(BUILDDIR)/$(LOGGER)/logger.o
 	g++ $(CPPFLAGS) $^ -o $@
 
 test: $(BUILDDIR)/test

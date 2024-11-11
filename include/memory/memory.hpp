@@ -5,7 +5,7 @@
 class Memory {
  public:
   Memory() {};
-  ~Memory() {};
+  virtual ~Memory() {};
 
   class Section {
    protected:
@@ -49,7 +49,7 @@ class Memory {
       mirror.dstEnd = mirrorDstEnd;
     };
 
-    ~Section() {};
+    virtual ~Section() {};
 
     // void clear();
 
