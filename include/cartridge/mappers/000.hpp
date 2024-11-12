@@ -6,5 +6,5 @@ class Mapper000 : public Mapper {
  public:
   Mapper000(uint8_t prgRomBanks, uint8_t chrRomBanks,
             MirroringMode mirroringMode)
-      : Mapper(prgRomBanks, uint8_t chrRomBanks, mirroringMode) {}
+      : Mapper(prgRomBanks, chrRomBanks, mirroringMode) {}
 };
