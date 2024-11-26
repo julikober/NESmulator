@@ -39,3 +39,6 @@ build/
 
 # Testing folder
 testing/ProcessorTests/
+
+# References folder
+references/

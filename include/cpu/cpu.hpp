@@ -961,7 +961,7 @@ class CPU {
     void XAAImmediate();
   };
 
-  CPUMemory& mMemory;
+  CPUMemoryMap& mMemory;
   InstructionSet mInstructionSet;
 
   // General purpose registers
@@ -1033,7 +1033,7 @@ class CPU {
   OperationOutput mShiftRight(uint8_t a);
 
  public:
-  CPU(CPUMemory& memory)
+  CPU(CPUMemoryMap& memory)
       : mMemory(memory),
         mInstructionSet(*this),
         mProgramCounter(0x400),

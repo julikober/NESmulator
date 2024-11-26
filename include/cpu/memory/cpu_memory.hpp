@@ -1,5 +1,7 @@
 #pragma once
 
+#include <array>
+
 #include "memory/memory.hpp"
 #include "ppu/ppu.hpp"
 
@@ -17,48 +19,67 @@
 #define IO_MIRROR_DST_START 0x2008
 #define IO_MIRROR_DST_END 0x3FFF
 
-class CPUMemory : public Memory {
+// Actual RAM
+class RAM : public Memory {
  private:
-  class RAM : public Section {
+  std::array<uint8_t, RAM_MIRROR_SRC_END - RAM_MIRROR_SRC_START + 1> mMemory;
+
+ public:
+  RAM() : Memory() {};
+  ~RAM() {};
+
+  virtual inline uint8_t read(uint32_t address) override {
+    return mMemory[address];
+  }
+  virtual inline void write(uint32_t address, uint8_t value) override {
+    mMemory[address] = value;
+  }
+};
+
+class CPUMemoryMap : public MemoryMap {
+ private:
+  // RAM
+  class RAMSection : public Section {
    private:
-    uint8_t mMemory[RAM_MIRROR_SRC_END - RAM_MIRROR_SRC_START + 1];
+    RAM mRAM;
 
    public:
-    RAM()
+    RAMSection()
         : Section(RAM_START, RAM_END, RAM_MIRROR_SRC_START, RAM_MIRROR_SRC_END,
                   RAM_MIRROR_DST_START, RAM_MIRROR_DST_END) {};
 
-    ~RAM() {};
+    ~RAMSection() {};
 
-    uint8_t read(uint16_t address) override;
-    void write(uint16_t address, uint8_t value) override;
+    virtual uint8_t read(uint16_t address) override;
+    virtual void write(uint16_t address, uint8_t value) override;
   };
 
-  class IO : public Section {
+  // IO registers
+  class IOSection : public Section {
    private:
     // PPU reference
     PPU& mPPU;
 
    public:
-    IO(PPU& ppu)
+    IOSection(PPU& ppu)
         : Section(IO_START, IO_END, IO_MIRROR_SRC_START, IO_MIRROR_SRC_END,
                   IO_MIRROR_DST_START, IO_MIRROR_DST_END),
           mPPU(ppu) {};
 
-    ~IO() {};
+    ~IOSection() {};
 
-    uint8_t read(uint16_t address) override;
-    void write(uint16_t address, uint8_t value) override;
+    virtual uint8_t read(uint16_t address) override;
+    virtual void write(uint16_t address, uint8_t value) override;
   };
 
-  RAM mRAM;
-  IO mIO;
+  RAMSection mRAM;
+  IOSection mIO;
 
  public:
-  CPUMemory(PPU& ppu) : mRAM(), mIO(ppu) {};
+  CPUMemoryMap(PPU& ppu) : mRAM(), mIO(ppu) {};
 
-  ~CPUMemory() {};
+  ~CPUMemoryMap() {};
 
-  uint8_t read(uint16_t address) override;
-  void write(uint16_t address, uint8_t value) override;
+  virtual uint8_t read(uint16_t address) override;
+  virtual void write(uint16_t address, uint8_t value) override;
 };

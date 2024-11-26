@@ -1,3 +1,7 @@
+#pragma once
+
+#include <array>
+
 #include "memory/memory.hpp"
 
 #define PATTERN_TABLES_START 0x0000
@@ -17,8 +21,34 @@
 #define PALETTES_MIRROR_DST_START 0x3F20
 #define PALETTES_MIRROR_DST_END 0x3FFF
 
-class VRAM : public Memory {
-  class PatternTables : public Section {
+#define NAMETABLE_MEMORY_SIZE 0x0800  // 2 KB
 
-  };
+class NameTableMemory : public Memory {
+ private:
+  std::array<uint8_t, NAMETABLE_MEMORY_SIZE> mMemory;
+
+ public:
+  NameTableMemory() : Memory() {}
+  ~NameTableMemory() {}
+
+  virtual inline uint8_t read(uint32_t address) override {
+    return mMemory[address];
+  }
+  virtual inline void write(uint32_t address, uint8_t value) override {
+    mMemory[address] = value;
+  }
+}
+
+class PPUMemoryMap : public MemoryMap {
+ private:
+  NameTableMemory mNametableMemory;
+
+ public:
+  class PatternTables : public Section {};
+
+  class NameTables : public Section {};
+
+  class Palettes : public Section {};
+
+  Memory *getNametableMemory() { return &mNametableMemory; }
 };

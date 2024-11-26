@@ -10,7 +10,7 @@ int main(void) {
 
   PPU ppu = PPU();
 
-  CPUMemory memory = CPUMemory(ppu);
+  CPUMemoryMap memory = CPUMemoryMap(ppu);
   memory.write(0x2002, 0x02);
   memory.write(0x200a, 0x03);
 

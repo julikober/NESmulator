@@ -13,7 +13,7 @@
 #define ADDR_PPUDATA 0x2007
 #define ADDR_OAMDMA 0x4014
 
-uint8_t CPUMemory::IO::read(uint16_t address) {
+uint8_t CPUMemoryMap::IOSection::read(uint16_t address) {
   try {
     switch (mResolveMirrors(address)) {
       case ADDR_PPUCTRL:
@@ -60,7 +60,7 @@ uint8_t CPUMemory::IO::read(uint16_t address) {
   }
 }
 
-void CPUMemory::IO::write(uint16_t address, uint8_t value) {
+void CPUMemoryMap::IOSection::write(uint16_t address, uint8_t value) {
   try {
     switch (mResolveMirrors(address)) {
       case ADDR_PPUCTRL:

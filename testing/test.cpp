@@ -16,7 +16,7 @@ int main(void) {
   ifs >> root;
   ifs.close();
 
-  CPUMemory memory = CPUMemory();
+  CPUMemoryMap memory = CPUMemoryMap();
   CPU cpu = CPU(memory);
 
   auto& test = root[0];
