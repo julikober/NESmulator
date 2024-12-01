@@ -15,10 +15,10 @@ class CartridgeRAM : public Memory {
   ~CartridgeRAM() { delete[] mData; }
 
   virtual inline uint8_t read(uint32_t address) override {
-    return mData[address];
+    return mData[address % mSize];
   }
 
   virtual inline void write(uint32_t address, uint8_t value) override {
-    mData[address] = value;
+    mData[address % mSize] = value;
   }
 };

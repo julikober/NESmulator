@@ -23,13 +23,13 @@
 
 #define NAMETABLE_MEMORY_SIZE 0x0800  // 2 KB
 
-class NameTableMemory : public Memory {
+class NametableMemory : public Memory {
  private:
   std::array<uint8_t, NAMETABLE_MEMORY_SIZE> mMemory;
 
  public:
-  NameTableMemory() : Memory() {}
-  ~NameTableMemory() {}
+  NametableMemory() : Memory() {}
+  ~NametableMemory() {}
 
   virtual inline uint8_t read(uint32_t address) override {
     return mMemory[address];
@@ -37,11 +37,11 @@ class NameTableMemory : public Memory {
   virtual inline void write(uint32_t address, uint8_t value) override {
     mMemory[address] = value;
   }
-}
+};
 
 class PPUMemoryMap : public MemoryMap {
  private:
-  NameTableMemory mNametableMemory;
+  NametableMemory mNametableMemory;
 
  public:
   class PatternTables : public Section {};

@@ -7,7 +7,6 @@
 enum AccessType { READ, WRITE, READ_WRITE, NONE };
 
 class Memory {
-
  public:
   Memory() {};
   virtual ~Memory() {};
@@ -21,6 +20,11 @@ class ReadOnlyMemory : public Memory {
   ReadOnlyMemory() : Memory() {}
 
   void write(uint32_t address, uint8_t value) override;
+};
+
+struct MemoryLocation {
+  Memory *memory;
+  uint32_t address;
 };
 
 class MemoryMap {

@@ -15,6 +15,6 @@ class CartridgeROM : public ReadOnlyMemory {
   ~CartridgeROM() { delete[] mData; }
 
   virtual inline uint8_t read(uint32_t address) override {
-    return mData[address];
+    return mData[address % mSize];
   }
 };
