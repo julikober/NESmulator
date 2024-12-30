@@ -1,4 +1,4 @@
-#include "cpu/memory/cpu_memory.hpp"
+#include "cpu/memory/memory.hpp"
 
 uint8_t CPUMemoryMap::RAMSection::read(uint16_t address) {
   return mRAM.read(mResolveMirrors(address) - mStart);

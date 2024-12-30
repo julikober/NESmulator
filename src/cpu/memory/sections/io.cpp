@@ -1,6 +1,6 @@
 #include <sstream>
 
-#include "cpu/memory/cpu_memory.hpp"
+#include "cpu/memory/memory.hpp"
 #include "logger/logger.hpp"
 
 #define ADDR_PPUCTRL 0x2000

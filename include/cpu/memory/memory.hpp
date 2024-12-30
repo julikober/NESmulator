@@ -2,6 +2,7 @@
 
 #include <array>
 
+#include "./ram.hpp"
 #include "memory/memory.hpp"
 #include "ppu/ppu.hpp"
 
@@ -18,23 +19,6 @@
 #define IO_MIRROR_SRC_END 0x2007
 #define IO_MIRROR_DST_START 0x2008
 #define IO_MIRROR_DST_END 0x3FFF
-
-// Actual RAM
-class RAM : public Memory {
- private:
-  std::array<uint8_t, RAM_MIRROR_SRC_END - RAM_MIRROR_SRC_START + 1> mMemory;
-
- public:
-  RAM() : Memory() {};
-  ~RAM() {};
-
-  virtual inline uint8_t read(uint32_t address) override {
-    return mMemory[address];
-  }
-  virtual inline void write(uint32_t address, uint8_t value) override {
-    mMemory[address] = value;
-  }
-};
 
 class CPUMemoryMap : public MemoryMap {
  private:

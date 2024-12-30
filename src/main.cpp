@@ -2,7 +2,7 @@
 #include <iostream>
 
 #include "cpu/cpu.hpp"
-#include "cpu/memory/cpu_memory.hpp"
+#include "cpu/memory/memory.hpp"
 #include "logger/logger.hpp"
 
 int main(void) {

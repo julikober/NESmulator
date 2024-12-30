@@ -1,5 +1,6 @@
 #pragma once
-#include "cartridge/mapper.hpp"
+
+#include "cartridge/mapper/mapper.hpp"
 
 #define MAP000_PRG_RAM_SIZE 8 * 1024  // 8 KB
 
@@ -17,11 +18,12 @@ class Mapper000 : public Mapper {
   virtual MemoryLocation mMapCHR(uint16_t address) override;
 
  public:
-  Mapper000(NametableMemory &nametableMemory, uint8_t prgRomBanks,
+  Mapper000(NametableMemory& nametableMemory, uint8_t prgRomBanks,
             uint8_t chrRomBanks, MirroringMode mirroringMode,
             bool hasBatteryBackedRam, bool hasTrainer,
             bool hasAlternativeMirroring)
-      : Mapper(prgRomBanks, mirroringMode, nametableMemory),
+      : Mapper(nametableMemory, prgRomBanks, chrRomBanks, mirroringMode,
+               hasBatteryBackedRam, hasTrainer, hasAlternativeMirroring),
         mPrgRam(MAP000_PRG_RAM_SIZE) {}
 
   ~Mapper000() {}

@@ -1,4 +1,4 @@
-#include "cpu/memory/cpu_memory.hpp"
+#include "cpu/memory/memory.hpp"
 
 uint8_t CPUMemoryMap::read(uint16_t address) {
   if (address >= RAM_START && address <= RAM_END) {
