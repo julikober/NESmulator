@@ -18,7 +18,7 @@ class Mapper000 : public Mapper {
   virtual MemoryLocation mMapCHR(uint16_t address) override;
 
  public:
-  Mapper000(NametableMemory& nametableMemory, uint8_t prgRomBanks,
+  Mapper000(NameTablesMemory& nametableMemory, uint8_t prgRomBanks,
             uint8_t chrRomBanks, MirroringMode mirroringMode,
             bool hasBatteryBackedRam, bool hasTrainer,
             bool hasAlternativeMirroring)

@@ -3,34 +3,21 @@
 #include <array>
 
 #include "./ram.hpp"
-#include "memory/memory.hpp"
+#include "memory/memorymap.hpp"
 #include "ppu/ppu.hpp"
-
-#define RAM_START 0x0000
-#define RAM_END 0x1FFF
-#define RAM_MIRROR_SRC_START 0x0000
-#define RAM_MIRROR_SRC_END 0x07FF
-#define RAM_MIRROR_DST_START 0x0800
-#define RAM_MIRROR_DST_END 0x1FFF
-
-#define IO_START 0x2000
-#define IO_END 0x401F
-#define IO_MIRROR_SRC_START 0x2000
-#define IO_MIRROR_SRC_END 0x2007
-#define IO_MIRROR_DST_START 0x2008
-#define IO_MIRROR_DST_END 0x3FFF
 
 class CPUMemoryMap : public MemoryMap {
  private:
   // RAM
   class RAMSection : public Section {
    private:
-    RAM mRAM;
+    RAM mMemory;
 
    public:
-    RAMSection()
-        : Section(RAM_START, RAM_END, RAM_MIRROR_SRC_START, RAM_MIRROR_SRC_END,
-                  RAM_MIRROR_DST_START, RAM_MIRROR_DST_END) {};
+    RAMSection(Mapper** mapper)
+        : Section(mapper, RAM_START, RAM_END, RAM_MIRROR_SRC_START,
+                  RAM_MIRROR_SRC_END, RAM_MIRROR_DST_START,
+                  RAM_MIRROR_DST_END) {};
 
     ~RAMSection() {};
 
@@ -45,9 +32,9 @@ class CPUMemoryMap : public MemoryMap {
     PPU& mPPU;
 
    public:
-    IOSection(PPU& ppu)
-        : Section(IO_START, IO_END, IO_MIRROR_SRC_START, IO_MIRROR_SRC_END,
-                  IO_MIRROR_DST_START, IO_MIRROR_DST_END),
+    IOSection(Mapper** mapper, PPU& ppu)
+        : Section(mapper, IO_START, IO_END, IO_MIRROR_SRC_START,
+                  IO_MIRROR_SRC_END, IO_MIRROR_DST_START, IO_MIRROR_DST_END),
           mPPU(ppu) {};
 
     ~IOSection() {};
@@ -60,7 +47,8 @@ class CPUMemoryMap : public MemoryMap {
   IOSection mIO;
 
  public:
-  CPUMemoryMap(PPU& ppu) : mRAM(), mIO(ppu) {};
+  CPUMemoryMap(Mapper** mapper, PPU& ppu)
+      : MemoryMap(mapper), mRAM(mapper), mIO(mapper, ppu) {};
 
   ~CPUMemoryMap() {};
 

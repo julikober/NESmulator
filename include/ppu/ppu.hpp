@@ -1,10 +1,15 @@
 #include <cstdint>
 
+#include "./memory/memorymap.hpp"
 #include "memory/exceptions.hpp"
-#include "memory/memory.hpp"
 
 class PPU {
  private:
+  uint16_t mCycle;
+  uint16_t mPosH;
+  uint16_t mPosV;
+
+  // Registers
   uint8_t mPPUCTRL;
   uint8_t mPPUMASK;
   uint8_t mPPUSTATUS;
@@ -27,9 +32,33 @@ class PPU {
     AccessType mOAMDMA;
   } mRegisterAccess;
 
+  // Latches
+  uint8_t mPatternData;
+  uint8_t mAttributeData;
+  uint8_t mLowTileData;
+  uint8_t mHighTileData;
+
+  // Shift registers
+  uint16_t mTileShiftLow;
+  uint16_t mTileShiftHigh;
+
+  uint8_t mAttributeShiftLow;
+  uint8_t mAttributeShiftHigh;
+
+  // OAM
+  std::array<uint8_t, 256> mOAM;
+  std::array<uint8_t, 32> mSecOAM;
+
+  // Name Tables
+  NameTablesMemory mNameTableMemory;
+
+  // Memory
+  PPUMemoryMap mMemory;
+
  public:
-  PPU()
-      : mPPUCTRL(0),
+  PPU(Mapper** mapper)
+      : mMemory(mapper),
+        mPPUCTRL(0),
         mPPUMASK(0),
         mPPUSTATUS(0),
         mOAMADDR(0),

@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <cstdio>
 
-#include "memory/memory.hpp"
+#include "./memory/memorymap.hpp"
 
 enum StatusFlag {
   CARRY = 1 << 0,

@@ -1,107 +1,32 @@
-#include <fstream>
+#include <cstdint>
 #include <iostream>
 
 #include "cpu/cpu.hpp"
-#include "json/json.h"
-#include "cpu/memory/cpu_memory.hpp"
-
-// This is a test runner for the CPU. It reads a JSON file with test cases and
-// For this to work the cpu registers must be public.
+#include "cpu/memory/memorymap.hpp"
+#include "ppu/memory/memorymap.hpp"
+#include "logger/logger.hpp"
+#include "cartridge/mapper/mappers/000.hpp"
 
 int main(void) {
-  Json::Value root;
-  std::ifstream ifs;
+  Logger& Logger = Logger::getInstance();
 
-  ifs.open("testing/ProcessorTests/nes6502/v1/00.json");
-  ifs >> root;
-  ifs.close();
+  NameTablesMemory nameTables = NameTablesMemory();
 
-  CPUMemoryMap memory = CPUMemoryMap();
-  CPU cpu = CPU(memory);
+  Mapper* mapper = new Mapper000(nameTables, 2, 0, HORIZONTAL, false, false, false);
 
-  auto& test = root[0];
-  bool failed = false;
+  PPUMemoryMap ppuMemory = PPUMemoryMap(&mapper);
 
-  for (auto& test : root) {
-    printf("Running test %s:\n", test["name"].asCString());
+  ppuMemory.write(0x0000, 0xff);
+  ppuMemory.write(0x2400, 0xff);
 
-    auto& state = test["initial"];
 
-    cpu.loadState(state["pc"].asInt(), state["s"].asInt(), state["a"].asInt(),
-                  state["x"].asInt(), state["y"].asInt(), state["p"].asInt());
+  // PPU ppu = PPU();
 
-    memory.clear();
+  // CPUMemoryMap memory = CPUMemoryMap(ppu);
+  // memory.write(0x2002, 0x02);
+  // memory.write(0x200a, 0x03);
 
-    auto& memoryState = state["ram"];
-    for (auto& mem : memoryState) {
-      memory.write(mem[0].asInt(), mem[1].asInt());
-    }
-
-    do {
-      cpu.doCycle();
-      cpu.dumpRegisters();
-    } while (cpu.mCycle != 1);
-
-    auto& finalState = test["final"];
-
-    if (finalState["pc"].asInt() != cpu.mProgramCounter) {
-      printf("PC: %04X != %04X\n", finalState["pc"].asInt(),
-             cpu.mProgramCounter);
-
-      failed = true;
-    }
-
-    if (finalState["s"].asInt() != cpu.mStackPointer) {
-      printf("S: %02X != %02X\n", finalState["s"].asInt(), cpu.mStackPointer);
-
-      failed = true;
-    }
-
-    if (finalState["a"].asInt() != cpu.mAccumulator) {
-      printf("A: %02X != %02X\n", finalState["a"].asInt(), cpu.mAccumulator);
-
-      failed = true;
-    }
-
-    if (finalState["x"].asInt() != cpu.mXIndex) {
-      printf("X: %02X != %02X\n", finalState["x"].asInt(), cpu.mXIndex);
-
-      failed = true;
-    }
-
-    if (finalState["y"].asInt() != cpu.mYIndex) {
-      printf("Y: %02X != %02X\n", finalState["y"].asInt(), cpu.mYIndex);
-
-      failed = true;
-    }
-
-    if (finalState["p"].asInt() != cpu.mStatus) {
-      printf("P: %02X != %02X\n", finalState["p"].asInt(), cpu.mStatus);
-
-      failed = true;
-    }
-
-    auto& finalMemoryState = finalState["ram"];
-
-    for (auto& mem : finalMemoryState) {
-      if (mem[1].asInt() != memory.read(mem[0].asInt())) {
-        printf("Memory at %04X: %02X != %02X\n", mem[0].asInt(), mem[1].asInt(),
-               memory.read(mem[0].asInt()));
-
-        failed = true;
-      }
-    }
-
-    if (failed) {
-      break;
-    }
-  }
-
-  if (failed) {
-    printf("Test failed\n");
-  } else {
-    printf("All tests passed\n");
-  }
+  // Logger.log("Memory written", INFO);
 
   return 0;
 }

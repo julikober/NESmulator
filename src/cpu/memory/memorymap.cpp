@@ -1,4 +1,4 @@
-#include "cpu/memory/memory.hpp"
+#include "cpu/memory/memorymap.hpp"
 
 uint8_t CPUMemoryMap::read(uint16_t address) {
   if (address >= RAM_START && address <= RAM_END) {
@@ -6,7 +6,8 @@ uint8_t CPUMemoryMap::read(uint16_t address) {
   } else if (address >= IO_START && address <= IO_END) {
     return mIO.read(address);
   } else {
-    return 0;
+    throw std::out_of_range(
+        "PPUMemoryMap::read - Address does not match any section");
   }
 }
 
@@ -15,5 +16,8 @@ void CPUMemoryMap::write(uint16_t address, uint8_t value) {
     mRAM.write(address, value);
   } else if (address >= IO_START && address <= IO_END) {
     mIO.write(address, value);
+  } else {
+    throw std::out_of_range(
+        "PPUMemoryMap::read - Address does not match any section");
   }
 }

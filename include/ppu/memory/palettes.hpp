@@ -4,15 +4,15 @@
 
 #include "memory/memory.hpp"
 
-#define NAMETABLES_SIZE 0x0800  // 2 KB
+#define PALETTES_SIZE 0x0020  // 32 bytes
 
-class NameTablesMemory : public Memory {
+class PalettesMemory : public Memory {
  private:
-  std::array<uint8_t, NAMETABLES_SIZE> mMemory;
+  std::array<uint8_t, PALETTES_SIZE> mMemory;
 
  public:
-  NameTablesMemory() : Memory() {}
-  ~NameTablesMemory() {}
+  PalettesMemory() : Memory() {};
+  ~PalettesMemory() {};
 
   virtual inline uint8_t read(uint32_t address) override {
     return mMemory[address];
