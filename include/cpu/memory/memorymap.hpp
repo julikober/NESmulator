@@ -43,12 +43,24 @@ class CPUMemoryMap : public MemoryMap {
     virtual void write(uint16_t address, uint8_t value) override;
   };
 
+  class CartridgeSection : public Section {
+   public:
+    CartridgeSection(Mapper** mapper)
+        : Section(mapper, CARTRIDGE_START, CARTRIDGE_END) {};
+
+    ~CartridgeSection() {};
+
+    virtual uint8_t read(uint16_t address) override;
+    virtual void write(uint16_t address, uint8_t value) override;
+  };
+
   RAMSection mRAM;
   IOSection mIO;
+  CartridgeSection mCartridge;
 
  public:
   CPUMemoryMap(Mapper** mapper, PPU& ppu)
-      : MemoryMap(mapper), mRAM(mapper), mIO(mapper, ppu) {};
+      : MemoryMap(mapper), mRAM(mapper), mIO(mapper, ppu), mCartridge(mapper) {};
 
   ~CPUMemoryMap() {};
 

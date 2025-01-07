@@ -10,14 +10,29 @@
 int main(void) {
   Logger& Logger = Logger::getInstance();
 
-  NameTablesMemory nameTables = NameTablesMemory();
+  NameTablesMemory nameTablesMemory = NameTablesMemory();
 
-  Mapper* mapper = new Mapper000(nameTables, 2, 0, HORIZONTAL, false, false, false);
+  Mapper* mapper = new Mapper000(nameTablesMemory, 1, 1, HORIZONTAL, false, false, false);
 
-  PPUMemoryMap ppuMemory = PPUMemoryMap(&mapper);
+  PPU ppu = PPU(&mapper);
 
-  ppuMemory.write(0x0000, 0xff);
-  ppuMemory.write(0x2400, 0xff);
+  CPUMemoryMap cpuMemory = CPUMemoryMap(&mapper, ppu);
+  CPU cpu = CPU(cpuMemory);
+
+  cpuMemory.write(0x0000, 0xA9);
+  cpuMemory.write(0x0001, 0x01);
+  cpuMemory.write(0x0002, 0x69);
+  cpuMemory.write(0x0003, 0x02);
+
+  cpuMemory.write(0x0004, 0x85);
+  cpuMemory.write(0x0005, 0x00);
+
+  for (int i = 0; i < 20; i++) {
+    cpu.doCycle();
+  }
+
+  // Print hex value of 0x0000
+  std::cout << std::hex << (int)cpuMemory.read(0x0000) << std::endl;
 
 
   // PPU ppu = PPU();

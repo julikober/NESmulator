@@ -5,9 +5,11 @@ uint8_t CPUMemoryMap::read(uint16_t address) {
     return mRAM.read(address);
   } else if (address >= IO_START && address <= IO_END) {
     return mIO.read(address);
+  } else if (address >= CARTRIDGE_START && address <= CARTRIDGE_END) {
+    return mCartridge.read(address);
   } else {
     throw std::out_of_range(
-        "PPUMemoryMap::read - Address does not match any section");
+        "CPUMemoryMap::read - Address does not match any section");
   }
 }
 
@@ -16,8 +18,10 @@ void CPUMemoryMap::write(uint16_t address, uint8_t value) {
     mRAM.write(address, value);
   } else if (address >= IO_START && address <= IO_END) {
     mIO.write(address, value);
+  } else if (address >= CARTRIDGE_START && address <= CARTRIDGE_END) {
+    mCartridge.write(address, value);
   } else {
     throw std::out_of_range(
-        "PPUMemoryMap::read - Address does not match any section");
+        "CPUMemoryMap::read - Address does not match any section");
   }
 }
