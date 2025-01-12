@@ -19,20 +19,21 @@ int main(void) {
   CPUMemoryMap cpuMemory = CPUMemoryMap(&mapper, ppu);
   CPU cpu = CPU(cpuMemory);
 
-  cpuMemory.write(0x0000, 0xA9);
-  cpuMemory.write(0x0001, 0x01);
-  cpuMemory.write(0x0002, 0x69);
-  cpuMemory.write(0x0003, 0x02);
+  cpuMemory.write(0x0400, 0xA9);
+  cpuMemory.write(0x0401, 0x01);
+  cpuMemory.write(0x0402, 0x69);
+  cpuMemory.write(0x0403, 0x02);
 
-  cpuMemory.write(0x0004, 0x85);
-  cpuMemory.write(0x0005, 0x00);
+  cpuMemory.write(0x0404, 0x8D);
+  cpuMemory.write(0x0405, 0x00);
+  cpuMemory.write(0x0406, 0x04);
 
   for (int i = 0; i < 10; i++) {
     cpu.doCycle();
   }
 
   // Print hex value of 0x0000
-  std::cout << std::hex << (int)cpuMemory.read(0x0000) << std::endl;
+  std::cout << std::hex << (int)cpuMemory.read(0x0400) << std::endl;
 
 
   // PPU ppu = PPU();

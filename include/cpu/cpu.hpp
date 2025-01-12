@@ -1036,7 +1036,7 @@ class CPU {
   CPU(CPUMemoryMap& memory)
       : mMemory(memory),
         mInstructionSet(*this),
-        mProgramCounter(0x400),
+        mProgramCounter(0x0400),
         mStackPointer(0xFF),
         mAccumulator(0),
         mXIndex(0),

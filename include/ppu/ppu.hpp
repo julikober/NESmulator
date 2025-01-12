@@ -3,9 +3,22 @@
 #include "./memory/memorymap.hpp"
 #include "memory/exceptions.hpp"
 
+#define SCANLINES 262
+#define PIXELS 341
+
+enum PPUCTRLFlags {
+  PPUCTRL_NAMETABLE = 1 | 1 << 1,
+  PPUCTRL_INCREMENT = 1 << 2,
+  PPUCTRL_SPRITE_TABLE = 1 << 3,
+  PPUCTRL_BACKGROUND_TABLE = 1 << 4,
+  PPUCTRL_SPRITE_SIZE = 1 << 5,
+  PPUCTRL_MASTER_SLAVE = 1 << 6,
+  PPUCTRL_NMI = 1 << 7
+};
+
 class PPU {
  private:
-  uint16_t mCycle;
+  uint16_t mAddress;
   uint16_t mPosH;
   uint16_t mPosV;
 
@@ -54,6 +67,10 @@ class PPU {
 
   // Memory
   PPUMemoryMap mMemory;
+
+  uint16_t mGetBaseNametableAddress();
+
+  void mDoPixel();
 
  public:
   PPU(Mapper** mapper)
@@ -107,4 +124,6 @@ class PPU {
 
   uint8_t getOAMDMA() const;
   void setOAMDMA(uint8_t value);
+
+  void doCycle();
 };
