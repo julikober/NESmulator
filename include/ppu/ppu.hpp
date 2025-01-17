@@ -46,7 +46,7 @@ class PPU {
   } mRegisterAccess;
 
   // Latches
-  uint8_t mPatternData;
+  uint8_t mNameTableData;
   uint8_t mAttributeData;
   uint8_t mLowTileData;
   uint8_t mHighTileData;
@@ -68,7 +68,9 @@ class PPU {
   // Memory
   PPUMemoryMap mMemory;
 
-  uint16_t mGetBaseNametableAddress();
+  uint16_t mGetBaseNameTableAddress();
+  uint16_t mGetAttributeTableAddress();
+  uint16_t mGetBasePatternTableAddress();
 
   void mDoPixel();
 
@@ -124,6 +126,10 @@ class PPU {
 
   uint8_t getOAMDMA() const;
   void setOAMDMA(uint8_t value);
+
+  // Read and write memory
+  inline uint8_t mReadMemory() { return mMemory.read(mAddress); }
+  inline void mWriteMemory(uint8_t value) { mMemory.write(mAddress, value); }
 
   void doCycle();
 };
