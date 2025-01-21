@@ -45,6 +45,12 @@ class PPU {
     AccessType mOAMDMA;
   } mRegisterAccess;
 
+  // Internal registers
+  uint16_t mV;
+  uint16_t mT;
+  uint8_t mX;
+  uint8_t mW;
+
   // Latches
   uint8_t mNameTableData;
   uint8_t mAttributeData;
@@ -55,8 +61,8 @@ class PPU {
   uint16_t mTileShiftLow;
   uint16_t mTileShiftHigh;
 
-  uint8_t mAttributeShiftLow;
-  uint8_t mAttributeShiftHigh;
+  uint16_t mAttributeShiftLow;
+  uint16_t mAttributeShiftHigh;
 
   // OAM
   std::array<uint8_t, 256> mOAM;
@@ -71,6 +77,23 @@ class PPU {
   uint16_t mGetBaseNameTableAddress();
   uint16_t mGetAttributeTableAddress();
   uint16_t mGetBasePatternTableAddress();
+
+  // Shift register methods
+  void mShiftRegisters();
+  void mShiftTileRegisters();
+  void mShiftAttributeRegisters();
+
+  void mPushTileShiftLow(uint8_t value);
+  void mPushTileShiftHigh(uint8_t value);
+
+  uint8_t mFetchTileShiftLow();
+  uint8_t mFetchTileShiftHigh();
+
+  void mPushAttributeShiftLow(uint8_t value);
+  void mPushAttributeShiftHigh(uint8_t value);
+
+  uint8_t mFetchAttributeShiftLow();
+  uint8_t mFetchAttributeShiftHigh();
 
   void mDoPixel();
 

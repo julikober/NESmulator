@@ -40,6 +40,44 @@ uint16_t PPU::mGetBasePatternTableAddress() {
   return address;
 }
 
+void PPU::mShiftRegisters() {
+  mShiftTileRegisters();
+  mShiftAttributeRegisters();
+}
+
+void PPU::mShiftTileRegisters() {
+  mTileShiftLow = (mTileShiftLow << 1) | 0x01;
+  mTileShiftHigh = (mTileShiftHigh << 1) | 0x01;
+}
+
+void PPU::mShiftAttributeRegisters() {
+  mAttributeShiftLow = (mAttributeShiftLow << 1) | 0x01;
+  mAttributeShiftHigh = (mAttributeShiftHigh << 1) | 0x01;
+}
+
+void PPU::mPushTileShiftLow(uint8_t value) {
+  mTileShiftLow = (mTileShiftLow & 0xFF00) | value;
+}
+
+void PPU::mPushTileShiftHigh(uint8_t value) {
+  mTileShiftHigh = (mTileShiftHigh & 0xFF00) | value;
+}
+
+uint8_t PPU::mFetchTileShiftLow() { return mTileShiftLow >> 8; }
+uint8_t PPU::mFetchTileShiftHigh() { return mTileShiftHigh >> 8; }
+
+void PPU::mPushAttributeShiftLow(uint8_t value) {
+  mAttributeShiftLow = (mAttributeShiftLow & 0xFF00) | ((value & 0x01) * 0xFF);
+}
+
+void PPU::mPushAttributeShiftHigh(uint8_t value) {
+  mAttributeShiftHigh =
+      (mAttributeShiftHigh & 0xFF00) | ((value & 0x01) * 0xFF);
+}
+
+uint8_t PPU::mFetchAttributeShiftLow() { return mAttributeShiftLow >> 8; }
+uint8_t PPU::mFetchAttributeShiftHigh() { return mAttributeShiftHigh >> 8; }
+
 void PPU::doCycle() {
   mPosH++;
 
@@ -71,6 +109,12 @@ void PPU::mDoPixel() {
         // Fetch name table byte
         mAddress =
             mGetBaseNameTableAddress() + (mPosV / 8) * 32 + (mPosH - 1) / 8;
+
+        // Push data to shift registers
+        mPushTileShiftLow(mLowTileData);
+        mPushTileShiftHigh(mHighTileData);
+
+        
         break;
       case 1:
         mNameTableData = mReadMemory();
