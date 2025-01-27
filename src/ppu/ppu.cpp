@@ -28,16 +28,20 @@ uint16_t PPU::mGetAttributeTableAddress() {
 uint16_t PPU::mGetBasePatternTableAddress() {
   uint16_t address;
 
-  switch (mPPUCTRL & PPUCTRL_BACKGROUND_TABLE) {
-    case 0:
-      address = PATTERNTABLE_0_START;
-      break;
-    case 1:
-      address = PATTERNTABLE_1_START;
-      break;
+  if (!(mPPUCTRL & PPUCTRL_BACKGROUND_TABLE)) {
+    address = PATTERNTABLE_0_START;
+  } else {
+    address = PATTERNTABLE_1_START;
   }
 
   return address;
+}
+
+uint8_t PPU::mGetCoarseX() { return (mV & VRAMADDR_COARSE_X) >> 0; }
+uint8_t PPU::mGetCoarseY() { return (mV & VRAMADDR_COARSE_Y) >> 5; }
+
+uint8_t PPU::mGetAttributeQuadrant() {
+  return (mGetCoarseX() & 0b10) | ((mGetCoarseY() >> 1) & 0b01);
 }
 
 void PPU::mShiftRegisters() {
@@ -101,27 +105,32 @@ void PPU::doCycle() {
 }
 
 void PPU::mDoPixel() {
-  if (mPosH == 0) {                         // Idle Cycle
-  } else if (mPosH >= 1 && mPosH <= 256) {  // Tile fetching
+  if (mPosH == 0) {  // Idle Cycle
+  }
+  if (mPosH >= 1 && mPosH <= 256) {  // Tile fetching
     // Fetch data
     switch ((mPosH - 1) % 8) {
       case 0:
         // Fetch name table byte
-        mAddress =
+        mPPUADDR =
             mGetBaseNameTableAddress() + (mPosV / 8) * 32 + (mPosH - 1) / 8;
 
         // Push data to shift registers
         mPushTileShiftLow(mLowTileData);
         mPushTileShiftHigh(mHighTileData);
 
-        
+        mPushAttributeShiftLow((mAttributeData >> mGetAttributeQuadrant()) &
+                               0x01);
+        mPushAttributeShiftHigh(
+            (mAttributeData >> (mGetAttributeQuadrant() + 1)) & 0x01);
+
         break;
       case 1:
         mNameTableData = mReadMemory();
         break;
       case 2:
         // Fetch attribute table byte
-        mAddress =
+        mPPUADDR =
             mGetAttributeTableAddress() + (mPosV / 32) * 8 + (mPosH - 1) / 32;
         break;
       case 3:
@@ -131,7 +140,7 @@ void PPU::mDoPixel() {
         break;
       case 4:
         // Fetch pattern table low byte
-        mAddress = mGetBasePatternTableAddress() + mNameTableData * 16;
+        mPPUADDR = mGetBasePatternTableAddress() + mNameTableData * 16;
         break;
       case 5:
         // Fetch pattern table low byte
@@ -139,15 +148,56 @@ void PPU::mDoPixel() {
         break;
       case 6:
         // Fetch pattern table high byte
-        mAddress = mGetBasePatternTableAddress() + mNameTableData * 16 + 8;
+        mPPUADDR = mGetBasePatternTableAddress() + mNameTableData * 16 + 8;
         break;
       case 7:
         // Fetch pattern table high byte
         mHighTileData = mReadMemory();
         break;
     }
-  } else if (mPosH >= 257 && mPosH <= 320) {  // Sprite evaluation
-  } else if (mPosH >= 321 && mPosH <= 336) {
-  } else if (mPosH >= 337 && mPosH <= 340) {
+  }
+
+  if (mPosH >= 1 && mPosH <= 64) {  // Initalize secondary OAM with 0xFF
+    mSecOAM[mPosH - 1] = 0xFF;
+  }
+
+  if (mPosH >= 65 && mPosH <= 256) {  // Sprite evaluation
+    if (mPosH % 2 == 1) {             // Odd cycles
+      // Read from OAM
+      mOAMADDR = mSpriteN * 4 + mSpriteM;
+      mReadOAM();
+
+      if () {
+      }
+
+      // Check if sprite is in range
+      if (mSpriteM == 0) {
+        if (mPosV - mOAMDATA < 8) {
+          mSpriteM++;
+        } else {
+          mSpriteN++;
+        }
+      } else {
+        mSpriteM++;
+      }
+
+      // M overflow
+      if (mSpriteM > 3) {
+        mSpriteM = 0;
+        mSpriteN++;
+      }
+
+      // N overflow
+      if (mSpriteN > 63) {
+        mSpriteN = 0;
+      }
+
+    } else {  // Even cycles
+      // Write to secondary OAM
+      if (mSecOAMSpriteCount < 8) {
+        mSecOAM[mSecOAMSpriteCount * 4 + mSpriteM] = mOAMDATA;
+      } else {
+      }
+    }
   }
 }
