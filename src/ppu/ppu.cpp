@@ -167,9 +167,6 @@ void PPU::mDoPixel() {
       mOAMADDR = mSpriteN * 4 + mSpriteM;
       mReadOAM();
 
-      if () {
-      }
-
       // Check if sprite is in range
       if (mSpriteM == 0) {
         if (mPosV - mOAMDATA < 8) {
