@@ -6,7 +6,7 @@
 #define SCANLINES 262
 #define PIXELS 341
 
-enum PPUCTRLFlags {
+enum PPUCTRLFlag {
   PPUCTRL_NAMETABLE = 1 | 1 << 1,
   PPUCTRL_INCREMENT = 1 << 2,
   PPUCTRL_SPRITE_TABLE = 1 << 3,
@@ -16,7 +16,13 @@ enum PPUCTRLFlags {
   PPUCTRL_NMI = 1 << 7
 };
 
-enum VRAMAddrFlags {
+enum PPUSTATUSFlag {
+  PPUSTATUS_SPRITE_OVERFLOW = 1 << 5,
+  PPUSTATUS_SPRITE_ZERO_HIT = 1 << 6,
+  PPUSTATUS_VBLANK = 1 << 7
+};
+
+enum VRAMAddrFlag {
   VRAMADDR_COARSE_X = 0b000000000001111,
   VRAMADDR_COARSE_Y = 0b000000111110000,
   VRAMADDR_NAMETABLE = 0b000001000000000,
@@ -74,10 +80,13 @@ class PPU {
   std::array<uint8_t, 256> mOAM;
   std::array<uint8_t, 32> mSecOAM;
 
+  // Sprite evaluation
   uint8_t mSpriteN;
   uint8_t mSpriteM;
 
   uint8_t mSecOAMSpriteCount;
+  bool mSpriteInRange;
+  bool mSpriteEvalFinished;
 
   // Name Tables
   NameTablesMemory mNameTableMemory;
@@ -85,6 +94,7 @@ class PPU {
   // Memory
   PPUMemoryMap mMemory;
 
+  // Background rendering
   uint16_t mGetBaseNameTableAddress();
   uint16_t mGetAttributeTableAddress();
   uint16_t mGetBasePatternTableAddress();
@@ -165,6 +175,13 @@ class PPU {
 
   uint8_t getOAMDMA() const;
   void setOAMDMA(uint8_t value);
+
+  // Status register
+  inline void mSetStatusFlag(PPUSTATUSFlag flag) { mPPUSTATUS |= flag; };
+  inline void mclearStatusFlag(PPUSTATUSFlag flag) { mPPUSTATUS &= ~flag; };
+  inline bool mCheckStatusFlag(PPUSTATUSFlag flag) {
+    return mPPUSTATUS & flag;
+  };
 
   // Read and write memory
   inline uint8_t mReadMemory() { return mPPUDATA = mMemory.read(mPPUADDR); }

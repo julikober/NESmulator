@@ -161,35 +161,65 @@ void PPU::mDoPixel() {
     mSecOAM[mPosH - 1] = 0xFF;
   }
 
-  if (mPosH >= 65 && mPosH <= 256) {  // Sprite evaluation
-    if (mPosH % 2 == 1) {             // Odd cycles
-      // Read from OAM
-      mOAMADDR = mSpriteN * 4 + mSpriteM;
-      mReadOAM();
+  if (mPosH >= 65 && mPosH <= 256) {                 // Sprite evaluation
+    if ((mPosH % 2 == 1) && !mSpriteEvalFinished) {  // Odd cycles
+      if (mSecOAMSpriteCount < 8) {
+        // Read from OAM
+        mOAMADDR = mSpriteN * 4 + mSpriteM;
+        mReadOAM();
 
-      // Check if sprite is in range
-      if (mSpriteM == 0) {
-        if (mPosV - mOAMDATA < 8) {
-          mSpriteM++;
+        // Check if sprite is in range
+        if (!mSpriteInRange) {
+          if (mPosV - mOAMDATA < 8) {
+            mSpriteInRange = true;
+
+            mSpriteM++;
+          } else {
+            mSpriteN++;
+          }
         } else {
-          mSpriteN++;
+          mSpriteM++;
         }
+
       } else {
-        mSpriteM++;
+        if (!mSpriteInRange) {
+          if (mPosV - mOAMDATA < 8) {
+            mSpriteInRange = true;
+
+            mSetStatusFlag(PPUSTATUS_SPRITE_OVERFLOW);
+            mSpriteM++;
+          } else {
+            mSpriteM++;  // Hardware bug
+            mSpriteN++;
+
+            if (mSpriteM > 3) {  // Overflow m without incrementing n
+              mSpriteM = 0;
+            }
+
+            if (mSpriteN > 63) {
+              mSpriteEvalFinished = true;
+            }
+
+            return;  // Skip default overflow check
+          }
+        } else {
+          mSpriteM++;
+        }
       }
 
       // M overflow
       if (mSpriteM > 3) {
         mSpriteM = 0;
         mSpriteN++;
+        mSpriteInRange = false;
       }
-
       // N overflow
       if (mSpriteN > 63) {
         mSpriteN = 0;
+        mSpriteEvalFinished = true;
       }
 
-    } else {  // Even cycles
+    } else {  // Even cycles and sprite evaluation finished
       // Write to secondary OAM
       if (mSecOAMSpriteCount < 8) {
         mSecOAM[mSecOAMSpriteCount * 4 + mSpriteM] = mOAMDATA;
