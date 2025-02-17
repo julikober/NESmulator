@@ -117,6 +117,22 @@ $(BUILDDIR)/$(PPU)/ppu.o: $(SRCDIR)/$(PPU)/ppu.cpp $(INCLUDEDIR)/$(PPU)/ppu.hpp
 $(BUILDDIR)/$(PPU)/ppu.a: $(BUILDDIR)/$(PPU)/ppu.o $(BUILDDIR)/$(PPU_MEMORY)/memorymap.o $(BUILDDIR)/$(PPU_MEMORY)/nametables.o $(BUILDDIR)/$(PPU_MEMORY)/palettes.o $(PPU_MEMORY_SECTIONS_OBJS) $(BUILDDIR)/$(PPU)/registers.o
 	ar rcs $@ $^
 
+# Emulator
+EMULATOR = emulator
+EMULATOR_LOADER = $(EMULATOR)/loader
+
+$(BUILDDIR)/$(EMULATOR_LOADER)/mapper.o: $(SRCDIR)/$(EMULATOR_LOADER)/mapper.cpp $(INCLUDEDIR)/$(EMULATOR_LOADER)/mapper.hpp
+	g++ $(CPPFLAGS) -c $< -o $@
+
+$(BUILDDIR)/$(EMULATOR_LOADER)/loader.o: $(SRCDIR)/$(EMULATOR_LOADER)/loader.cpp $(INCLUDEDIR)/$(EMULATOR_LOADER)/loader.hpp
+	g++ $(CPPFLAGS) -c $< -o $@
+
+$(BUILDDIR)/$(EMULATOR)/emulator.o: $(SRCDIR)/$(EMULATOR)/emulator.cpp $(INCLUDEDIR)/$(EMULATOR)/emulator.hpp
+	g++ $(CPPFLAGS) -c $< -o $@
+
+$(BUILDDIR)/$(EMULATOR)/emulator.a: $(BUILDDIR)/$(EMULATOR)/emulator.o $(BUILDDIR)/$(EMULATOR_LOADER)/mapper.o $(BUILDDIR)/$(EMULATOR_LOADER)/loader.o
+	ar rcs $@ $^
+
 # Logger
 LOGGER = logger
 $(BUILDDIR)/$(LOGGER)/logger.o: $(SRCDIR)/$(LOGGER)/logger.cpp $(INCLUDEDIR)/$(LOGGER)/logger.hpp
@@ -131,7 +147,7 @@ dirs:
 	mkdir -p $(BUILDDIR)/$(MEMORY) $(BUILDDIR)/$(CARTRIDGE) $(BUILDDIR)/$(CARTRIDGE_MEMORY) $(BUILDDIR)/$(CARTRIDGE_MAPPER) $(BUILDDIR)/$(CARTRIDGE_MAPPER_MAPPERS) $(BUILDDIR)/$(CPU) $(BUILDDIR)/$(CPU_MEMORY) $(BUILDDIR)/$(CPU_MEMORY_SECTIONS) $(BUILDDIR)/$(INSTRUCTIONS) $(BUILDDIR)/$(PPU) $(BUILDDIR)/$(PPU_MEMORY) $(BUILDDIR)/$(PPU_MEMORY_SECTIONS) $(BUILDDIR)/$(LOGGER)
 
 # Main
-$(BUILDDIR)/main: $(SRCDIR)/main.cpp $(BUILDDIR)/$(MEMORY)/memory.a $(BUILDDIR)/$(CARTRIDGE)/cartridge.a $(BUILDDIR)/$(CPU)/cpu.a $(BUILDDIR)/$(PPU)/ppu.a $(BUILDDIR)/$(LOGGER)/logger.o
+$(BUILDDIR)/main: $(SRCDIR)/main.cpp $(BUILDDIR)/$(MEMORY)/memory.a $(BUILDDIR)/$(CARTRIDGE)/cartridge.a $(BUILDDIR)/$(CPU)/cpu.a $(BUILDDIR)/$(PPU)/ppu.a $(BUILDDIR)/$(LOGGER)/logger.o $(BUILDDIR)/$(EMULATOR)/emulator.a
 	g++ $(CPPFLAGS) $^ -o $@
 
 # Run
@@ -139,7 +155,7 @@ run: all
 	$(BUILDDIR)/main
 
 # Test
-$(BUILDDIR)/test: $(TESTDIR)/test.cpp $(BUILDDIR)/$(MEMORY)/memory.a $(BUILDDIR)/$(CARTRIDGE)/cartridge.a $(BUILDDIR)/$(CPU)/cpu.a $(BUILDDIR)/$(PPU)/ppu.a $(BUILDDIR)/$(LOGGER)/logger.o
+$(BUILDDIR)/test: $(TESTDIR)/test.cpp $(BUILDDIR)/$(MEMORY)/memory.a $(BUILDDIR)/$(CARTRIDGE)/cartridge.a $(BUILDDIR)/$(CPU)/cpu.a $(BUILDDIR)/$(PPU)/ppu.a $(BUILDDIR)/$(LOGGER)/logger.o $(BUILDDIR)/$(EMULATOR)/emulator.a
 	g++ $(CPPFLAGS) $^ -o $@
 
 test: $(BUILDDIR)/test

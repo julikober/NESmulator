@@ -5,7 +5,7 @@
 class CartridgeRAM : public Memory {
  private:
   uint8_t* mData;
-  uint32_t mSize;
+  size_t mSize;
 
  public:
   CartridgeRAM(uint32_t size) : Memory(), mSize(size) {
@@ -21,4 +21,6 @@ class CartridgeRAM : public Memory {
   virtual inline void write(uint32_t address, uint8_t value) override {
     mData[address % mSize] = value;
   }
+
+  virtual inline size_t size() override { return mSize; }
 };

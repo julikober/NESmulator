@@ -5,7 +5,7 @@
 class CartridgeROM : public ReadOnlyMemory {
  private:
   uint8_t* mData;
-  uint32_t mSize;
+  size_t mSize;
 
  public:
   CartridgeROM(uint32_t size) : ReadOnlyMemory(), mSize(size) {
@@ -17,4 +17,6 @@ class CartridgeROM : public ReadOnlyMemory {
   virtual inline uint8_t read(uint32_t address) override {
     return mData[address % mSize];
   }
+
+  virtual inline size_t size() override { return mSize; }
 };

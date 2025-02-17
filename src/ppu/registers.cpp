@@ -1,6 +1,6 @@
 #include "ppu/ppu.hpp"
 
-uint8_t PPU::getPPUCTRL() const {
+uint8_t PPU::getPPUCTRL() {
   if (mRegisterAccess.mPPUCTRL == READ ||
       mRegisterAccess.mPPUCTRL == READ_WRITE) {
     return mPPUCTRL;
@@ -18,7 +18,7 @@ void PPU::setPPUCTRL(uint8_t value) {
   }
 }
 
-uint8_t PPU::getPPUMASK() const {
+uint8_t PPU::getPPUMASK() {
   if (mRegisterAccess.mPPUMASK == READ ||
       mRegisterAccess.mPPUMASK == READ_WRITE) {
     return mPPUMASK;
@@ -36,7 +36,7 @@ void PPU::setPPUMASK(uint8_t value) {
   }
 }
 
-uint8_t PPU::getPPUSTATUS() const {
+uint8_t PPU::getPPUSTATUS() {
   if (mRegisterAccess.mPPUSTATUS == READ ||
       mRegisterAccess.mPPUSTATUS == READ_WRITE) {
     return mPPUSTATUS;
@@ -54,7 +54,7 @@ void PPU::setPPUSTATUS(uint8_t value) {
   }
 }
 
-uint8_t PPU::getOAMADDR() const {
+uint8_t PPU::getOAMADDR() {
   if (mRegisterAccess.mOAMADDR == READ ||
       mRegisterAccess.mOAMADDR == READ_WRITE) {
     return mOAMADDR;
@@ -72,7 +72,7 @@ void PPU::setOAMADDR(uint8_t value) {
   }
 }
 
-uint8_t PPU::getOAMDATA() const {
+uint8_t PPU::getOAMDATA() {
   if (mRegisterAccess.mOAMDATA == READ ||
       mRegisterAccess.mOAMDATA == READ_WRITE) {
     return mOAMDATA;
@@ -90,7 +90,7 @@ void PPU::setOAMDATA(uint8_t value) {
   }
 }
 
-uint8_t PPU::getPPUSCROLL() const {
+uint8_t PPU::getPPUSCROLL() {
   if (mRegisterAccess.mPPUSCROLL == READ ||
       mRegisterAccess.mPPUSCROLL == READ_WRITE) {
     return mPPUSCROLL;
@@ -108,7 +108,7 @@ void PPU::setPPUSCROLL(uint8_t value) {
   }
 }
 
-uint8_t PPU::getPPUADDR() const {
+uint8_t PPU::getPPUADDR() {
   if (mRegisterAccess.mPPUADDR == READ ||
       mRegisterAccess.mPPUADDR == READ_WRITE) {
     return mPPUADDR;
@@ -126,10 +126,12 @@ void PPU::setPPUADDR(uint8_t value) {
   }
 }
 
-uint8_t PPU::getPPUDATA() const {
+uint8_t PPU::getPPUDATA() {
   if (mRegisterAccess.mPPUDATA == READ ||
       mRegisterAccess.mPPUDATA == READ_WRITE) {
-    return mPPUDATA;
+    uint8_t data = mPPUDATAReadBuffer;
+    mPPUDATAReadBuffer = mPPUDATA;
+    return data;
   } else {
     throw InvalidAccessTypeException("PPUDATA register cannot be read");
   }
@@ -139,12 +141,13 @@ void PPU::setPPUDATA(uint8_t value) {
   if (mRegisterAccess.mPPUDATA == WRITE ||
       mRegisterAccess.mPPUDATA == READ_WRITE) {
     mPPUDATA = value;
+    mWriteMemory();
   } else {
     throw InvalidAccessTypeException("PPUDATA register cannot be written to");
   }
 }
 
-uint8_t PPU::getOAMDMA() const {
+uint8_t PPU::getOAMDMA() {
   if (mRegisterAccess.mOAMDMA == READ ||
       mRegisterAccess.mOAMDMA == READ_WRITE) {
     return mOAMDMA;

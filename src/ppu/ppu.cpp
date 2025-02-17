@@ -82,6 +82,14 @@ void PPU::mPushAttributeShiftHigh(uint8_t value) {
 uint8_t PPU::mFetchAttributeShiftLow() { return mAttributeShiftLow >> 8; }
 uint8_t PPU::mFetchAttributeShiftHigh() { return mAttributeShiftHigh >> 8; }
 
+uint16_t PPU::mIncreasePPUADDR() {
+  if (mPPUCTRL & PPUCTRL_VRAM_INCREMENT) {
+    mPPUADDR += 32;
+  } else {
+    mPPUADDR += 1;
+  }
+}
+
 void PPU::doCycle() {
   mPosH++;
 
@@ -226,5 +234,46 @@ void PPU::mDoPixel() {
       } else {
       }
     }
+  }
+
+  if (mPosH >= 257 && mPosH <= 320) { // Sprite loading
+    switch ((mPosH - 257) % 8) {
+      case 0:
+        mCurrentSprite.mY = mSecOAM[mPosH - 257];
+        break;
+
+      case 1:
+        mCurrentSprite.mTile = mSecOAM[mPosH - 257];
+        break;
+
+      case 2:
+        mCurrentSprite.mAttribute = mSecOAM[mPosH - 257];
+        break;
+
+      case 3:
+        mCurrentSprite.mX = mSecOAM[mPosH - 257];
+        break;
+
+      case 4:
+        // Fetch pattern table low byte
+        mPPUADDR = mGetBasePatternTableAddress() + mCurrentSprite.mTile * 16;
+        break;
+
+      case 5:
+        // Fetch pattern table low byte
+        mLowTileData = mReadMemory();
+        break;
+
+      case 6:
+        // Fetch pattern table high byte
+        mPPUADDR = mGetBasePatternTableAddress() + mCurrentSprite.mTile * 16 + 8;
+        break;
+
+      case 7:
+        // Fetch pattern table high byte
+        mHighTileData = mReadMemory();
+        break;
+    }
+
   }
 }

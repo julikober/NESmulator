@@ -20,4 +20,6 @@ class PalettesMemory : public Memory {
   virtual inline void write(uint32_t address, uint8_t value) override {
     mMemory[address] = value;
   }
+
+  virtual inline size_t size() override { return PALETTES_SIZE; }
 };

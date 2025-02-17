@@ -8,7 +8,7 @@
 
 enum PPUCTRLFlag {
   PPUCTRL_NAMETABLE = 1 | 1 << 1,
-  PPUCTRL_INCREMENT = 1 << 2,
+  PPUCTRL_VRAM_INCREMENT = 1 << 2,
   PPUCTRL_SPRITE_TABLE = 1 << 3,
   PPUCTRL_BACKGROUND_TABLE = 1 << 4,
   PPUCTRL_SPRITE_SIZE = 1 << 5,
@@ -44,6 +44,8 @@ class PPU {
   uint16_t mPPUADDR;
   uint8_t mPPUDATA;
   uint8_t mOAMDMA;
+
+  uint8_t mPPUDATAReadBuffer;
 
   struct RegisterAccess {
     AccessType mPPUCTRL;
@@ -87,6 +89,13 @@ class PPU {
   uint8_t mSecOAMSpriteCount;
   bool mSpriteInRange;
   bool mSpriteEvalFinished;
+
+  struct Sprite {
+    uint8_t mY;
+    uint8_t mTile;
+    uint8_t mAttribute;
+    uint8_t mX;
+  } mCurrentSprite;
 
   // Name Tables
   NameTablesMemory mNameTableMemory;
@@ -149,32 +158,34 @@ class PPU {
 
   ~PPU() {};
 
-  uint8_t getPPUCTRL() const;
+  uint8_t getPPUCTRL();
   void setPPUCTRL(uint8_t value);
 
-  uint8_t getPPUMASK() const;
+  uint8_t getPPUMASK();
   void setPPUMASK(uint8_t value);
 
-  uint8_t getPPUSTATUS() const;
+  uint8_t getPPUSTATUS();
   void setPPUSTATUS(uint8_t value);
 
-  uint8_t getOAMADDR() const;
+  uint8_t getOAMADDR();
   void setOAMADDR(uint8_t value);
 
-  uint8_t getOAMDATA() const;
+  uint8_t getOAMDATA();
   void setOAMDATA(uint8_t value);
 
-  uint8_t getPPUSCROLL() const;
+  uint8_t getPPUSCROLL();
   void setPPUSCROLL(uint8_t value);
 
-  uint8_t getPPUADDR() const;
+  uint8_t getPPUADDR();
   void setPPUADDR(uint8_t value);
 
-  uint8_t getPPUDATA() const;
+  uint8_t getPPUDATA();
   void setPPUDATA(uint8_t value);
 
-  uint8_t getOAMDMA() const;
+  uint8_t getOAMDMA();
   void setOAMDMA(uint8_t value);
+
+  uint16_t mIncreasePPUADDR();
 
   // Status register
   inline void mSetStatusFlag(PPUSTATUSFlag flag) { mPPUSTATUS |= flag; };
@@ -182,6 +193,9 @@ class PPU {
   inline bool mCheckStatusFlag(PPUSTATUSFlag flag) {
     return mPPUSTATUS & flag;
   };
+
+  // Get Nametable Memory
+  inline NameTablesMemory& getNameTablesMemory() { return mNameTableMemory; }
 
   // Read and write memory
   inline uint8_t mReadMemory() { return mPPUDATA = mMemory.read(mPPUADDR); }

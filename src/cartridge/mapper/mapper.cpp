@@ -9,7 +9,7 @@ MemoryLocation Mapper::mMapNametableMirrors(uint16_t address) {
   if (mHasAlternativeMirroring) {
     try {
       return mMapAlternativeMirrors(address);
-    } catch (MissingNametableMirroringException &e) {
+    } catch (MissingNametableMirroringException& e) {
       Logger::getInstance().log(e.what(), WARNING);
       Logger::getInstance().log("Falling back to default mirroring", INFO);
 
@@ -69,3 +69,23 @@ void Mapper::writeCHR(uint16_t address, uint8_t value) {
   MemoryLocation location = mMapCHR(address);
   location.memory->write(location.address, value);
 };
+
+void Mapper::loadPRGROM(const uint8_t* data, size_t size) {
+  if (size > mPrgRom.size()) {
+    throw std::invalid_argument("PRG ROM size exceeds allocated memory");
+  }
+
+  for (size_t i = 0; i < size; i++) {
+    mPrgRom.write(i, data[i]);
+  }
+}
+
+void Mapper::loadCHR(const uint8_t* data, size_t size) {
+  if (size > mChrMemory->size()) {
+    throw std::invalid_argument("CHR memory size exceeds allocated memory");
+  }
+
+  for (size_t i = 0; i < size; i++) {
+    mChrMemory->write(i, data[i]);
+  }
+}
