@@ -1,3 +1,5 @@
+#pragma once
+
 #include <cstdint>
 
 #include "./memory/memorymap.hpp"
@@ -41,7 +43,7 @@ class PPU {
   uint8_t mOAMADDR;
   uint8_t mOAMDATA;
   uint8_t mPPUSCROLL;
-  uint16_t mPPUADDR;
+  unsigned int mPPUADDR : 14;
   uint8_t mPPUDATA;
   uint8_t mOAMDMA;
 
@@ -60,10 +62,10 @@ class PPU {
   } mRegisterAccess;
 
   // Internal registers
-  uint16_t mV;
-  uint16_t mT;
-  uint8_t mX;
-  uint8_t mW;
+  unsigned int mV : 15;
+  unsigned int mT : 15;
+  unsigned int mX : 3;
+  unsigned int mW : 1;
 
   // Latches
   uint8_t mNameTableData;

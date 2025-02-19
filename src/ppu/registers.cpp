@@ -85,6 +85,9 @@ void PPU::setOAMDATA(uint8_t value) {
   if (mRegisterAccess.mOAMDATA == WRITE ||
       mRegisterAccess.mOAMDATA == READ_WRITE) {
     mOAMDATA = value;
+
+    // Increment OAMADDR
+    mOAMADDR++;
   } else {
     throw InvalidAccessTypeException("OAMDATA register cannot be written to");
   }
@@ -142,6 +145,13 @@ void PPU::setPPUDATA(uint8_t value) {
       mRegisterAccess.mPPUDATA == READ_WRITE) {
     mPPUDATA = value;
     mWriteMemory();
+
+    // Increment PPUADDR
+    if (mPPUCTRL & PPUCTRL_VRAM_INCREMENT) {
+      mPPUADDR += 32;
+    } else {
+      mPPUADDR += 1;
+    }
   } else {
     throw InvalidAccessTypeException("PPUDATA register cannot be written to");
   }

@@ -80,7 +80,7 @@ void Mapper::loadPRGROM(const uint8_t* data, size_t size) {
   }
 }
 
-void Mapper::loadCHR(const uint8_t* data, size_t size) {
+void Mapper::loadCHRROM(const uint8_t* data, size_t size) {
   if (size > mChrMemory->size()) {
     throw std::invalid_argument("CHR memory size exceeds allocated memory");
   }

@@ -56,6 +56,6 @@ void Emulator::loadROMFile(const char* filename) {
     uint8_t* chrRom = new uint8_t[header.ChrRomSize * CHR_ROM_BANK_SIZE];
     file.read((char*)(chrRom), header.ChrRomSize * CHR_ROM_BANK_SIZE);
 
-    mMapper->loadCHR(chrRom, header.ChrRomSize * CHR_ROM_BANK_SIZE);
+    mMapper->loadCHRROM(chrRom, header.ChrRomSize * CHR_ROM_BANK_SIZE);
   }
 }

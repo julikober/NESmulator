@@ -1,8 +1,11 @@
+#pragma once
+
 #include <cstdint>
 #include <fstream>
 
+#include "./loader/mapper.hpp"
+#include "cartridge/mapper/mapper.hpp"
 #include "cpu/cpu.hpp"
-#include "mapper/mapper.hpp"
 #include "ppu/ppu.hpp"
 
 #define HEADER_SIZE 16

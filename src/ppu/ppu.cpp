@@ -236,7 +236,10 @@ void PPU::mDoPixel() {
     }
   }
 
-  if (mPosH >= 257 && mPosH <= 320) { // Sprite loading
+  if (mPosH >= 257 && mPosH <= 320) {  // Sprite loading
+    // Set OAMADDR to 0
+    mOAMADDR = 0;
+
     switch ((mPosH - 257) % 8) {
       case 0:
         mCurrentSprite.mY = mSecOAM[mPosH - 257];
@@ -266,7 +269,8 @@ void PPU::mDoPixel() {
 
       case 6:
         // Fetch pattern table high byte
-        mPPUADDR = mGetBasePatternTableAddress() + mCurrentSprite.mTile * 16 + 8;
+        mPPUADDR =
+            mGetBasePatternTableAddress() + mCurrentSprite.mTile * 16 + 8;
         break;
 
       case 7:
@@ -274,6 +278,5 @@ void PPU::mDoPixel() {
         mHighTileData = mReadMemory();
         break;
     }
-
   }
 }

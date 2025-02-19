@@ -64,5 +64,6 @@ class Mapper {
   virtual void writeCHR(uint16_t address, uint8_t value);
 
   void loadPRGROM(const uint8_t *data, size_t size);
-  void loadCHR(const uint8_t *data, size_t size);
+  void loadCHRROM(const uint8_t *data,
+                  size_t size);  // It assumed that CHR is ROM
 };
