@@ -93,17 +93,47 @@ class PPU {
   bool mSpriteEvalFinished;
 
   struct Sprite {
-    uint8_t mY;
-    uint8_t mTile;
-    uint8_t mAttribute;
-    uint8_t mX;
+    uint8_t y;
+    uint8_t tile;
+    uint8_t attribute;
+    uint8_t x;
   } mCurrentSprite;
+
+  struct SpriteOutput {
+    uint8_t tileLow;
+    uint8_t tileHigh;
+    uint8_t attribute;
+    uint8_t x;
+  };
+
+  struct BackgroundPixel {
+    unsigned int color : 2;
+    unsigned int palette : 2;
+  };
+
+  struct SpritePixel {
+    unsigned int color : 2;
+    unsigned int palette : 2;
+    unsigned int priority : 1;
+  };
+
+  struct MergedPixel {
+    unsigned int color : 2;
+    unsigned int palette : 2;
+    enum Type { BACKGROUND, SPRITE } type;
+  };
+
+  std::array<SpriteOutput, 8> mSpriteOutputs;
 
   // Name Tables
   NameTablesMemory mNameTableMemory;
 
   // Memory
   PPUMemoryMap mMemory;
+
+  // Internal register methods
+  void mClearW();
+  void mFlipW();
 
   // Background rendering
   uint16_t mGetBaseNameTableAddress();
@@ -114,6 +144,14 @@ class PPU {
   uint8_t mGetCoarseY();
 
   uint8_t mGetAttributeQuadrant();
+
+  BackgroundPixel mGetBackgroundPixel();
+
+  // Sprite evaluation
+  SpritePixel mGetSpritePixel();
+
+  // Pixel multiplexer
+  MergedPixel mGetMergedPixel();
 
   // Shift register methods
   void mShiftRegisters();
@@ -136,7 +174,9 @@ class PPU {
 
  public:
   PPU(Mapper** mapper)
-      : mMemory(mapper),
+      : mPosH(0),
+        mPosV(0),
+
         mPPUCTRL(0),
         mPPUMASK(0),
         mPPUSTATUS(0),
@@ -146,6 +186,37 @@ class PPU {
         mPPUADDR(0),
         mPPUDATA(0),
         mOAMDMA(0),
+
+        mPPUDATAReadBuffer(0),
+
+        mV(0),
+        mT(0),
+        mX(0),
+        mW(0),
+
+        mNameTableData(0),
+        mAttributeData(0),
+        mLowTileData(0),
+        mHighTileData(0),
+
+        mTileShiftLow(0),
+        mTileShiftHigh(0),
+
+        mAttributeShiftLow(0),
+        mAttributeShiftHigh(0),
+
+        mSpriteN(0),
+        mSpriteM(0),
+
+        mSecOAMSpriteCount(0),
+        mSpriteInRange(false),
+        mSpriteEvalFinished(false),
+
+        mSpriteOutputs(),
+
+        mNameTableMemory(),
+
+        mMemory(mapper),
         mRegisterAccess() {
     mRegisterAccess.mPPUCTRL = WRITE;
     mRegisterAccess.mPPUMASK = WRITE;
@@ -156,6 +227,8 @@ class PPU {
     mRegisterAccess.mPPUADDR = WRITE;
     mRegisterAccess.mPPUDATA = READ_WRITE;
     mRegisterAccess.mOAMDMA = WRITE;
+
+    mCurrentSprite = {0, 0, 0, 0};
   };
 
   ~PPU() {};

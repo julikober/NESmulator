@@ -44,6 +44,85 @@ uint8_t PPU::mGetAttributeQuadrant() {
   return (mGetCoarseX() & 0b10) | ((mGetCoarseY() >> 1) & 0b01);
 }
 
+PPU::BackgroundPixel PPU::mGetBackgroundPixel() {
+  BackgroundPixel pixel;
+  pixel.color = 0;
+  pixel.palette = 0;
+
+  pixel.color = (mFetchTileShiftLow() >> (7 - mX)) & 0x01;
+  pixel.color |= ((mFetchTileShiftHigh() >> (7 - mX)) & 0x01) << 1;
+
+  pixel.palette = (mFetchAttributeShiftLow() >> (7 - mX)) & 0x01;
+  pixel.palette |= ((mFetchAttributeShiftHigh() >> (7 - mX)) & 0x01) << 1;
+
+  return pixel;
+}
+
+PPU::SpritePixel PPU::mGetSpritePixel() {
+  SpritePixel pixel;
+  pixel.color = 0;
+  pixel.palette = 0;
+  pixel.priority = 0;
+
+  for (SpriteOutput sprite : mSpriteOutputs) {
+    if (sprite.x - mX < 8) {
+      pixel.color = (sprite.tileLow >> (7 - (mX - sprite.x))) & 0x01;
+      pixel.color |= ((sprite.tileHigh >> (7 - (mX - sprite.x))) & 0x01) << 1;
+
+      pixel.palette = sprite.attribute & 0b11;
+
+      pixel.priority = (sprite.attribute >> 5) & 0x01;
+
+      break;
+    }
+  }
+
+  return pixel;
+}
+
+PPU::MergedPixel PPU::mGetMergedPixel() {
+  BackgroundPixel background = mGetBackgroundPixel();
+  SpritePixel sprite = mGetSpritePixel();
+
+  MergedPixel pixel;
+
+  if (background.color == 0 && sprite.color == 0) {
+    // Transparent pixel
+    // Use fallback color
+    pixel.color = 0;
+    pixel.palette = 0;
+    pixel.type = MergedPixel::Type::BACKGROUND;
+  } else if (background.color == 0 && sprite.color != 0) {
+    // Select sprite pixel
+    pixel.color = sprite.color;
+    pixel.palette = sprite.palette;
+    pixel.type = MergedPixel::Type::SPRITE;
+  } else if (background.color != 0 && sprite.color == 0) {
+    // Select background pixel
+    pixel.color = background.color;
+    pixel.palette = background.palette;
+    pixel.type = MergedPixel::Type::BACKGROUND;
+
+  } else if (background.color != 0 && sprite.color != 0) {
+    if (sprite.priority) {
+      // Select sprite pixel
+      pixel.color = sprite.color;
+      pixel.palette = sprite.palette;
+      pixel.type = MergedPixel::Type::SPRITE;
+    } else {
+      // Select background pixel
+      pixel.color = background.color;
+      pixel.palette = background.palette;
+      pixel.type = MergedPixel::Type::BACKGROUND;
+    }
+  }
+
+  std::cout << "Color: " << pixel.color << " Palette: " << pixel.palette
+            << " Type: " << pixel.type << std::endl;
+
+  return pixel;
+}
+
 void PPU::mShiftRegisters() {
   mShiftTileRegisters();
   mShiftAttributeRegisters();
@@ -91,6 +170,13 @@ uint16_t PPU::mIncreasePPUADDR() {
 }
 
 void PPU::doCycle() {
+  if (mPosV >= 0 && mPosV <= 239) {  // Visible scanlines
+    mDoPixel();
+  } else if (mPosV == 240) {                  // Post-render scanline
+  } else if (mPosV >= 241 && mPosV <= 260) {  // Vertical blanking lines
+  } else if (mPosV == 261) {                  // Pre-render scanline
+  }
+
   mPosH++;
 
   // Reset Pixel and increment scanline
@@ -103,16 +189,13 @@ void PPU::doCycle() {
       mPosV = 0;
     }
   }
-
-  if (mPosV >= 0 && mPosV <= 239) {  // Visible scanlines
-    mDoPixel();
-  } else if (mPosV == 240) {                  // Post-render scanline
-  } else if (mPosV >= 241 && mPosV <= 260) {  // Vertical blanking lines
-  } else if (mPosV == 261) {                  // Pre-render scanline
-  }
 }
 
 void PPU::mDoPixel() {
+  // Render pipeline
+  mShiftRegisters();
+  mGetMergedPixel();
+
   if (mPosH == 0) {  // Idle Cycle
   }
   if (mPosH >= 1 && mPosH <= 256) {  // Tile fetching
@@ -148,7 +231,8 @@ void PPU::mDoPixel() {
         break;
       case 4:
         // Fetch pattern table low byte
-        mPPUADDR = mGetBasePatternTableAddress() + mNameTableData * 16;
+        mPPUADDR =
+            mGetBasePatternTableAddress() + mNameTableData * 16 + mPosV % 8;
         break;
       case 5:
         // Fetch pattern table low byte
@@ -156,7 +240,8 @@ void PPU::mDoPixel() {
         break;
       case 6:
         // Fetch pattern table high byte
-        mPPUADDR = mGetBasePatternTableAddress() + mNameTableData * 16 + 8;
+        mPPUADDR =
+            mGetBasePatternTableAddress() + mNameTableData * 16 + 8 + mPosV % 8;
         break;
       case 7:
         // Fetch pattern table high byte
@@ -242,24 +327,24 @@ void PPU::mDoPixel() {
 
     switch ((mPosH - 257) % 8) {
       case 0:
-        mCurrentSprite.mY = mSecOAM[mPosH - 257];
+        mCurrentSprite.y = mSecOAM[mPosH - 257];
         break;
 
       case 1:
-        mCurrentSprite.mTile = mSecOAM[mPosH - 257];
+        mCurrentSprite.tile = mSecOAM[mPosH - 257];
         break;
 
       case 2:
-        mCurrentSprite.mAttribute = mSecOAM[mPosH - 257];
+        mCurrentSprite.attribute = mSecOAM[mPosH - 257];
         break;
 
       case 3:
-        mCurrentSprite.mX = mSecOAM[mPosH - 257];
+        mCurrentSprite.x = mSecOAM[mPosH - 257];
         break;
 
       case 4:
         // Fetch pattern table low byte
-        mPPUADDR = mGetBasePatternTableAddress() + mCurrentSprite.mTile * 16;
+        mPPUADDR = mGetBasePatternTableAddress() + mCurrentSprite.tile * 16;
         break;
 
       case 5:
@@ -269,8 +354,7 @@ void PPU::mDoPixel() {
 
       case 6:
         // Fetch pattern table high byte
-        mPPUADDR =
-            mGetBasePatternTableAddress() + mCurrentSprite.mTile * 16 + 8;
+        mPPUADDR = mGetBasePatternTableAddress() + mCurrentSprite.tile * 16 + 8;
         break;
 
       case 7:

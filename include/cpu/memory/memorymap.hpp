@@ -6,6 +6,16 @@
 #include "memory/memorymap.hpp"
 #include "ppu/ppu.hpp"
 
+#define ADDR_PPUCTRL 0x2000
+#define ADDR_PPUMASK 0x2001
+#define ADDR_PPUSTATUS 0x2002
+#define ADDR_OAMADDR 0x2003
+#define ADDR_OAMDATA 0x2004
+#define ADDR_PPUSCROLL 0x2005
+#define ADDR_PPUADDR 0x2006
+#define ADDR_PPUDATA 0x2007
+#define ADDR_OAMDMA 0x4014
+
 class CPUMemoryMap : public MemoryMap {
  private:
   // RAM
@@ -23,6 +33,9 @@ class CPUMemoryMap : public MemoryMap {
 
     virtual uint8_t read(uint16_t address) override;
     virtual void write(uint16_t address, uint8_t value) override;
+    inline void load(const uint8_t* data, size_t size) {
+      mMemory.load(data, size);
+    }
   };
 
   // IO registers
@@ -60,7 +73,8 @@ class CPUMemoryMap : public MemoryMap {
 
  public:
   CPUMemoryMap(Mapper** mapper, PPU& ppu)
-      : MemoryMap(mapper), mRAM(mapper), mIO(mapper, ppu), mCartridge(mapper) {};
+      : MemoryMap(mapper), mRAM(mapper), mIO(mapper, ppu), mCartridge(mapper) {
+        };
 
   ~CPUMemoryMap() {};
 

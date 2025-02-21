@@ -71,21 +71,9 @@ void Mapper::writeCHR(uint16_t address, uint8_t value) {
 };
 
 void Mapper::loadPRGROM(const uint8_t* data, size_t size) {
-  if (size > mPrgRom.size()) {
-    throw std::invalid_argument("PRG ROM size exceeds allocated memory");
-  }
-
-  for (size_t i = 0; i < size; i++) {
-    mPrgRom.write(i, data[i]);
-  }
+  mPrgRom.load(data, size);
 }
 
 void Mapper::loadCHRROM(const uint8_t* data, size_t size) {
-  if (size > mChrMemory->size()) {
-    throw std::invalid_argument("CHR memory size exceeds allocated memory");
-  }
-
-  for (size_t i = 0; i < size; i++) {
-    mChrMemory->write(i, data[i]);
-  }
+  mChrMemory->load(data, size);
 }

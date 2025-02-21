@@ -47,6 +47,9 @@ class PPUMemoryMap : public MemoryMap {
 
     virtual uint8_t read(uint16_t address) override;
     virtual void write(uint16_t address, uint8_t value) override;
+    inline void load(const uint8_t* data, size_t size) {
+      mMemory.load(data, size);
+    }
   };
 
   PatternTablesSection mPatternTablesSection;

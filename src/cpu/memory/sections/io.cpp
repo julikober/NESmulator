@@ -3,16 +3,6 @@
 #include "cpu/memory/memorymap.hpp"
 #include "logger/logger.hpp"
 
-#define ADDR_PPUCTRL 0x2000
-#define ADDR_PPUMASK 0x2001
-#define ADDR_PPUSTATUS 0x2002
-#define ADDR_OAMADDR 0x2003
-#define ADDR_OAMDATA 0x2004
-#define ADDR_PPUSCROLL 0x2005
-#define ADDR_PPUADDR 0x2006
-#define ADDR_PPUDATA 0x2007
-#define ADDR_OAMDMA 0x4014
-
 uint8_t CPUMemoryMap::IOSection::read(uint16_t address) {
   try {
     switch (mResolveMirrors(address)) {

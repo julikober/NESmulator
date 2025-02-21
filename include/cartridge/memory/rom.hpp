@@ -19,4 +19,5 @@ class CartridgeROM : public ReadOnlyMemory {
   }
 
   virtual inline size_t size() override { return mSize; }
+  virtual void load(const uint8_t* data, size_t size) override;
 };

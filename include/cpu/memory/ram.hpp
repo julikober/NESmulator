@@ -21,5 +21,7 @@ class RAM : public Memory {
     mMemory[address] = value;
   }
 
+  virtual void load(const uint8_t* data, size_t size) override;
+
   virtual inline size_t size() override { return RAM_SIZE; }
 };

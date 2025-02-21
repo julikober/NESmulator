@@ -2,11 +2,11 @@
 
 uint8_t PPUMemoryMap::read(uint16_t address) {
   if (address >= PATTERNTABLES_START && address <= PATTERNTABLES_END) {
-    mPatternTablesSection.read(address);
+    return mPatternTablesSection.read(address);
   } else if (address >= NAMETABLES_START && address <= NAMETABLES_END) {
-    mNameTablesSection.read(address);
+    return mNameTablesSection.read(address);
   } else if (address >= PALETTES_START && address <= PALETTES_END) {
-    mPalettesSection.read(address);
+    return mPalettesSection.read(address);
   } else {
     throw std::out_of_range(
         "PPUMemoryMap::read - Address does not match any section");

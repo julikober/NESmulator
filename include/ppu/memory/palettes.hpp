@@ -17,9 +17,12 @@ class PalettesMemory : public Memory {
   virtual inline uint8_t read(uint32_t address) override {
     return mMemory[address];
   }
+
   virtual inline void write(uint32_t address, uint8_t value) override {
     mMemory[address] = value;
   }
+
+  virtual void load(const uint8_t *data, size_t size) override;
 
   virtual inline size_t size() override { return PALETTES_SIZE; }
 };

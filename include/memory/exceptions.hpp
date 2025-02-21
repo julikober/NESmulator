@@ -1,6 +1,6 @@
 #pragma once
 
-#include <exception>
+#include <stdexcept>
 #include <string>
 
 class InvalidAccessTypeException : public std::exception {

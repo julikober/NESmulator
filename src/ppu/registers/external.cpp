@@ -39,6 +39,9 @@ void PPU::setPPUMASK(uint8_t value) {
 uint8_t PPU::getPPUSTATUS() {
   if (mRegisterAccess.mPPUSTATUS == READ ||
       mRegisterAccess.mPPUSTATUS == READ_WRITE) {
+    // Clear W register
+    mClearW();
+
     return mPPUSTATUS;
   } else {
     throw InvalidAccessTypeException("PPUSTATUS register cannot be read");
@@ -105,7 +108,16 @@ uint8_t PPU::getPPUSCROLL() {
 void PPU::setPPUSCROLL(uint8_t value) {
   if (mRegisterAccess.mPPUSCROLL == WRITE ||
       mRegisterAccess.mPPUSCROLL == READ_WRITE) {
-    mPPUSCROLL = value;
+    // W determines which byte is being written
+    // High byte is written first
+    if (!mW) {
+      mPPUSCROLL = (mPPUSCROLL & 0x00FF) | (value << 8);
+    } else {
+      mPPUSCROLL = (mPPUSCROLL & 0xFF00) | value;
+    }
+
+    // Flip W register
+    mFlipW();
   } else {
     throw InvalidAccessTypeException("PPUSCROLL register cannot be written to");
   }
@@ -123,7 +135,16 @@ uint8_t PPU::getPPUADDR() {
 void PPU::setPPUADDR(uint8_t value) {
   if (mRegisterAccess.mPPUADDR == WRITE ||
       mRegisterAccess.mPPUADDR == READ_WRITE) {
-    mPPUADDR = value;
+    // W determines which byte is being written
+    // High byte is written first
+    if (!mW) {
+      mPPUADDR = (mPPUADDR & 0x00FF) | (value << 8);
+    } else {
+      mPPUADDR = (mPPUADDR & 0xFF00) | value;
+    }
+
+    // Flip W register
+    mFlipW();
   } else {
     throw InvalidAccessTypeException("PPUADDR register cannot be written to");
   }
