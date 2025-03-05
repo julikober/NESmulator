@@ -8,7 +8,7 @@ void CPU::InstructionSet::mReadLAX() {
   mCpu.mAccumulator = mCpu.mReadMemory();
   mCpu.mXIndex = mCpu.mAccumulator;
 
-  mCpu.mSetZeroAndNegative(mCpu.mAccumulator);
+  mCpu.mUpdateZeroAndNegative(mCpu.mAccumulator);
 }
 
 void CPU::InstructionSet::mReadLAXImmediate() {
@@ -16,7 +16,7 @@ void CPU::InstructionSet::mReadLAXImmediate() {
       (mCpu.mAccumulator | UNDETERMINISTIC_CONSTANT) & mCpu.mReadMemory();
   mCpu.mXIndex = mCpu.mAccumulator;
 
-  mCpu.mSetZeroAndNegative(mCpu.mAccumulator);
+  mCpu.mUpdateZeroAndNegative(mCpu.mAccumulator);
 }
 
 void CPU::InstructionSet::LAXImmediate() {

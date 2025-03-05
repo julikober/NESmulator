@@ -3,7 +3,7 @@
 void CPU::InstructionSet::mReadANC() {
   mCpu.mAccumulator &= mCpu.mReadMemory();
 
-  mCpu.mSetZeroAndNegative(mCpu.mAccumulator);
+  mCpu.mUpdateZeroAndNegative(mCpu.mAccumulator);
 
   if (mCpu.mCheckFlag(NEGATIVE)) {
     mCpu.mSetFlag(CARRY);

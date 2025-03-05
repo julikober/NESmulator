@@ -1,5 +1,8 @@
 #include "cpu/memory/memorymap.hpp"
 
+CPUMemoryMap::CPUMemoryMap(Mapper** mapper, PPU* ppu)
+    : MemoryMap(mapper), mRAM(mapper), mIO(mapper, ppu), mCartridge(mapper) {};
+
 uint8_t CPUMemoryMap::read(uint16_t address) {
   if (address >= RAM_START && address <= RAM_END) {
     return mRAM.read(address);

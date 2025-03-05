@@ -3,7 +3,7 @@
 void CPU::InstructionSet::mExecuteTAX() {
   mCpu.mXIndex = mCpu.mAccumulator;
 
-  mCpu.mSetZeroAndNegative(mCpu.mXIndex);
+  mCpu.mUpdateZeroAndNegative(mCpu.mXIndex);
 }
 
 void CPU::InstructionSet::TAXImplied() {

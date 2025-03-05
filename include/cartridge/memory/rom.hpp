@@ -8,15 +8,10 @@ class CartridgeROM : public ReadOnlyMemory {
   size_t mSize;
 
  public:
-  CartridgeROM(uint32_t size) : ReadOnlyMemory(), mSize(size) {
-    mData = new uint8_t[size];
-  }
+  CartridgeROM(uint32_t size);
+  ~CartridgeROM();
 
-  ~CartridgeROM() { delete[] mData; }
-
-  virtual inline uint8_t read(uint32_t address) override {
-    return mData[address % mSize];
-  }
+  virtual uint8_t read(uint32_t address) override;
 
   virtual inline size_t size() override { return mSize; }
   virtual void load(const uint8_t* data, size_t size) override;

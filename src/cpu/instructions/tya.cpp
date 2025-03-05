@@ -3,7 +3,7 @@
 void CPU::InstructionSet::mExecuteTYA() {
   mCpu.mAccumulator = mCpu.mYIndex;
 
-  mCpu.mSetZeroAndNegative(mCpu.mAccumulator);
+  mCpu.mUpdateZeroAndNegative(mCpu.mAccumulator);
 }
 
 void CPU::InstructionSet::TYAImplied() {

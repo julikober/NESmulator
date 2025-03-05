@@ -61,8 +61,8 @@ enum AccessType { READ, WRITE, READ_WRITE, NONE };
 
 class Memory {
  public:
-  Memory() {};
-  virtual ~Memory() {};
+  Memory() = default;
+  virtual ~Memory() = default;
 
   virtual uint8_t read(uint32_t address) = 0;
   virtual void write(uint32_t address, uint8_t value) = 0;
@@ -73,7 +73,8 @@ class Memory {
 
 class ReadOnlyMemory : public Memory {
  public:
-  ReadOnlyMemory() : Memory() {}
+  ReadOnlyMemory() = default;
+  virtual ~ReadOnlyMemory() = default;
 
   void write(uint32_t address, uint8_t value) override;
 };

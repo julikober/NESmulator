@@ -1,11 +1,28 @@
 #include "cpu/cpu.hpp"
 
+CPU::CPU(Mapper** mapper, PPU* ppu)
+    : mInstructionSet(*this),
+      mMemory(new CPUMemoryMap(mapper, ppu)),
+      mProgramCounter(0x0400),
+      mStackPointer(0xFF),
+      mAccumulator(0),
+      mXIndex(0),
+      mYIndex(0),
+      mStatus(INTERRUPT_DISABLE),
+      mCycle(1) {};
+
+CPU::~CPU() { delete mMemory; }
+CPU::InstructionSet::InstructionSet(CPU& cpu) : mCpu(cpu) {};
+
 void CPU::mFetchInstruction() {
   mAddress = mProgramCounter;
   mProgramCounter++;
 
   mInstruction = (Instruction)mReadMemory();
 }
+
+uint8_t CPU::mReadMemory() { return mMemory->read(mAddress); }
+void CPU::mWriteMemory(uint8_t value) { mMemory->write(mAddress, value); }
 
 void CPU::mPushStack(uint8_t value) {
   mAddress = mStackPointer + M_STACK_OFFSET;
@@ -19,7 +36,7 @@ uint8_t CPU::mPopStack() {
   return mReadMemory();
 }
 
-void CPU::mSetZeroAndNegative(uint8_t value) {
+void CPU::mUpdateZeroAndNegative(uint8_t value) {
   if (value == 0) {
     mSetFlag(ZERO);
   } else {
@@ -1147,15 +1164,4 @@ void CPU::doCycle() {
     }
   }
   mCycle++;
-}
-
-void CPU::loadState(uint16_t programCounter, uint8_t stackPointer,
-                    uint8_t accumulator, uint8_t xIndex, uint8_t yIndex,
-                    uint8_t status) {
-  mProgramCounter = programCounter;
-  mStackPointer = stackPointer;
-  mAccumulator = accumulator;
-  mXIndex = xIndex;
-  mYIndex = yIndex;
-  mStatus = status;
 }

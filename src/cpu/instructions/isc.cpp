@@ -4,7 +4,7 @@ void CPU::InstructionSet::mReadISC() { mCpu.mBuffer = mCpu.mReadMemory(); }
 
 void CPU::InstructionSet::mModifyISC() {
   mCpu.mBuffer++;
-  mCpu.mSetZeroAndNegative(mCpu.mBuffer);
+  mCpu.mUpdateZeroAndNegative(mCpu.mBuffer);
 }
 
 void CPU::InstructionSet::mWriteISC() {
@@ -14,7 +14,7 @@ void CPU::InstructionSet::mWriteISC() {
       mCpu.mSum(mCpu.mAccumulator, ~mCpu.mBuffer, mCpu.mCheckFlag(CARRY));
   mCpu.mAccumulator = output.value;
 
-  mCpu.mSetZeroAndNegative(mCpu.mAccumulator);
+  mCpu.mUpdateZeroAndNegative(mCpu.mAccumulator);
 
   if (output.carry) {
     mCpu.mSetFlag(CARRY);

@@ -43,19 +43,9 @@ class Mapper {
   Mapper(NameTablesMemory &nametableMemory, uint8_t prgRomBanks,
          uint8_t chrRomBanks, MirroringMode mirroringMode,
          bool hasBatteryBackedRam, bool hasTrainer,
-         bool hasAlternativeMirroring)
-      : mNametableMemory(nametableMemory),
-        mPrgRom(prgRomBanks * PRG_ROM_BANK_SIZE),
-        mMirroringMode(mirroringMode),
-        mHasAlternativeMirroring(hasAlternativeMirroring) {
-    if (chrRomBanks > 0) {
-      mChrMemory = new CartridgeROM(chrRomBanks * CHR_ROM_BANK_SIZE);
-    } else {
-      mChrMemory = new CartridgeRAM(CHR_RAM_SIZE);
-    }
-  }
+         bool hasAlternativeMirroring);
 
-  virtual ~Mapper() { delete mChrMemory; }
+  virtual ~Mapper();
 
   virtual uint8_t readPRG(uint16_t address);
   virtual void writePRG(uint16_t address, uint8_t value);

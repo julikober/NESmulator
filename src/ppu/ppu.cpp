@@ -1,5 +1,66 @@
 #include "ppu/ppu.hpp"
 
+PPU::PPU(Mapper** mapper, CPU* cpu)
+    : mCPU(cpu),
+
+      mMemory(mapper),
+
+      mPosH(0),
+      mPosV(0),
+
+      mPPUCTRL(0),
+      mPPUMASK(0),
+      mPPUSTATUS(0),
+      mOAMADDR(0),
+      mOAMDATA(0),
+      mPPUSCROLL(0),
+      mPPUADDR(0),
+      mPPUDATA(0),
+      mOAMDMA(0),
+
+      mPPUDATAReadBuffer(0),
+
+      mV(0),
+      mT(0),
+      mX(0),
+      mW(0),
+
+      mNameTableData(0),
+      mAttributeData(0),
+      mLowTileData(0),
+      mHighTileData(0),
+
+      mTileShiftLow(0),
+      mTileShiftHigh(0),
+
+      mAttributeShiftLow(0),
+      mAttributeShiftHigh(0),
+
+      mSpriteN(0),
+      mSpriteM(0),
+
+      mSecOAMSpriteCount(0),
+      mSpriteInRange(false),
+      mSpriteEvalFinished(false),
+
+      mSpriteOutputs(),
+
+      mNameTableMemory(),
+
+      mRegisterAccess() {
+  mRegisterAccess.mPPUCTRL = WRITE;
+  mRegisterAccess.mPPUMASK = WRITE;
+  mRegisterAccess.mPPUSTATUS = READ;
+  mRegisterAccess.mOAMADDR = WRITE;
+  mRegisterAccess.mOAMDATA = READ_WRITE;
+  mRegisterAccess.mPPUSCROLL = WRITE;
+  mRegisterAccess.mPPUADDR = WRITE;
+  mRegisterAccess.mPPUDATA = READ_WRITE;
+  mRegisterAccess.mOAMDMA = WRITE;
+
+  mCurrentSprite = {0, 0, 0, 0};
+}
+
 uint16_t PPU::mGetBaseNameTableAddress() {
   uint16_t address;
 

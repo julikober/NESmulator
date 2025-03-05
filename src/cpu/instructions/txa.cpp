@@ -3,7 +3,7 @@
 void CPU::InstructionSet::mExecuteTXA() {
   mCpu.mAccumulator = mCpu.mXIndex;
 
-  mCpu.mSetZeroAndNegative(mCpu.mAccumulator);
+  mCpu.mUpdateZeroAndNegative(mCpu.mAccumulator);
 }
 
 void CPU::InstructionSet::TXAImplied() {

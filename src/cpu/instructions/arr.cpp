@@ -5,7 +5,7 @@ void CPU::InstructionSet::mReadARR() {
       mCpu.mShiftRight(mCpu.mReadMemory() & mCpu.mAccumulator);
   mCpu.mAccumulator = output.value | (mCpu.mCheckFlag(CARRY) << 7);
 
-  mCpu.mSetZeroAndNegative(mCpu.mAccumulator);
+  mCpu.mUpdateZeroAndNegative(mCpu.mAccumulator);
 
   // Set carry if bit 6 is set
   if (mCpu.mAccumulator & (1 << 6)) {

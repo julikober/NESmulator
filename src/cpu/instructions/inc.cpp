@@ -5,7 +5,7 @@ void CPU::InstructionSet::mReadINC() { mCpu.mBuffer = mCpu.mReadMemory(); }
 void CPU::InstructionSet::mModifyINC() {
   mCpu.mBuffer++;
 
-  mCpu.mSetZeroAndNegative(mCpu.mBuffer);
+  mCpu.mUpdateZeroAndNegative(mCpu.mBuffer);
 }
 
 void CPU::InstructionSet::mWriteINC() { mCpu.mWriteMemory(mCpu.mBuffer); }

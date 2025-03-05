@@ -3,7 +3,7 @@
 void CPU::InstructionSet::mExecuteTSX() {
   mCpu.mXIndex = mCpu.mStackPointer;
 
-  mCpu.mSetZeroAndNegative(mCpu.mXIndex);
+  mCpu.mUpdateZeroAndNegative(mCpu.mXIndex);
 }
 
 void CPU::InstructionSet::TSXImplied() {

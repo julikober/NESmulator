@@ -5,7 +5,7 @@ void CPU::InstructionSet::mReadAXS() {
       mCpu.mSum(mCpu.mAccumulator & mCpu.mXIndex, ~mCpu.mReadMemory(), 1);
   mCpu.mXIndex = output.value;
 
-  mCpu.mSetZeroAndNegative(mCpu.mXIndex);
+  mCpu.mUpdateZeroAndNegative(mCpu.mXIndex);
 
   if (output.carry) {
     mCpu.mSetFlag(CARRY);

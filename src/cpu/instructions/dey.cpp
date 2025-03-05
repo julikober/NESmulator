@@ -3,7 +3,7 @@
 void CPU::InstructionSet::mExecuteDEY() {
   mCpu.mYIndex--;
 
-  mCpu.mSetZeroAndNegative(mCpu.mYIndex);
+  mCpu.mUpdateZeroAndNegative(mCpu.mYIndex);
 }
 
 void CPU::InstructionSet::DEYImplied() {

@@ -3,7 +3,7 @@
 void CPU::InstructionSet::mReadLDA() {
   mCpu.mAccumulator = mCpu.mReadMemory();
 
-  mCpu.mSetZeroAndNegative(mCpu.mAccumulator);
+  mCpu.mUpdateZeroAndNegative(mCpu.mAccumulator);
 }
 
 void CPU::InstructionSet::LDAImmediate() {

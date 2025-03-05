@@ -5,7 +5,7 @@ void CPU::InstructionSet::mReadSBC() {
       mCpu.mSum(mCpu.mAccumulator, ~mCpu.mReadMemory(), mCpu.mCheckFlag(CARRY));
   mCpu.mAccumulator = output.value;
 
-  mCpu.mSetZeroAndNegative(output.value);
+  mCpu.mUpdateZeroAndNegative(output.value);
 
   if (output.carry) {
     mCpu.mSetFlag(CARRY);

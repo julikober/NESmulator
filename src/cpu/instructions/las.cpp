@@ -5,7 +5,7 @@ void CPU::InstructionSet::mReadLAS() {
   mCpu.mXIndex = mCpu.mAccumulator;
   mCpu.mStackPointer = mCpu.mAccumulator;
 
-  mCpu.mSetZeroAndNegative(mCpu.mAccumulator);
+  mCpu.mUpdateZeroAndNegative(mCpu.mAccumulator);
 }
 
 void CPU::InstructionSet::LASAbsoluteY() {

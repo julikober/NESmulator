@@ -25,10 +25,13 @@ struct ROMHeader {
 
 class Emulator {
  private:
-  CPU mCPU;
-  PPU mPPU;
+  CPU *mCPU;
+  PPU *mPPU;
   Mapper* mMapper;
 
  public:
+  Emulator();
+  ~Emulator();
+  
   void loadROMFile(const char* filename);
 };

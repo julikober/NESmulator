@@ -6,7 +6,7 @@ void CPU::InstructionSet::mModifySLO() {
   OperationOutput output = mCpu.mSum(mCpu.mBuffer, mCpu.mBuffer);
   mCpu.mBuffer = output.value;
 
-  mCpu.mSetZeroAndNegative(mCpu.mBuffer);
+  mCpu.mUpdateZeroAndNegative(mCpu.mBuffer);
 
   if (output.carry) {
     mCpu.mSetFlag(CARRY);
@@ -19,7 +19,7 @@ void CPU::InstructionSet::mWriteSLO() {
   mCpu.mWriteMemory(mCpu.mBuffer);
   mCpu.mAccumulator |= mCpu.mBuffer;
 
-  mCpu.mSetZeroAndNegative(mCpu.mAccumulator);
+  mCpu.mUpdateZeroAndNegative(mCpu.mAccumulator);
 }
 
 void CPU::InstructionSet::SLOZeroPage() {

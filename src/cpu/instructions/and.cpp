@@ -3,7 +3,7 @@
 void CPU::InstructionSet::mReadAND() {
   mCpu.mAccumulator = mCpu.mAnd(mCpu.mAccumulator, mCpu.mReadMemory()).value;
 
-  mCpu.mSetZeroAndNegative(mCpu.mAccumulator);
+  mCpu.mUpdateZeroAndNegative(mCpu.mAccumulator);
 }
 
 void CPU::InstructionSet::ANDImmediate() {

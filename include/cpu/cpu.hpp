@@ -3,7 +3,22 @@
 #include <cstdint>
 #include <cstdio>
 
-#include "./memory/memorymap.hpp"
+#include "cpu/memory/memorymap.hpp"
+#include "ppu/ppu.hpp"
+
+#define NMI_VECTOR 0xFFFA
+#define RESET_VECTOR 0xFFFC
+#define IRQ_BRK_VECTOR 0xFFFE
+
+class PPU;
+class CPUMemoryMap;
+
+enum Interrupt {
+  NMI,
+  IRQ,
+  BRK,
+  RESET
+};
 
 enum StatusFlag {
   CARRY = 1 << 0,
@@ -584,7 +599,7 @@ class CPU {
                   void (InstructionSet::*write)() = nullptr);
 
    public:
-    InstructionSet(CPU& cpu) : mCpu(cpu) {};
+    InstructionSet(CPU& cpu);
 
     // ADC
     void ADCImmediate();
@@ -961,8 +976,13 @@ class CPU {
     void XAAImmediate();
   };
 
-  CPUMemoryMap& mMemory;
+  void mDoInterrupt(Interrupt interrupt);
+
+  CPUMemoryMap* mMemory;
   InstructionSet mInstructionSet;
+
+  // NMI flip-flop
+  bool mNMI;
 
   // General purpose registers
   uint16_t mProgramCounter;
@@ -985,11 +1005,14 @@ class CPU {
   void mFetchInstruction();
 
   // Getters and setters for program counter high and low bytes
+
   inline uint8_t mGetProgramCounterHigh() { return mProgramCounter >> 8; }
   inline uint8_t mGetProgramCounterLow() { return mProgramCounter & 0xFF; }
+
   inline void mSetProgramCounterHigh(uint8_t value) {
     mProgramCounter = (mProgramCounter & 0x00FF) | (value << 8);
   }
+
   inline void mSetProgramCounterLow(uint8_t value) {
     mProgramCounter = (mProgramCounter & 0xFF00) | value;
   }
@@ -997,27 +1020,29 @@ class CPU {
   // Getters and setters for address high and low bytes
   inline uint8_t mGetAddressHigh() { return mAddress >> 8; }
   inline uint8_t mGetAddressLow() { return mAddress & 0xFF; }
+
   inline void mSetAddressHigh(uint8_t value) {
     mAddress = (mAddress & 0x00FF) | (value << 8);
   }
+
   inline void mSetAddressLow(uint8_t value) {
     mAddress = (mAddress & 0xFF00) | value;
   }
 
   // Read and write memory
-  inline uint8_t mReadMemory() { return mMemory.read(mAddress); }
-  inline void mWriteMemory(uint8_t value) { mMemory.write(mAddress, value); }
+  uint8_t mReadMemory();
+  void mWriteMemory(uint8_t value);
 
   void mPushStack(uint8_t value);
   uint8_t mPopStack();
 
   // Getters and setters for status flags
-  inline void mSetFlag(uint8_t flags) { mStatus |= flags; };
-  inline void mClearFlag(uint8_t flags) { mStatus &= ~flags; };
-  inline bool mCheckFlag(uint8_t flags) { return mStatus & flags; };
+  inline void mSetFlag(uint8_t flags) { mStatus |= flags; }
+  inline void mClearFlag(uint8_t flags) { mStatus &= ~flags; }
+  inline bool mCheckFlag(uint8_t flags) { return mStatus & flags; }
 
   // Method for automatically setting or clearing zero and negative flags
-  void mSetZeroAndNegative(uint8_t value);
+  void mUpdateZeroAndNegative(uint8_t value);
 
   struct OperationOutput {
     uint8_t value;
@@ -1033,72 +1058,11 @@ class CPU {
   OperationOutput mShiftRight(uint8_t a);
 
  public:
-  CPU(CPUMemoryMap& memory)
-      : mMemory(memory),
-        mInstructionSet(*this),
-        mProgramCounter(0x0400),
-        mStackPointer(0xFF),
-        mAccumulator(0),
-        mXIndex(0),
-        mYIndex(0),
-        mStatus(INTERRUPT_DISABLE),
-        mCycle(1) {};
-  ~CPU() {};
+  CPU(Mapper** mapper, PPU* ppu);
+  ~CPU();
 
   void doCycle();
-  void loadState(uint16_t programCounter, uint8_t stackPointer,
-                 uint8_t accumulator, uint8_t xIndex, uint8_t yIndex,
-                 uint8_t status);
 
-  void dumpRegisters() {  // For debugging purposes only
-    printf(
-        "PC: %04X Instruction: %02X Cycle: %d SP: %02X A: %02X X: %02X Y: %02X "
-        "P: ",
-        mProgramCounter, mInstruction, mCycle, mStackPointer, mAccumulator,
-        mXIndex, mYIndex);
-
-    if (mCheckFlag(NEGATIVE)) {
-      printf("N");
-    } else {
-      printf("n");
-    }
-
-    if (mCheckFlag(OVERFLOW)) {
-      printf("V");
-    } else {
-      printf("v");
-    }
-
-    printf("-");
-
-    if (mCheckFlag(BREAK)) {
-      printf("B");
-    } else {
-      printf("b");
-    }
-
-    printf("d");
-
-    if (mCheckFlag(INTERRUPT_DISABLE)) {
-      printf("I");
-    } else {
-      printf("i");
-    }
-
-    if (mCheckFlag(ZERO)) {
-      printf("Z");
-    } else {
-      printf("z");
-    }
-
-    if (mCheckFlag(CARRY)) {
-      printf("C");
-    } else {
-      printf("c");
-    }
-
-    printf(" Address: %04X ", mAddress);
-
-    printf("\n");
-  };
+  // NMI interrupt
+  inline void nmi() { mNMI = true; }
 };

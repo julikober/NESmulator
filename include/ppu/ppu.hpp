@@ -2,11 +2,14 @@
 
 #include <cstdint>
 
-#include "./memory/memorymap.hpp"
+#include "cpu/cpu.hpp"
 #include "memory/exceptions.hpp"
+#include "ppu/memory/memorymap.hpp"
 
 #define SCANLINES 262
 #define PIXELS 341
+
+class CPU;
 
 enum PPUCTRLFlag {
   PPUCTRL_NAMETABLE = 1 | 1 << 1,
@@ -33,6 +36,13 @@ enum VRAMAddrFlag {
 
 class PPU {
  private:
+  // CPU pointer
+  CPU* mCPU;
+
+  // Memory
+  PPUMemoryMap mMemory;
+
+  // Position
   uint16_t mPosH;
   uint16_t mPosV;
 
@@ -128,9 +138,6 @@ class PPU {
   // Name Tables
   NameTablesMemory mNameTableMemory;
 
-  // Memory
-  PPUMemoryMap mMemory;
-
   // Internal register methods
   void mClearW();
   void mFlipW();
@@ -173,65 +180,7 @@ class PPU {
   void mDoPixel();
 
  public:
-  PPU(Mapper** mapper)
-      : mPosH(0),
-        mPosV(0),
-
-        mPPUCTRL(0),
-        mPPUMASK(0),
-        mPPUSTATUS(0),
-        mOAMADDR(0),
-        mOAMDATA(0),
-        mPPUSCROLL(0),
-        mPPUADDR(0),
-        mPPUDATA(0),
-        mOAMDMA(0),
-
-        mPPUDATAReadBuffer(0),
-
-        mV(0),
-        mT(0),
-        mX(0),
-        mW(0),
-
-        mNameTableData(0),
-        mAttributeData(0),
-        mLowTileData(0),
-        mHighTileData(0),
-
-        mTileShiftLow(0),
-        mTileShiftHigh(0),
-
-        mAttributeShiftLow(0),
-        mAttributeShiftHigh(0),
-
-        mSpriteN(0),
-        mSpriteM(0),
-
-        mSecOAMSpriteCount(0),
-        mSpriteInRange(false),
-        mSpriteEvalFinished(false),
-
-        mSpriteOutputs(),
-
-        mNameTableMemory(),
-
-        mMemory(mapper),
-        mRegisterAccess() {
-    mRegisterAccess.mPPUCTRL = WRITE;
-    mRegisterAccess.mPPUMASK = WRITE;
-    mRegisterAccess.mPPUSTATUS = READ;
-    mRegisterAccess.mOAMADDR = WRITE;
-    mRegisterAccess.mOAMDATA = READ_WRITE;
-    mRegisterAccess.mPPUSCROLL = WRITE;
-    mRegisterAccess.mPPUADDR = WRITE;
-    mRegisterAccess.mPPUDATA = READ_WRITE;
-    mRegisterAccess.mOAMDMA = WRITE;
-
-    mCurrentSprite = {0, 0, 0, 0};
-  };
-
-  ~PPU() {};
+  PPU(Mapper** mapper, CPU* cpu);
 
   uint8_t getPPUCTRL();
   void setPPUCTRL(uint8_t value);

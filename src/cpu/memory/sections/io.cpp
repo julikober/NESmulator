@@ -3,35 +3,40 @@
 #include "cpu/memory/memorymap.hpp"
 #include "logger/logger.hpp"
 
+CPUMemoryMap::IOSection::IOSection(Mapper** mapper, PPU* ppu)
+    : Section(mapper, IO_START, IO_END, IO_MIRROR_SRC_START, IO_MIRROR_SRC_END,
+              IO_MIRROR_DST_START, IO_MIRROR_DST_END),
+      mPPU(ppu) {};
+
 uint8_t CPUMemoryMap::IOSection::read(uint16_t address) {
   try {
     switch (mResolveMirrors(address)) {
       case ADDR_PPUCTRL:
-        mPPU.getPPUCTRL();
+        mPPU->getPPUCTRL();
         break;
       case ADDR_PPUMASK:
-        mPPU.getPPUMASK();
+        mPPU->getPPUMASK();
         break;
       case ADDR_PPUSTATUS:
-        mPPU.getPPUSTATUS();
+        mPPU->getPPUSTATUS();
         break;
       case ADDR_OAMADDR:
-        mPPU.getOAMADDR();
+        mPPU->getOAMADDR();
         break;
       case ADDR_OAMDATA:
-        mPPU.getOAMDATA();
+        mPPU->getOAMDATA();
         break;
       case ADDR_PPUSCROLL:
-        mPPU.getPPUSCROLL();
+        mPPU->getPPUSCROLL();
         break;
       case ADDR_PPUADDR:
-        mPPU.getPPUADDR();
+        mPPU->getPPUADDR();
         break;
       case ADDR_PPUDATA:
-        mPPU.getPPUDATA();
+        mPPU->getPPUDATA();
         break;
       case ADDR_OAMDMA:
-        mPPU.getOAMDMA();
+        mPPU->getOAMDMA();
         break;
 
       default:
@@ -54,31 +59,31 @@ void CPUMemoryMap::IOSection::write(uint16_t address, uint8_t value) {
   try {
     switch (mResolveMirrors(address)) {
       case ADDR_PPUCTRL:
-        mPPU.setPPUCTRL(value);
+        mPPU->setPPUCTRL(value);
         break;
       case ADDR_PPUMASK:
-        mPPU.setPPUMASK(value);
+        mPPU->setPPUMASK(value);
         break;
       case ADDR_PPUSTATUS:
-        mPPU.setPPUSTATUS(value);
+        mPPU->setPPUSTATUS(value);
         break;
       case ADDR_OAMADDR:
-        mPPU.setOAMADDR(value);
+        mPPU->setOAMADDR(value);
         break;
       case ADDR_OAMDATA:
-        mPPU.setOAMDATA(value);
+        mPPU->setOAMDATA(value);
         break;
       case ADDR_PPUSCROLL:
-        mPPU.setPPUSCROLL(value);
+        mPPU->setPPUSCROLL(value);
         break;
       case ADDR_PPUADDR:
-        mPPU.setPPUADDR(value);
+        mPPU->setPPUADDR(value);
         break;
       case ADDR_PPUDATA:
-        mPPU.setPPUDATA(value);
+        mPPU->setPPUDATA(value);
         break;
       case ADDR_OAMDMA:
-        mPPU.setOAMDMA(value);
+        mPPU->setOAMDMA(value);
         break;
 
       default:

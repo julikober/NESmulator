@@ -3,7 +3,7 @@
 void CPU::InstructionSet::mReadEOR() {
   mCpu.mAccumulator = mCpu.mEor(mCpu.mAccumulator, mCpu.mReadMemory()).value;
 
-  mCpu.mSetZeroAndNegative(mCpu.mAccumulator);
+  mCpu.mUpdateZeroAndNegative(mCpu.mAccumulator);
 }
 
 void CPU::InstructionSet::EORImmediate() {

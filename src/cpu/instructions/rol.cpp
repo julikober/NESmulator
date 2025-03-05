@@ -7,7 +7,7 @@ void CPU::InstructionSet::mModifyROL() {
       mCpu.mSum(mCpu.mBuffer, mCpu.mBuffer, mCpu.mCheckFlag(CARRY));
   mCpu.mBuffer = output.value;
 
-  mCpu.mSetZeroAndNegative(mCpu.mBuffer);
+  mCpu.mUpdateZeroAndNegative(mCpu.mBuffer);
 
   if (output.carry) {
     mCpu.mSetFlag(CARRY);
@@ -23,7 +23,7 @@ void CPU::InstructionSet::mReadROLAccumulator() {
       mCpu.mSum(mCpu.mAccumulator, mCpu.mAccumulator, mCpu.mCheckFlag(CARRY));
   mCpu.mAccumulator = output.value;
 
-  mCpu.mSetZeroAndNegative(mCpu.mAccumulator);
+  mCpu.mUpdateZeroAndNegative(mCpu.mAccumulator);
 
   if (output.carry) {
     mCpu.mSetFlag(CARRY);

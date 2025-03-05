@@ -6,7 +6,7 @@ void CPU::InstructionSet::mModifyLSR() {
   OperationOutput output = mCpu.mShiftRight(mCpu.mBuffer);
   mCpu.mBuffer = output.value;
 
-  mCpu.mSetZeroAndNegative(mCpu.mBuffer);
+  mCpu.mUpdateZeroAndNegative(mCpu.mBuffer);
 
   if (output.carry) {
     mCpu.mSetFlag(CARRY);
@@ -21,7 +21,7 @@ void CPU::InstructionSet::mReadLSRAccumulator() {
   OperationOutput output = mCpu.mShiftRight(mCpu.mAccumulator);
   mCpu.mAccumulator = output.value;
 
-  mCpu.mSetZeroAndNegative(mCpu.mAccumulator);
+  mCpu.mUpdateZeroAndNegative(mCpu.mAccumulator);
 
   if (output.carry) {
     mCpu.mSetFlag(CARRY);

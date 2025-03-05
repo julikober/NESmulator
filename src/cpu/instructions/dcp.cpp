@@ -4,14 +4,14 @@ void CPU::InstructionSet::mReadDCP() { mCpu.mBuffer = mCpu.mReadMemory(); }
 
 void CPU::InstructionSet::mModifyDCP() {
   mCpu.mBuffer--;
-  mCpu.mSetZeroAndNegative(mCpu.mBuffer);
+  mCpu.mUpdateZeroAndNegative(mCpu.mBuffer);
 }
 
 void CPU::InstructionSet::mWriteDCP() {
   mCpu.mWriteMemory(mCpu.mBuffer);
   OperationOutput output = mCpu.mSum(mCpu.mAccumulator, ~mCpu.mBuffer, 1);
 
-  mCpu.mSetZeroAndNegative(output.value);
+  mCpu.mUpdateZeroAndNegative(output.value);
 
   if (output.carry) {
     mCpu.mSetFlag(CARRY);

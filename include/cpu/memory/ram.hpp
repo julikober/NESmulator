@@ -11,17 +11,12 @@ class RAM : public Memory {
   std::array<uint8_t, RAM_SIZE> mMemory;
 
  public:
-  RAM() : Memory() {};
-  ~RAM() {};
+  RAM();
 
-  virtual inline uint8_t read(uint32_t address) override {
-    return mMemory[address];
-  }
-  virtual inline void write(uint32_t address, uint8_t value) override {
-    mMemory[address] = value;
-  }
+  virtual uint8_t read(uint32_t address) override;
+  virtual void write(uint32_t address, uint8_t value) override;
 
   virtual void load(const uint8_t* data, size_t size) override;
 
-  virtual inline size_t size() override { return RAM_SIZE; }
+  virtual inline size_t size() override { return RAM_SIZE; };
 };

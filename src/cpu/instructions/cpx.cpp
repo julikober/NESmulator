@@ -3,7 +3,7 @@
 void CPU::InstructionSet::mReadCPX() {
   OperationOutput output = mCpu.mSum(mCpu.mXIndex, ~mCpu.mReadMemory(), 1);
 
-  mCpu.mSetZeroAndNegative(output.value);
+  mCpu.mUpdateZeroAndNegative(output.value);
 
   if (output.carry) {
     mCpu.mSetFlag(CARRY);

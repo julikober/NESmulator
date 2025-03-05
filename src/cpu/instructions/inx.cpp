@@ -3,7 +3,7 @@
 void CPU::InstructionSet::mExecuteINX() {
   mCpu.mXIndex++;
 
-  mCpu.mSetZeroAndNegative(mCpu.mXIndex);
+  mCpu.mUpdateZeroAndNegative(mCpu.mXIndex);
 }
 
 void CPU::InstructionSet::INXImplied() {

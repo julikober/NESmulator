@@ -6,7 +6,7 @@ void CPU::InstructionSet::mModifyRRA() {
   OperationOutput output = mCpu.mShiftRight(mCpu.mBuffer);
   mCpu.mBuffer = output.value | (mCpu.mCheckFlag(CARRY) << 7);
 
-  mCpu.mSetZeroAndNegative(mCpu.mBuffer);
+  mCpu.mUpdateZeroAndNegative(mCpu.mBuffer);
 
   if (output.carry) {
     mCpu.mSetFlag(CARRY);
@@ -22,7 +22,7 @@ void CPU::InstructionSet::mWriteRRA() {
       mCpu.mSum(mCpu.mAccumulator, mCpu.mBuffer, mCpu.mCheckFlag(CARRY));
   mCpu.mAccumulator = output.value;
 
-  mCpu.mSetZeroAndNegative(mCpu.mAccumulator);
+  mCpu.mUpdateZeroAndNegative(mCpu.mAccumulator);
 
   if (output.carry) {
     mCpu.mSetFlag(CARRY);

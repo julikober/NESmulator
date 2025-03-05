@@ -1,9 +1,21 @@
 #include "cartridge/mapper/mapper.hpp"
 
-MemoryLocation Mapper::mMapAlternativeMirrors(uint16_t address) {
-  throw MissingNametableMirroringException(
-      "Alternative mirroring not implemented for this mapper");
+Mapper::Mapper(NameTablesMemory& nametableMemory, uint8_t prgRomBanks,
+               uint8_t chrRomBanks, MirroringMode mirroringMode,
+               bool hasBatteryBackedRam, bool hasTrainer,
+               bool hasAlternativeMirroring)
+    : mNametableMemory(nametableMemory),
+      mPrgRom(prgRomBanks * PRG_ROM_BANK_SIZE),
+      mMirroringMode(mirroringMode),
+      mHasAlternativeMirroring(hasAlternativeMirroring) {
+  if (chrRomBanks > 0) {
+    mChrMemory = new CartridgeROM(chrRomBanks * CHR_ROM_BANK_SIZE);
+  } else {
+    mChrMemory = new CartridgeRAM(CHR_RAM_SIZE);
+  }
 }
+
+Mapper::~Mapper() { delete mChrMemory; }
 
 MemoryLocation Mapper::mMapNametableMirrors(uint16_t address) {
   if (mHasAlternativeMirroring) {
@@ -48,6 +60,11 @@ MemoryLocation Mapper::mMapNametableMirrors(uint16_t address) {
   } else {
     throw std::invalid_argument("Invalid mirroring mode");
   }
+}
+
+MemoryLocation Mapper::mMapAlternativeMirrors(uint16_t address) {
+  throw MissingNametableMirroringException(
+      "Alternative mirroring not implemented for this mapper");
 }
 
 uint8_t Mapper::readPRG(uint16_t address) {

@@ -1,5 +1,11 @@
 #include "ppu/memory/memorymap.hpp"
 
+PPUMemoryMap::PPUMemoryMap(Mapper** mapper)
+    : MemoryMap(mapper),
+      mPatternTablesSection(mapper),
+      mNameTablesSection(mapper),
+      mPalettesSection(mapper) {}
+
 uint8_t PPUMemoryMap::read(uint16_t address) {
   if (address >= PATTERNTABLES_START && address <= PATTERNTABLES_END) {
     return mPatternTablesSection.read(address);

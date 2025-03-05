@@ -17,10 +17,13 @@ $(BUILDDIR)/$(MEMORY)/memory.o: $(SRCDIR)/$(MEMORY)/memory.cpp $(INCLUDEDIR)/$(M
 $(BUILDDIR)/$(MEMORY)/memorymap.o: $(SRCDIR)/$(MEMORY)/memorymap.cpp $(INCLUDEDIR)/$(MEMORY)/memorymap.hpp
 	g++ $(CPPFLAGS) -c $< -o $@
 
+$(BUILDDIR)/$(MEMORY)/section.o: $(SRCDIR)/$(MEMORY)/section.cpp $(INCLUDEDIR)/$(MEMORY)/section.hpp
+	g++ $(CPPFLAGS) -c $< -o $@
+
 $(BUILDDIR)/$(MEMORY)/exceptions.o: $(SRCDIR)/$(MEMORY)/exceptions.cpp $(INCLUDEDIR)/$(MEMORY)/exceptions.hpp
 	g++ $(CPPFLAGS) -c $< -o $@
 
-$(BUILDDIR)/$(MEMORY)/memory.a: $(BUILDDIR)/$(MEMORY)/memory.o $(BUILDDIR)/$(MEMORY)/memorymap.o $(BUILDDIR)/$(MEMORY)/exceptions.o
+$(BUILDDIR)/$(MEMORY)/memory.so: $(BUILDDIR)/$(MEMORY)/memory.o $(BUILDDIR)/$(MEMORY)/memorymap.o $(BUILDDIR)/$(MEMORY)/section.o $(BUILDDIR)/$(MEMORY)/exceptions.o
 	ar rcs $@ $^
 
 # Cartridge
@@ -73,10 +76,13 @@ $(BUILDDIR)/$(CPU_MEMORY)/ram.o: $(SRCDIR)/$(CPU_MEMORY)/ram.cpp $(INCLUDEDIR)/$
 $(BUILDDIR)/$(CPU_MEMORY_SECTIONS)/%.o: $(SRCDIR)/$(CPU_MEMORY_SECTIONS)/%.cpp $(INCLUDEDIR)/$(CPU_MEMORY)/memorymap.hpp
 	g++ $(CPPFLAGS) -c $< -o $@
 
-$(BUILDDIR)/$(CPU)/operations.o: $(SRCDIR)/$(CPU)/operations.cpp $(INCLUDEDIR)/$(CPU)/cpu.hpp
+$(BUILDDIR)/$(CPU)/addressing.o: $(SRCDIR)/$(CPU)/addressing.cpp $(INCLUDEDIR)/$(CPU)/cpu.hpp
 	g++ $(CPPFLAGS) -c $< -o $@
 
-$(BUILDDIR)/$(CPU)/addressing.o: $(SRCDIR)/$(CPU)/addressing.cpp $(INCLUDEDIR)/$(CPU)/cpu.hpp
+$(BUILDDIR)/$(CPU)/interrupt.o: $(SRCDIR)/$(CPU)/interrupt.cpp $(INCLUDEDIR)/$(CPU)/cpu.hpp
+	g++ $(CPPFLAGS) -c $< -o $@
+
+$(BUILDDIR)/$(CPU)/operations.o: $(SRCDIR)/$(CPU)/operations.cpp $(INCLUDEDIR)/$(CPU)/cpu.hpp
 	g++ $(CPPFLAGS) -c $< -o $@
 
 $(BUILDDIR)/$(INSTRUCTIONS)/%.o: $(SRCDIR)/$(INSTRUCTIONS)/%.cpp $(INCLUDEDIR)/$(CPU)/cpu.hpp
@@ -85,7 +91,7 @@ $(BUILDDIR)/$(INSTRUCTIONS)/%.o: $(SRCDIR)/$(INSTRUCTIONS)/%.cpp $(INCLUDEDIR)/$
 $(BUILDDIR)/$(CPU)/cpu.o: $(SRCDIR)/$(CPU)/cpu.cpp $(INCLUDEDIR)/$(CPU)/cpu.hpp
 	g++ $(CPPFLAGS) -c $< -o $@
 
-$(BUILDDIR)/$(CPU)/cpu.a: $(BUILDDIR)/$(CPU)/cpu.o $(BUILDDIR)/$(CPU_MEMORY)/memorymap.o $(BUILDDIR)/$(CPU_MEMORY)/ram.o $(CPU_MEMORY_SECTIONS_OBJS) $(BUILDDIR)/$(CPU)/operations.o $(BUILDDIR)/$(CPU)/addressing.o $(INSTRUCTION_OBJS)
+$(BUILDDIR)/$(CPU)/cpu.a: $(BUILDDIR)/$(CPU)/cpu.o $(BUILDDIR)/$(CPU_MEMORY)/memorymap.o $(BUILDDIR)/$(CPU_MEMORY)/ram.o $(CPU_MEMORY_SECTIONS_OBJS) $(BUILDDIR)/$(CPU)/addressing.o $(BUILDDIR)/$(CPU)/interrupt.o $(BUILDDIR)/$(CPU)/operations.o $(INSTRUCTION_OBJS)
 	ar rcs $@ $^
 
 # PPU
@@ -156,7 +162,7 @@ run: all
 	$(BUILDDIR)/main
 
 # Test
-$(BUILDDIR)/test: $(TESTDIR)/test.cpp $(BUILDDIR)/$(MEMORY)/memory.a $(BUILDDIR)/$(CARTRIDGE)/cartridge.a $(BUILDDIR)/$(CPU)/cpu.a $(BUILDDIR)/$(PPU)/ppu.a $(BUILDDIR)/$(LOGGER)/logger.o $(BUILDDIR)/$(EMULATOR)/emulator.a
+$(BUILDDIR)/test: $(TESTDIR)/test.cpp $(BUILDDIR)/$(MEMORY)/memory.o $(BUILDDIR)/$(MEMORY)/section.o $(BUILDDIR)/$(PPU_MEMORY)/memorymap.o $(BUILDDIR)/$(MEMORY)/memory.a $(BUILDDIR)/$(CARTRIDGE)/cartridge.a $(BUILDDIR)/$(CPU)/cpu.a $(BUILDDIR)/$(PPU)/ppu.a $(BUILDDIR)/$(LOGGER)/logger.o $(BUILDDIR)/$(EMULATOR)/emulator.a
 	g++ $(CPPFLAGS) $^ -o $@
 
 test: $(BUILDDIR)/test

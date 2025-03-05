@@ -8,7 +8,7 @@ void CPU::InstructionSet::mReadXAA() {
   mCpu.mAccumulator = (mCpu.mAccumulator | UNDETERMINISTIC_CONSTANT) &
                       mCpu.mXIndex & mCpu.mReadMemory();
 
-  mCpu.mSetZeroAndNegative(mCpu.mAccumulator);
+  mCpu.mUpdateZeroAndNegative(mCpu.mAccumulator);
 }
 
 void CPU::InstructionSet::XAAImmediate() {

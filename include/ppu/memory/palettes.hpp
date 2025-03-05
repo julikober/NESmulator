@@ -11,16 +11,10 @@ class PalettesMemory : public Memory {
   std::array<uint8_t, PALETTES_SIZE> mMemory;
 
  public:
-  PalettesMemory() : Memory() {};
-  ~PalettesMemory() {};
+  PalettesMemory();
 
-  virtual inline uint8_t read(uint32_t address) override {
-    return mMemory[address];
-  }
-
-  virtual inline void write(uint32_t address, uint8_t value) override {
-    mMemory[address] = value;
-  }
+  virtual uint8_t read(uint32_t address) override;
+  virtual void write(uint32_t address, uint8_t value) override;
 
   virtual void load(const uint8_t *data, size_t size) override;
 

@@ -3,7 +3,7 @@
 void CPU::InstructionSet::mReadLDX() {
   mCpu.mXIndex = mCpu.mReadMemory();
 
-  mCpu.mSetZeroAndNegative(mCpu.mXIndex);
+  mCpu.mUpdateZeroAndNegative(mCpu.mXIndex);
 }
 
 void CPU::InstructionSet::LDXImmediate() {

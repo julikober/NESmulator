@@ -11,7 +11,7 @@ void CPU::InstructionSet::PLAImplied() {
 
     case 4:
       mCpu.mAccumulator = mCpu.mPopStack();
-      mCpu.mSetZeroAndNegative(mCpu.mAccumulator);
+      mCpu.mUpdateZeroAndNegative(mCpu.mAccumulator);
 
     default:
       mCpu.mCycle = 0;

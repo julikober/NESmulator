@@ -3,7 +3,7 @@
 void CPU::InstructionSet::mExecuteTAY() {
   mCpu.mYIndex = mCpu.mAccumulator;
 
-  mCpu.mSetZeroAndNegative(mCpu.mYIndex);
+  mCpu.mUpdateZeroAndNegative(mCpu.mYIndex);
 }
 
 void CPU::InstructionSet::TAYImplied() {

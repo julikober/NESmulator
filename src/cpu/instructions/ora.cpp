@@ -3,7 +3,7 @@
 void CPU::InstructionSet::mReadORA() {
   mCpu.mAccumulator = mCpu.mOr(mCpu.mAccumulator, mCpu.mReadMemory()).value;
 
-  mCpu.mSetZeroAndNegative(mCpu.mAccumulator);
+  mCpu.mUpdateZeroAndNegative(mCpu.mAccumulator);
 }
 
 void CPU::InstructionSet::ORAImmediate() {

@@ -21,10 +21,5 @@ class Mapper000 : public Mapper {
   Mapper000(NameTablesMemory& nametableMemory, uint8_t prgRomBanks,
             uint8_t chrRomBanks, MirroringMode mirroringMode,
             bool hasBatteryBackedRam, bool hasTrainer,
-            bool hasAlternativeMirroring)
-      : Mapper(nametableMemory, prgRomBanks, chrRomBanks, mirroringMode,
-               hasBatteryBackedRam, hasTrainer, hasAlternativeMirroring),
-        mPrgRam(MAP000_PRG_RAM_SIZE) {}
-
-  ~Mapper000() {}
+            bool hasAlternativeMirroring);
 };

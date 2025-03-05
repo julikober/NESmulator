@@ -7,7 +7,7 @@ void CPU::InstructionSet::mModifyRLA() {
       mCpu.mSum(mCpu.mBuffer, mCpu.mBuffer, mCpu.mCheckFlag(CARRY));
   mCpu.mBuffer = output.value;
 
-  mCpu.mSetZeroAndNegative(mCpu.mBuffer);
+  mCpu.mUpdateZeroAndNegative(mCpu.mBuffer);
 
   if (output.carry) {
     mCpu.mSetFlag(CARRY);
@@ -21,7 +21,7 @@ void CPU::InstructionSet::mWriteRLA() {
 
   mCpu.mAccumulator &= mCpu.mBuffer;
 
-  mCpu.mSetZeroAndNegative(mCpu.mAccumulator);
+  mCpu.mUpdateZeroAndNegative(mCpu.mAccumulator);
 }
 
 void CPU::InstructionSet::RLAZeroPage() {

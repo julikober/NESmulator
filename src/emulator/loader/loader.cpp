@@ -30,7 +30,7 @@ void Emulator::loadROMFile(const char* filename) {
   }
 
   // Create new mapper
-  mMapper = createMapper(header.flags6 >> 4, mPPU.getNameTablesMemory(),
+  mMapper = createMapper(header.flags6 >> 4, mPPU->getNameTablesMemory(),
                          header.PrgRomSize, header.ChrRomSize,
                          static_cast<MirroringMode>(header.flags6 & 1),
                          header.flags6 & (1 << 1), header.flags6 & (1 << 3),

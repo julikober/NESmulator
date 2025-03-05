@@ -11,17 +11,14 @@ enum LogLevel {
 
 class Logger {
  private:
-  Logger() {}
+  Logger() = default;
 
  public:
-  static Logger& getInstance() {
-    static Logger instance;
-
-    return instance;
-  }
+  static Logger& getInstance();
 
   Logger(Logger const&) = delete;
   void operator=(Logger const&) = delete;
+  ~Logger() = default;
 
   void log(const std::string& message, const LogLevel level);
 };
