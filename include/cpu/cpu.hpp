@@ -1064,5 +1064,5 @@ class CPU {
   void doCycle();
 
   // NMI interrupt
-  inline void nmi() { mNMI = true; }
+  inline void requestNMI() { mNMI = true; }
 };

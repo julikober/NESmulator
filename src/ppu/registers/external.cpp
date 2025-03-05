@@ -12,6 +12,13 @@ uint8_t PPU::getPPUCTRL() {
 void PPU::setPPUCTRL(uint8_t value) {
   if (mRegisterAccess.mPPUCTRL == WRITE ||
       mRegisterAccess.mPPUCTRL == READ_WRITE) {
+    // Check if NMI is enabled
+    if (mCheckPPUCTRLFlag(PPUCTRL_NMI_ENABLE)) {
+      if (!mPPUCTRL & PPUCTRL_NMI_ENABLE && value & PPUCTRL_NMI_ENABLE) {
+        mCPU->requestNMI();
+      }
+    }
+
     mPPUCTRL = value;
   } else {
     throw InvalidAccessTypeException("PPUCTRL register cannot be written to");
@@ -39,10 +46,15 @@ void PPU::setPPUMASK(uint8_t value) {
 uint8_t PPU::getPPUSTATUS() {
   if (mRegisterAccess.mPPUSTATUS == READ ||
       mRegisterAccess.mPPUSTATUS == READ_WRITE) {
+    uint8_t status = mPPUSTATUS;
+
     // Clear W register
     mClearW();
 
-    return mPPUSTATUS;
+    // Clear VBlank flag
+    mClearPPUSTATUSFlag(PPUSTATUS_VBLANK);
+
+    return status;
   } else {
     throw InvalidAccessTypeException("PPUSTATUS register cannot be read");
   }

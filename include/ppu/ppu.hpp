@@ -18,7 +18,7 @@ enum PPUCTRLFlag {
   PPUCTRL_BACKGROUND_TABLE = 1 << 4,
   PPUCTRL_SPRITE_SIZE = 1 << 5,
   PPUCTRL_MASTER_SLAVE = 1 << 6,
-  PPUCTRL_NMI = 1 << 7
+  PPUCTRL_NMI_ENABLE = 1 << 7
 };
 
 enum PPUSTATUSFlag {
@@ -138,6 +138,18 @@ class PPU {
   // Name Tables
   NameTablesMemory mNameTableMemory;
 
+  inline void mSetPPUCTRLFlag(PPUCTRLFlag flag) { mPPUCTRL |= flag; };
+  inline void mClearPPUCTRLFlag(PPUCTRLFlag flag) { mPPUCTRL &= ~flag; };
+  inline bool mCheckPPUCTRLFlag(PPUCTRLFlag flag) {
+    return mPPUCTRL & flag;
+  };
+
+  inline void mSetPPUSTATUSFlag(PPUSTATUSFlag flag) { mPPUSTATUS |= flag; };
+  inline void mClearPPUSTATUSFlag(PPUSTATUSFlag flag) { mPPUSTATUS &= ~flag; };
+  inline bool mCheckPPUSTATUSFlag(PPUSTATUSFlag flag) {
+    return mPPUSTATUS & flag;
+  };
+
   // Internal register methods
   void mClearW();
   void mFlipW();
@@ -177,7 +189,17 @@ class PPU {
   uint8_t mFetchAttributeShiftLow();
   uint8_t mFetchAttributeShiftHigh();
 
-  void mDoPixel();
+  // Pre-render scanline
+  void mDoPreRenderScanline();
+
+  // Visible scanlines
+  void mDoScanline();
+
+  // Post render scandline
+  void mDoPostRenderScanline();
+
+  // Vertical blank
+  void mDoVerticalBlankingLine();
 
  public:
   PPU(Mapper** mapper, CPU* cpu);
@@ -212,9 +234,9 @@ class PPU {
   uint16_t mIncreasePPUADDR();
 
   // Status register
-  inline void mSetStatusFlag(PPUSTATUSFlag flag) { mPPUSTATUS |= flag; };
+  inline void mSetPPUSTATUSFlag(PPUSTATUSFlag flag) { mPPUSTATUS |= flag; };
   inline void mclearStatusFlag(PPUSTATUSFlag flag) { mPPUSTATUS &= ~flag; };
-  inline bool mCheckStatusFlag(PPUSTATUSFlag flag) {
+  inline bool mCheckPPUSTATUSFlag(PPUSTATUSFlag flag) {
     return mPPUSTATUS & flag;
   };
 
