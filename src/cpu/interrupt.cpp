@@ -2,8 +2,12 @@
 
 void CPU::mDoInterrupt(Interrupt interrupt) {
   switch (mCycle) {
+    case 1:
+      break;
     case 2:
-      mProgramCounter++;
+      if (interrupt == BRK) {
+        mProgramCounter++;
+      }
       break;
 
     case 3:
@@ -63,6 +67,8 @@ void CPU::mDoInterrupt(Interrupt interrupt) {
 
     default:
       mCycle = 0;
+
+      mNMI = false;
       break;
   }
 }

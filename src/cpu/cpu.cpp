@@ -9,7 +9,7 @@ CPU::CPU(Mapper** mapper, PPU* ppu)
       mXIndex(0),
       mYIndex(0),
       mStatus(INTERRUPT_DISABLE),
-      mCycle(1) {};
+      mCycle(0) {};
 
 CPU::~CPU() { delete mMemory; }
 CPU::InstructionSet::InstructionSet(CPU& cpu) : mCpu(cpu) {};
@@ -51,6 +51,14 @@ void CPU::mUpdateZeroAndNegative(uint8_t value) {
 }
 
 void CPU::doCycle() {
+  mCycle++;
+
+  if (mNMI) {
+    mDoInterrupt(NMI);
+
+    return;
+  }
+
   if (mCycle == 1) {
     mFetchInstruction();
   } else {
@@ -1163,5 +1171,4 @@ void CPU::doCycle() {
         break;
     }
   }
-  mCycle++;
 }
