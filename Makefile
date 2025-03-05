@@ -121,6 +121,9 @@ $(BUILDDIR)/$(PPU_REGISTERS)/external.o: $(SRCDIR)/$(PPU_REGISTERS)/external.cpp
 $(BUILDDIR)/$(PPU_REGISTERS)/internal.o: $(SRCDIR)/$(PPU_REGISTERS)/internal.cpp $(INCLUDEDIR)/$(PPU)/ppu.hpp
 	g++ $(CPPFLAGS) -c $< -o $@
 
+$(BUILDDIR)/$(PPU)/rendering.o: $(SRCDIR)/$(PPU)/rendering.cpp $(INCLUDEDIR)/$(PPU)/ppu.hpp
+	g++ $(CPPFLAGS) -c $< -o $@
+
 $(BUILDDIR)/$(PPU)/ppu.o: $(SRCDIR)/$(PPU)/ppu.cpp $(INCLUDEDIR)/$(PPU)/ppu.hpp
 	g++ $(CPPFLAGS) -c $< -o $@
 
@@ -162,7 +165,7 @@ run: all
 	$(BUILDDIR)/main
 
 # Test
-$(BUILDDIR)/test: $(TESTDIR)/test.cpp $(BUILDDIR)/$(MEMORY)/memory.o $(BUILDDIR)/$(MEMORY)/section.o $(BUILDDIR)/$(PPU_MEMORY)/memorymap.o $(BUILDDIR)/$(MEMORY)/memory.a $(BUILDDIR)/$(CARTRIDGE)/cartridge.a $(BUILDDIR)/$(CPU)/cpu.a $(BUILDDIR)/$(PPU)/ppu.a $(BUILDDIR)/$(LOGGER)/logger.o $(BUILDDIR)/$(EMULATOR)/emulator.a
+$(BUILDDIR)/test: $(TESTDIR)/test.cpp $(BUILDDIR)/$(MEMORY)/memory.o $(BUILDDIR)/$(MEMORY)/section.o $(BUILDDIR)/$(PPU)/rendering.o $(BUILDDIR)/$(PPU_MEMORY)/memorymap.o $(BUILDDIR)/$(MEMORY)/memory.a $(BUILDDIR)/$(CARTRIDGE)/cartridge.a $(BUILDDIR)/$(CPU)/cpu.a $(BUILDDIR)/$(PPU)/ppu.a $(BUILDDIR)/$(LOGGER)/logger.o $(BUILDDIR)/$(EMULATOR)/emulator.a
 	g++ $(CPPFLAGS) $^ -o $@
 
 test: $(BUILDDIR)/test

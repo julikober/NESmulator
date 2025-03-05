@@ -138,12 +138,14 @@ class PPU {
   // Name Tables
   NameTablesMemory mNameTableMemory;
 
+  // PPUCTRL methods
   inline void mSetPPUCTRLFlag(PPUCTRLFlag flag) { mPPUCTRL |= flag; };
   inline void mClearPPUCTRLFlag(PPUCTRLFlag flag) { mPPUCTRL &= ~flag; };
   inline bool mCheckPPUCTRLFlag(PPUCTRLFlag flag) {
     return mPPUCTRL & flag;
   };
 
+  // PPUSTATUS methods
   inline void mSetPPUSTATUSFlag(PPUSTATUSFlag flag) { mPPUSTATUS |= flag; };
   inline void mClearPPUSTATUSFlag(PPUSTATUSFlag flag) { mPPUSTATUS &= ~flag; };
   inline bool mCheckPPUSTATUSFlag(PPUSTATUSFlag flag) {
@@ -232,13 +234,6 @@ class PPU {
   void setOAMDMA(uint8_t value);
 
   uint16_t mIncreasePPUADDR();
-
-  // Status register
-  inline void mSetPPUSTATUSFlag(PPUSTATUSFlag flag) { mPPUSTATUS |= flag; };
-  inline void mclearStatusFlag(PPUSTATUSFlag flag) { mPPUSTATUS &= ~flag; };
-  inline bool mCheckPPUSTATUSFlag(PPUSTATUSFlag flag) {
-    return mPPUSTATUS & flag;
-  };
 
   // Get Nametable Memory
   inline NameTablesMemory& getNameTablesMemory() { return mNameTableMemory; }
