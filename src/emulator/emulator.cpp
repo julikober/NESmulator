@@ -11,3 +11,18 @@ Emulator::~Emulator() {
   delete mPPU;
   delete mMapper;
 }
+
+void Emulator::tick() {
+  if (mCPUCounter == 12) {
+    mCPU->doCycle();
+    mCPUCounter = 0;
+  }
+
+  if (mPPUCounter == 4) {
+    mPPU->doCycle();
+    mPPUCounter = 0;
+  }
+
+  mCPUCounter++;
+  mPPUCounter++;
+}

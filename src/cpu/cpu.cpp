@@ -3,8 +3,8 @@
 CPU::CPU(Mapper** mapper, PPU* ppu)
     : mInstructionSet(*this),
       mMemory(new CPUMemoryMap(mapper, ppu)),
-      mProgramCounter(0x0400),
-      mStackPointer(0xFF),
+      mProgramCounter(0xFFFC),
+      mStackPointer(0xFD),
       mAccumulator(0),
       mXIndex(0),
       mYIndex(0),

@@ -29,9 +29,14 @@ class Emulator {
   PPU *mPPU;
   Mapper* mMapper;
 
+  uint8_t mCPUCounter;
+  uint8_t mPPUCounter;
+
  public:
   Emulator();
   ~Emulator();
+
+  void tick();
   
   void loadROMFile(const char* filename);
 };
